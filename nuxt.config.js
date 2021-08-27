@@ -18,7 +18,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/api.js'],
+  plugins: [],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -39,13 +39,14 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http://127.0.0.1:8000/api/v1/',
+    baseURL: `${process.env.API_BASE_URL}/api/v1/`,
     credentials: true,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 
+  // Configuraciones para paquete AUTH-LARAVEL
   auth: {
     redirect: {
       login: '/',
