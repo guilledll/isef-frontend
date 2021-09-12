@@ -1,0 +1,14 @@
+@layer components {
+  .input-text {
+    @apply w-full rounded-md px-3 py-2 border border-gray-300  placeholder-gray-500 text-base text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10;
+  }
+  .checkbox {
+    @apply flex items-center;
+    & > .text {
+      @apply ml-2 block text-base text-gray-900;
+    }
+    & > .check {
+      @apply h-4 w-4 border-gray-300 rounded;
+    }
+  }
+}

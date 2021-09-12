@@ -1,9 +1,7 @@
 <template>
-  <div id="app-layout">
+  <div id="app-layout" class="w-full h-screen bg-white">
     <AppHeader v-if="showHeader" />
-    <main>
-      <nuxt />
-    </main>
+    <nuxt />
   </div>
 </template>
 <script>

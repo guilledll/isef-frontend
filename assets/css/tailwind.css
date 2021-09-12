@@ -1,0 +1,10 @@
+/* Archivos base de Tailwind */
+@import 'tailwindcss/base';
+
+/* Componentes de tailwind y declarados */
+@import 'tailwindcss/components';
+@import './components/forms.css';
+@import './components/buttons.css';
+
+/* Utilidades de tailwind */
+@import 'tailwindcss/utilities';
