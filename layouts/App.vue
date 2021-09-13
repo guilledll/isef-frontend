@@ -7,10 +7,10 @@
 <script>
 import AppHeader from '@/components/global/AppHeader'
 export default {
-  layout: 'App',
   components: {
     AppHeader,
   },
+  layout: 'App',
   data() {
     return {}
   },

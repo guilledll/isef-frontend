@@ -53,7 +53,7 @@
           </div>
           <div class="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
             <router-link
-              to="/register"
+              to="/registro"
               class="font-medium text-gray-500 hover:text-gray-900"
               >Registrarme
             </router-link>
@@ -138,7 +138,7 @@
               <router-link to="/login" class="menu-item"
                 >Iniciar sesión
               </router-link>
-              <router-link to="/register" class="menu-item"
+              <router-link to="/registro" class="menu-item"
                 >Registrarme
               </router-link>
               <a

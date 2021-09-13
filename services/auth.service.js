@@ -5,4 +5,7 @@ export default {
   setCookie() {
     return api().get('/sanctum/csrf-cookie')
   },
+  register(data) {
+    return api().post('/register', data)
+  },
 }

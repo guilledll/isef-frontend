@@ -2,7 +2,7 @@
   <div
     class="
       min-h-screen
-      flex
+      flex flex-col
       items-center
       justify-center
       py-12
@@ -16,7 +16,7 @@
         <h2 class="text-4xl font-extrabold text-gray-900">ISEF</h2>
         <p class="text-gray-500 text-xl">Gestión de materiales y reservas</p>
       </div>
-      <form class="mt-8 space-y-6">
+      <form class="mt-8 space-y-4">
         <input type="hidden" name="remember" value="true" />
         <div class="space-y-2">
           <div>
@@ -73,6 +73,19 @@
         </div>
       </form>
     </div>
+    <router-link
+      to="/registro"
+      class="
+        text-center
+        font-medium
+        text-indigo-600
+        hover:text-indigo-500
+        mt-6
+        hover:underline
+      "
+    >
+      ¿No tiene cuenta? Regístrate!
+    </router-link>
   </div>
 </template>
 
