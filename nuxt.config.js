@@ -49,8 +49,9 @@ export default {
   // Configuraciones para paquete AUTH-LARAVEL
   auth: {
     redirect: {
-      login: '/',
-      home: false,
+      login: '/login',
+      logout: '/',
+      home: '/home',
     },
     strategies: {
       laravelSanctum: {

@@ -16,16 +16,17 @@
         <h2 class="text-4xl font-extrabold text-gray-900">ISEF</h2>
         <p class="text-gray-500 text-xl">Gestión de materiales y reservas</p>
       </div>
-      <form class="mt-8 space-y-4">
+      <form class="mt-8 space-y-4" @submit.prevent>
         <input type="hidden" name="remember" value="true" />
         <div class="space-y-2">
           <div>
-            <label for="correo" class="sr-only">Correo o CI</label>
+            <label for="ci" class="sr-only">Correo o CI</label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              autocomplete="email"
+              id="ci"
+              v-model="user.ci"
+              name="ci"
+              type="text"
+              autocomplete="on"
               required
               class="input-text"
               placeholder="Correo o CI"
@@ -35,6 +36,7 @@
             <label for="password" class="sr-only">Contraseña</label>
             <input
               id="password"
+              v-model="user.password"
               name="password"
               type="password"
               autocomplete="current-password"
@@ -69,7 +71,9 @@
           </div>
         </div>
         <div>
-          <button type="submit" class="btn-indigo">Iniciar sesión</button>
+          <button type="submit" class="btn-indigo" @click="login">
+            Iniciar sesión
+          </button>
         </div>
       </form>
     </div>
@@ -90,5 +94,29 @@
 </template>
 
 <script>
-export default {}
+import AuthService from '~/services/auth.service'
+export default {
+  data() {
+    return {
+      user: {
+        ci: '',
+        password: '',
+      },
+    }
+  },
+  methods: {
+    login() {
+      AuthService.setCookie().then(() => {
+        this.$auth
+          .loginWith('laravelSanctum', { data: this.user })
+          .then((res) => {
+            console.log(res, this.$auth.user)
+          })
+          .catch((e) => {
+            console.log(e, this.$auth)
+          })
+      })
+    },
+  },
+}
 </script>

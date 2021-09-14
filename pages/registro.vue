@@ -178,12 +178,8 @@ export default {
       AuthService.setCookie().then(() => {
         AuthService.register(this.form).then((res) => {
           console.log(res)
-          // let login = { correo: this.form.correo, password: this.form.password }
-          // this.$auth
-          //   .loginWith('laravelSanctum', { data: login })
-          //   .then((res) => {
-          //     console.log(res.data)
-          //   })
+          let login = { correo: this.form.correo, password: this.form.password }
+          this.$auth.loginWith('laravelSanctum', { data: login })
         })
       })
     },
