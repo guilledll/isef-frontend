@@ -2,6 +2,7 @@
   <div>
     Home
     <button class="btn-indigo" @click="logout">Chau</button>
+    {{ user }}
   </div>
 </template>
 
@@ -9,10 +10,14 @@
 export default {
   layout: 'App',
   middleware: 'auth',
+  computed: {
+    user() {
+      return this.$auth.user.data
+    },
+  },
   methods: {
     async logout() {
       await this.$auth.logout()
-      this.$router.push('/')
     },
   },
 }

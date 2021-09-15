@@ -51,7 +51,7 @@ export default {
     redirect: {
       login: '/login',
       logout: '/',
-      home: '/home',
+      home: '/inicio',
     },
     strategies: {
       laravelSanctum: {
