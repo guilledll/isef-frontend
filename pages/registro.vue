@@ -171,20 +171,16 @@ export default {
   },
   mounted() {
     DepartamentoService.index().then((res) => {
-      this.sedes = res.data.data
+      this.sedes = res.data
     })
   },
   methods: {
     registro() {
       AuthService.register(this.form).then(() => {
-        // SE PODRIA ENVIAR ESTE CODIGO AL BACK EN EL LOGIN Y REGISTRO
-        // Y PROCESARLO EN UNA FUNCION QUE VAYA A LA STORE
-        // Y AHORA HACER EL CAMBIO DE VALOR
         this.$auth.loginWith('laravelSanctum', {
           correo: this.form.correo,
           password: this.form.password,
         })
-        // =====================================
       })
     },
   },
