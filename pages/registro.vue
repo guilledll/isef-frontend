@@ -153,6 +153,7 @@ import DepartamentoService from '@/services/departamento.service'
 import AuthService from '~/services/auth.service'
 export default {
   layout: 'App',
+  middleware: 'guest',
   data() {
     return {
       form: {
@@ -175,12 +176,15 @@ export default {
   },
   methods: {
     registro() {
-      AuthService.setCookie().then(() => {
-        AuthService.register(this.form).then((res) => {
-          console.log(res)
-          let login = { correo: this.form.correo, password: this.form.password }
-          this.$auth.loginWith('laravelSanctum', { data: login })
+      AuthService.register(this.form).then(() => {
+        // SE PODRIA ENVIAR ESTE CODIGO AL BACK EN EL LOGIN Y REGISTRO
+        // Y PROCESARLO EN UNA FUNCION QUE VAYA A LA STORE
+        // Y AHORA HACER EL CAMBIO DE VALOR
+        this.$auth.loginWith('laravelSanctum', {
+          correo: this.form.correo,
+          password: this.form.password,
         })
+        // =====================================
       })
     },
   },

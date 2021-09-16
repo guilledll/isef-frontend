@@ -96,6 +96,8 @@
 <script>
 import AuthService from '~/services/auth.service'
 export default {
+  layout: 'App',
+  middleware: 'guest',
   data() {
     return {
       user: {
@@ -106,14 +108,11 @@ export default {
   },
   methods: {
     login() {
-      AuthService.setCookie().then(() => {
+      AuthService.login().then(() => {
         this.$auth
           .loginWith('laravelSanctum', { data: this.user })
-          .then((res) => {
-            console.log(res, this.$auth.user)
-          })
           .catch((e) => {
-            console.log(e, this.$auth)
+            console.log(e)
           })
       })
     },
