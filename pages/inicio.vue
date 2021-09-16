@@ -12,7 +12,7 @@ export default {
   middleware: 'auth',
   computed: {
     user() {
-      return this.$auth.user.data
+      return this.$auth.user
     },
   },
   methods: {

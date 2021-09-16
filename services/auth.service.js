@@ -11,7 +11,6 @@ function setCookie() {
 export default {
   async login() {
     return await setCookie()
-    // AQUI PONER COMMITER DE $AUTH
   },
   async register(data) {
     await setCookie()

@@ -21,9 +21,10 @@
         <div class="space-y-2">
           <div>
             <label for="ci" class="sr-only">Correo o CI</label>
+            <span v-if="!$v.name.required"></span>
             <input
               id="ci"
-              v-model="user.ci"
+              v-model.trim="$v.user.ci.$model"
               name="ci"
               type="text"
               autocomplete="on"
@@ -36,7 +37,7 @@
             <label for="password" class="sr-only">Contraseña</label>
             <input
               id="password"
-              v-model="user.password"
+              v-model.trim="$v.user.password.$model"
               name="password"
               type="password"
               autocomplete="current-password"
@@ -94,7 +95,12 @@
 </template>
 
 <script>
-import AuthService from '~/services/auth.service'
+import {
+  required,
+  minLength,
+  maxLength,
+  numeric,
+} from 'vuelidate/lib/validators'
 export default {
   layout: 'App',
   middleware: 'guest',
@@ -106,14 +112,27 @@ export default {
       },
     }
   },
+  validations: {
+    user: {
+      ci: {
+        required,
+        minLength: minLength(8),
+        maxLength: maxLength(8),
+        numeric,
+      },
+      password: {
+        required,
+      },
+    },
+  },
   methods: {
     login() {
-      AuthService.login().then(() => {
-        this.$auth
-          .loginWith('laravelSanctum', { data: this.user })
-          .catch((e) => {
-            console.log(e)
-          })
+      this.$v.$touch()
+      // if(this.$v.$invalid){
+
+      // }
+      this.$auth.loginWith('laravelSanctum', { data: this.user }).catch((e) => {
+        console.log(e)
       })
     },
   },

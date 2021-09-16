@@ -58,6 +58,9 @@ export default {
         provider: 'laravel/sanctum',
         url: process.env.API_BASE_URL,
         endpoints: {
+          csrf: {
+            url: '/sanctum/csrf-cookie',
+          },
           login: {
             url: '/login',
           },
@@ -67,6 +70,9 @@ export default {
           logout: {
             url: '/logout',
           },
+        },
+        cookie: {
+          name: 'XSRF-TOKEN',
         },
       },
     },
