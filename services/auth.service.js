@@ -9,9 +9,6 @@ function setCookie() {
 }
 
 export default {
-  async login() {
-    return await setCookie()
-  },
   async register(data) {
     await setCookie()
     return api().post('/register', data)

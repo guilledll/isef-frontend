@@ -16,12 +16,14 @@
         <h2 class="text-4xl font-extrabold text-gray-900">ISEF</h2>
         <p class="text-gray-500 text-xl">Gestión de materiales y reservas</p>
       </div>
-      <form class="mt-8 space-y-4" @submit.prevent>
+      <form class="mt-8 space-y-4" @submit.prevent="login">
         <input type="hidden" name="remember" value="true" />
         <div class="space-y-2">
+          <p v-if="error" class="text-center text-red-500 font-medium">
+            {{ error }}
+          </p>
           <div>
             <label for="ci" class="sr-only">Correo o CI</label>
-            <span v-if="!$v.name.required"></span>
             <input
               id="ci"
               v-model.trim="$v.user.ci.$model"
@@ -29,9 +31,15 @@
               type="text"
               autocomplete="on"
               required
-              class="input-text"
               placeholder="Correo o CI"
+              class="input-text"
+              :class="{ error: $v.user.ci.$anyError }"
+              @input="$v.user.ci.$reset()"
+              @blur="$v.user.ci.$touch()"
             />
+            <span v-if="$v.user.ci.$anyError" class="error">
+              {{ validar($v.user.ci) }}
+            </span>
           </div>
           <div>
             <label for="password" class="sr-only">Contraseña</label>
@@ -41,10 +49,16 @@
               name="password"
               type="password"
               autocomplete="current-password"
-              required=""
-              class="input-text"
+              required
               placeholder="Contraseña"
+              class="input-text"
+              :class="{ error: $v.user.password.$anyError }"
+              @input="$v.user.password.$reset()"
+              @blur="$v.user.password.$touch()"
             />
+            <span v-if="$v.user.password.$anyError" class="error">
+              {{ validar($v.user.password) }}
+            </span>
           </div>
         </div>
         <div class="flex items-center justify-between">
@@ -72,9 +86,7 @@
           </div>
         </div>
         <div>
-          <button type="submit" class="btn-indigo" @click="login">
-            Iniciar sesión
-          </button>
+          <button class="btn-indigo">Iniciar sesión</button>
         </div>
       </form>
     </div>
@@ -95,13 +107,12 @@
 </template>
 
 <script>
-import {
-  required,
-  minLength,
-  maxLength,
-  numeric,
-} from 'vuelidate/lib/validators'
+import { mensajes } from '@/services/validation.service'
+import { validationMixin } from 'vuelidate'
+import { validationMessage } from 'vuelidate-messages'
+import { required, maxLength } from 'vuelidate/lib/validators'
 export default {
+  mixins: [validationMixin],
   layout: 'App',
   middleware: 'guest',
   data() {
@@ -110,15 +121,14 @@ export default {
         ci: '',
         password: '',
       },
+      error: null,
     }
   },
   validations: {
     user: {
       ci: {
         required,
-        minLength: minLength(8),
-        maxLength: maxLength(8),
-        numeric,
+        maxLength: maxLength(255),
       },
       password: {
         required,
@@ -126,13 +136,11 @@ export default {
     },
   },
   methods: {
+    validar: validationMessage(mensajes),
     login() {
-      this.$v.$touch()
-      // if(this.$v.$invalid){
-
-      // }
+      if (this.$v.$invalid) return
       this.$auth.loginWith('laravelSanctum', { data: this.user }).catch((e) => {
-        console.log(e)
+        this.error = e.response.data.errors.ci[0]
       })
     },
   },
