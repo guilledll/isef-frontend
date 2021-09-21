@@ -1,18 +1,18 @@
 <template>
   <div id="app-layout" class="w-full h-screen bg-white">
-    <AppHeader v-if="showHeader" />
-    <nuxt />
+    <div class="bg-white max-w-6xl mx-auto">
+      <Topbar />
+      <div class="mt-10 mx-auto px-4 sm:px-6 lg:px-8">
+        <nuxt />
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import AppHeader from '@/components/global/AppHeader'
+import Topbar from '@/components/topbar/Topbar'
 export default {
   components: {
-    AppHeader,
-  },
-  layout: 'App',
-  data() {
-    return {}
+    Topbar,
   },
   computed: {
     showHeader() {

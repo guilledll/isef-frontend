@@ -1,15 +1,6 @@
 <template>
   <div
-    class="
-      min-h-screen
-      flex flex-col
-      items-center
-      justify-center
-      py-12
-      px-4
-      sm:px-6
-      lg:px-8
-    "
+    class="flex flex-col items-center justify-center sm:py-12 sm:px-6 lg:px-8"
   >
     <div class="max-w-md w-full space-y-8">
       <div class="text-center space-y-2">
@@ -29,7 +20,6 @@
               v-model.trim="$v.user.ci.$model"
               name="ci"
               type="text"
-              autocomplete="on"
               required
               placeholder="Correo o CI"
               class="input-text"
@@ -41,6 +31,16 @@
               {{ validar($v.user.ci) }}
             </span>
           </div>
+          <!-- <Input
+            id="ci"
+            v-model="$v.user.ci"
+            name="ci"
+            type="text"
+            required
+            placeholder="Correo o CI"
+            label="Correo o CI"
+            :message="validar($v.user.ci)"
+          /> -->
           <div>
             <label for="password" class="sr-only">Contraseña</label>
             <input
@@ -85,9 +85,7 @@
             </a>
           </div>
         </div>
-        <div>
-          <button class="btn-indigo">Iniciar sesión</button>
-        </div>
+        <button class="btn full indigo">Iniciar sesión</button>
       </form>
     </div>
     <router-link
@@ -112,6 +110,9 @@ import { validationMixin } from 'vuelidate'
 import { validationMessage } from 'vuelidate-messages'
 import { required, maxLength } from 'vuelidate/lib/validators'
 export default {
+  components: {
+    // Input: () => import('@/components/forms/Input'),
+  },
   mixins: [validationMixin],
   layout: 'App',
   middleware: 'guest',
@@ -136,7 +137,9 @@ export default {
     },
   },
   methods: {
-    validar: validationMessage(mensajes),
+    validar() {
+      validationMessage(mensajes)
+    },
     login() {
       if (this.$v.$invalid) return
       this.$auth.loginWith('laravelSanctum', { data: this.user }).catch((e) => {

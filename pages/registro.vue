@@ -1,15 +1,6 @@
 <template>
   <div
-    class="
-      min-h-screen
-      flex flex-col
-      items-center
-      justify-center
-      py-12
-      px-4
-      sm:px-6
-      lg:px-8
-    "
+    class="flex flex-col items-center justify-center sm:py-12 sm:px-6 lg:px-8"
   >
     <div class="max-w-md w-full space-y-8">
       <div class="text-center space-y-2">
@@ -180,7 +171,7 @@
             </span>
           </div>
         </div>
-        <button class="btn-indigo">Registrarme</button>
+        <button class="btn full green">Registrarme</button>
       </form>
     </div>
     <router-link
@@ -188,8 +179,8 @@
       class="
         text-center
         font-medium
-        text-indigo-600
-        hover:text-indigo-500
+        text-green-600
+        hover:text-green-500
         mt-6
         hover:underline
       "
