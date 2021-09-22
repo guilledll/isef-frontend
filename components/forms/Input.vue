@@ -1,49 +1,37 @@
 <template>
   <div>
-    {{ value }}
-    <label :for="id" :class="{ 'sr-only': sr }">{{ label }}</label>
+    <label :for="id" :class="{ 'sr-only': sr }">{{ label || name }}</label>
     <input
       :id="id"
-      :value="model.$model"
+      :value="value"
       :name="name"
       :type="type"
+      :autocomplete="autocomplete"
       :required="required"
       :placeholder="placeholder"
-      :class="{ error: value.$anyError }"
+      :class="{ error: error }"
       class="input-text"
-      @input="setModel($event.target.value)"
+      @input="$emit('input', $event.target.value)"
+      @keyup.enter="$emit('enter')"
+      @focus="$emit('focus')"
+      @blur="$emit('blur')"
     />
-    <span v-if="model.$anyError" class="error">
-      {{ message }}
-    </span>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    value: { type: Object, default: () => {} },
+    value: { type: String, default: '' },
     id: { type: String, default: '' },
     name: { type: String, default: '' },
-    type: { type: String, default: '' },
+    type: { type: String, default: 'text' },
     label: { type: String, default: '' },
-    message: { type: String, default: '' },
     placeholder: { type: String, default: '' },
-    required: { type: Boolean, default: false },
+    autocomplete: { type: String, default: 'on' },
+    required: { type: Boolean, default: true },
+    error: { type: Boolean, default: false },
     sr: { type: Boolean, default: true },
-  },
-  data() {
-    return {
-      model: '',
-    }
-  },
-  methods: {
-    setModel(value) {
-      console.log(this.model, value, this.value)
-      this.model = value
-      this.value.$touch()
-      console.log(this.model, value, this.value)
-    },
   },
 }
 </script>

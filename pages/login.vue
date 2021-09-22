@@ -14,45 +14,29 @@
             {{ error }}
           </p>
           <div>
-            <label for="ci" class="sr-only">Correo o CI</label>
-            <input
+            <Input
               id="ci"
-              v-model.trim="$v.user.ci.$model"
+              v-model.trim="user.ci"
               name="ci"
-              type="text"
-              required
+              autocomplete="on"
               placeholder="Correo o CI"
-              class="input-text"
-              :class="{ error: $v.user.ci.$anyError }"
+              :error="$v.user.ci.$anyError"
               @input="$v.user.ci.$reset()"
               @blur="$v.user.ci.$touch()"
             />
-            <span v-if="$v.user.ci.$anyError" class="error">
+            <span v-if="$v.user.ci.$anyError || error" class="error">
               {{ validar($v.user.ci) }}
             </span>
           </div>
-          <!-- <Input
-            id="ci"
-            v-model="$v.user.ci"
-            name="ci"
-            type="text"
-            required
-            placeholder="Correo o CI"
-            label="Correo o CI"
-            :message="validar($v.user.ci)"
-          /> -->
           <div>
-            <label for="password" class="sr-only">Contraseña</label>
-            <input
+            <Input
               id="password"
-              v-model.trim="$v.user.password.$model"
+              v-model.trim="user.password"
               name="password"
               type="password"
               autocomplete="current-password"
-              required
               placeholder="Contraseña"
-              class="input-text"
-              :class="{ error: $v.user.password.$anyError }"
+              :error="$v.user.password.$anyError"
               @input="$v.user.password.$reset()"
               @blur="$v.user.password.$touch()"
             />
@@ -109,9 +93,10 @@ import { mensajes } from '@/services/validation.service'
 import { validationMixin } from 'vuelidate'
 import { validationMessage } from 'vuelidate-messages'
 import { required, maxLength } from 'vuelidate/lib/validators'
+import Input from '@/components/forms/Input'
 export default {
   components: {
-    // Input: () => import('@/components/forms/Input'),
+    Input,
   },
   mixins: [validationMixin],
   layout: 'App',
@@ -137,9 +122,7 @@ export default {
     },
   },
   methods: {
-    validar() {
-      validationMessage(mensajes)
-    },
+    validar: validationMessage(mensajes),
     login() {
       if (this.$v.$invalid) return
       this.$auth.loginWith('laravelSanctum', { data: this.user }).catch((e) => {

@@ -1,8 +1,6 @@
 <template>
   <div>
-    Home
-    <button class="btn-indigo" @click="logout">Chau</button>
-    {{ user }}
+    <button class="btn indigo" @click="logout">Chau</button>
   </div>
 </template>
 
