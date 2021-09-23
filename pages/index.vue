@@ -77,14 +77,6 @@
 <script>
 export default {
   layout: 'App',
+  middleware: 'guest',
 }
 </script>
-
-<style lang="postcss" scoped>
-.menu-item {
-  @apply block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50;
-}
-.menu-btn {
-  @apply bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-500 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500;
-}
-</style>
