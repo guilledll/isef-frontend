@@ -14,7 +14,7 @@
           <p
             v-for="(e, i) in errors"
             :key="i"
-            class="mb-1 text-red-500 font-medium text-center"
+            class="text-red-500 font-medium text-center"
           >
             {{ e[0] }}
           </p>
@@ -22,16 +22,12 @@
         <div class="space-y-2">
           <!-- CEDULA -->
           <div>
-            <input
+            <Input
               id="ci"
-              v-model.trim="$v.form.ci.$model"
+              v-model.trim="form.ci"
               name="ci"
-              type="text"
-              required
-              pattern="[0-9]{8}"
-              class="input-text"
               placeholder="Cédula (sin puntos ni guión)"
-              :class="{ error: $v.form.ci.$anyError }"
+              :error="$v.form.ci.$anyError"
               @input="$v.form.ci.$reset()"
               @blur="$v.form.ci.$touch()"
             />
@@ -41,15 +37,12 @@
           </div>
           <!-- NOMBRE -->
           <div>
-            <input
+            <Input
               id="nombre"
-              v-model.trim="$v.form.nombre.$model"
+              v-model.trim="form.nombre"
               name="nombre"
-              type="text"
-              required
-              class="input-text"
               placeholder="Nombre"
-              :class="{ error: $v.form.nombre.$anyError }"
+              :error="$v.form.nombre.$anyError"
               @input="$v.form.nombre.$reset()"
               @blur="$v.form.nombre.$touch()"
             />
@@ -59,15 +52,12 @@
           </div>
           <!-- APELLIDO -->
           <div>
-            <input
+            <Input
               id="apellido"
-              v-model.trim="$v.form.apellido.$model"
+              v-model.trim="form.apellido"
               name="apellido"
-              type="text"
-              required
-              class="input-text"
               placeholder="Apellido"
-              :class="{ error: $v.form.apellido.$anyError }"
+              :error="$v.form.apellido.$anyError"
               @input="$v.form.apellido.$reset()"
               @blur="$v.form.apellido.$touch()"
             />
@@ -77,16 +67,14 @@
           </div>
           <!-- CORREO -->
           <div>
-            <input
+            <Input
               id="correo"
-              v-model.trim="$v.form.correo.$model"
+              v-model.trim="form.correo"
               name="correo"
               type="email"
               autocomplete="email"
-              required
-              class="input-text"
               placeholder="Correo"
-              :class="{ error: $v.form.correo.$anyError }"
+              :error="$v.form.correo.$anyError"
               @input="$v.form.correo.$reset()"
               @blur="$v.form.correo.$touch()"
             />
@@ -96,16 +84,13 @@
           </div>
           <!-- TELEFONO -->
           <div>
-            <input
+            <Input
               id="telefono"
-              v-model.trim="$v.form.telefono.$model"
+              v-model.trim="form.telefono"
               name="telefono"
               type="tel"
-              pattern="[0-9]{9}"
-              required
-              class="input-text"
               placeholder="Teléfono de contacto"
-              :class="{ error: $v.form.telefono.$anyError }"
+              :error="$v.form.telefono.$anyError"
               @input="$v.form.telefono.$reset()"
               @blur="$v.form.telefono.$touch()"
             />
@@ -115,15 +100,13 @@
           </div>
           <!-- CONTRASEÑA -->
           <div>
-            <input
+            <Input
               id="password"
-              v-model.trim="$v.form.password.$model"
+              v-model.trim="form.password"
               name="password"
               type="password"
-              required
-              class="input-text"
               placeholder="Contraseña"
-              :class="{ error: $v.form.password.$anyError }"
+              :error="$v.form.password.$anyError"
               @input="$v.form.password.$reset()"
               @blur="$v.form.password.$touch()"
             />
@@ -133,15 +116,13 @@
           </div>
           <!-- REPETIR CONTRASEÑA -->
           <div>
-            <input
+            <Input
               id="password_confirmation"
-              v-model.trim="$v.form.password_confirmation.$model"
+              v-model.trim="form.password_confirmation"
               name="password_confirmation"
               type="password"
-              required
-              class="input-text"
               placeholder="Repetir contraseña"
-              :class="{ error: $v.form.password_confirmation.$anyError }"
+              :error="$v.form.password_confirmation.$anyError"
               @input="$v.form.password_confirmation.$reset()"
               @blur="$v.form.password_confirmation.$touch()"
             />
@@ -153,11 +134,11 @@
           <div>
             <select
               id="sede"
-              v-model.trim="$v.form.departamento.$model"
+              v-model.trim="form.departamento"
               name="sede"
               required
               class="input-text bg-white h-11 text-gray-900"
-              :class="{ error: $v.form.departamento.$anyError }"
+              :error="$v.form.departamento.$anyError"
               @input="$v.form.departamento.$reset()"
               @blur="$v.form.departamento.$touch()"
             >
@@ -205,8 +186,12 @@ import {
   email,
   sameAs,
 } from 'vuelidate/lib/validators'
+import Input from '@/components/forms/Input'
 const departamento = (value) => value != 0
 export default {
+  components: {
+    Input,
+  },
   mixins: [validationMixin],
   layout: 'App',
   middleware: 'guest',
@@ -250,6 +235,7 @@ export default {
       telefono: {
         required,
         maxLength: maxLength(9),
+        numeric,
       },
       password: {
         required,
