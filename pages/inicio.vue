@@ -2,7 +2,7 @@
   <div>
     Home
     <button class="btn-indigo" @click="logout">Chau</button>
-    {{ user }}
+    <router-link to="/admin"> Admin </router-link>
   </div>
 </template>
 
