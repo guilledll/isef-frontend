@@ -12,7 +12,7 @@
       >
         <div class="flex items-center justify-between w-full">
           <router-link
-            :to="topbarLink"
+            to="/inicio"
             class="
               text-gray-900 text-3xl
               md:text-4xl
@@ -29,28 +29,20 @@
             />
             ISEF
           </router-link>
-          <div class="sm:-mr-2 flex items-center">
-            <div class="hidden md:block md:ml-12 md:pr-5">
-              <div v-if="!auth" class="md:space-x-6">
-                <router-link
-                  v-for="(item, i) in filterButtons"
-                  :key="i"
-                  :to="item.path"
-                  class="font-medium text-gray-500 hover:text-gray-900"
-                  >{{ item.text }}
-                </router-link>
-              </div>
-              <div v-else class="md:space-x-6">
-                <router-link
-                  v-for="(item, i) in filterButtons"
-                  :key="i"
-                  :to="item.path"
-                  class="font-medium text-gray-500 hover:text-gray-900"
-                  >{{ item.text }}
-                </router-link>
-              </div>
+          <div class="-mr-2 flex items-center sm:mr-2">
+            <div class="hidden md:block md:space-x-6">
+              <router-link
+                v-for="(item, i) in filterButtons"
+                :key="i"
+                :to="item.path"
+                class="font-medium text-gray-500 hover:text-gray-900"
+                :class="{ 'text-gray-900': item.selected }"
+                >{{ item.text }}
+              </router-link>
             </div>
-            <MenuButton @clicked="hideMenu" />
+            <div class="block md:hidden md:ml-5">
+              <MenuButton @clicked="hideMenu" />
+            </div>
           </div>
         </div>
       </nav>
@@ -74,7 +66,7 @@
             transition
             transform
             origin-top-right
-            sm:w-52 sm:right-2 sm:left-auto sm:top-2
+            md:w-52 md:right-2 md:left-auto md:top-2
           "
         >
           <div
@@ -138,40 +130,37 @@ export default {
     admin() {
       return this.user.rol === 3
     },
-    topbarLink() {
-      return this.auth ? '/inicio' : '/'
-    },
     menuItems() {
       return [
         {
           text: 'Perfil',
           path: '/perfil',
+          selected: this.selected('perfil'),
           show: this.auth,
         },
         {
           text: 'Reservas',
           path: '/reservas',
+          selected: this.selected('reservas'),
           show: this.auth,
         },
         {
           text: 'Depósitos',
           path: '/depositos',
+          selected: this.selected('depositos'),
+          show: this.auth && this.admin,
+        },
+        {
+          text: 'Materiales',
+          path: '/materiales',
+          selected: this.selected('materiales'),
           show: this.auth && this.admin,
         },
         {
           text: 'Registros',
           path: '/inventario',
+          selected: this.selected('inventario'),
           show: this.auth && this.admin,
-        },
-        {
-          text: 'Iniciar sesión',
-          path: '/login',
-          show: !this.auth,
-        },
-        {
-          text: 'Registrarme',
-          path: '/registro',
-          show: !this.auth,
         },
       ]
     },
@@ -182,6 +171,9 @@ export default {
   methods: {
     hideMenu() {
       this.showMenu = !this.showMenu
+    },
+    selected(path) {
+      return this.$route.path.includes(path)
     },
   },
 }

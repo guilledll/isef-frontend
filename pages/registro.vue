@@ -193,8 +193,7 @@ export default {
     Input,
   },
   mixins: [validationMixin],
-  layout: 'App',
-  middleware: 'guest',
+  layout: 'out.layout',
   data() {
     return {
       form: {

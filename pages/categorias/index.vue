@@ -1,6 +1,51 @@
 <template>
   <div>
+    <div class="rounded-xl bg-blue-500 px-8 py-6 w-full text-white">
+      <h4 class="title">Categorías de materiales</h4>
+      <span class="text-lg leading-5 font-medium">
+        Listado de las categorías asignadas a los materiales. Como ejemplo
+        algunas categorías pueden ser: Fútbol, Tennis, Pesas, Natación,
+        Colchonetas, etc.
+      </span>
+    </div>
+    <div class="w-full flex items-center justify-between mt-6 mb-10 gap-3">
+      <div class="btn btn-options left">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+          />
+        </svg>
+        Materiales
+      </div>
+      <div class="btn btn-options right">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+        Agregar categoría
+      </div>
+    </div>
     <div class="flex flex-col">
+      <h4 class="font-medium mb-4 text-3xl text-gray-800">Categorías</h4>
       <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div
@@ -42,26 +87,25 @@
                   >
                     Departamento
                   </th>
-
                   <th scope="col" class="relative px-6 py-3">
                     <span class="sr-only">Edit</span>
                   </th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="deposito in depositos" :key="deposito.id">
+                <tr v-for="categoria in categorias" :key="categoria.id">
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                       <div class="ml-4">
                         <div class="text-sm font-medium text-gray-900">
-                          {{ deposito.nombre }}
+                          {{ categoria.nombre }}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-500">
-                      {{ deposito.departamento }}
+                      {{ categoria.id }}
                     </div>
                   </td>
                   <td
@@ -74,9 +118,9 @@
                     "
                   >
                     <a
+                      href="updateDeposito"
                       class="text-indigo-600 hover:text-indigo-900"
-                      @click="seleccionarDeposito(deposito)"
-                      >Editar</a
+                      >Edit</a
                     >
                   </td>
                 </tr>
@@ -86,54 +130,38 @@
         </div>
       </div>
     </div>
-    <Modal
-      v-if="showModal"
-      :show-modal="showModal"
-      :deposito="selectedDeposito"
-      @close="showModal = !showModal"
-      @update="updateDeposito"
-    ></Modal>
   </div>
 </template>
 
 <script>
-import DepositosService from '@/services/depositos.service'
-import Modal from '@/components/modals/Modal'
+import CategoriasService from '@/services/categoria.service'
 export default {
-  components: {
-    Modal,
-  },
   layout: 'app.layout',
+  middleware: 'admin.middleware',
   data() {
     return {
-      depositos: [],
-      showModal: false,
-      selectedDeposito: {},
+      categorias: {},
     }
   },
-  async mounted() {
-    await DepositosService.index().then((res) => {
-      this.depositos = res.data
+  mounted() {
+    CategoriasService.index().then((res) => {
+      this.categorias = res.data
     })
-  },
-  methods: {
-    seleccionarDeposito(deposito) {
-      this.showModal = !this.showModal
-      this.selectedDeposito = deposito
-      //console.log(deposito, this.selectedDeposito)
-    },
-    updateDeposito(data) {
-      DepositosService.update(data.id, data)
-        .then(() => {
-          let deposito = this.depositos.find((dep) => dep.id === data.id)
-          deposito.nombre = data.nombre
-        })
-        .catch((e) => {
-          console.log(e)
-        })
-    },
   },
 }
 </script>
 
-<style></style>
+<style lang="postcss" scoped>
+.title {
+  @apply font-medium text-4xl leading-6 mb-5;
+}
+.btn-options {
+  @apply border border-transparent rounded-lg text-white text-center text-2xl h-16 cursor-pointer w-full;
+  &.left {
+    @apply bg-indigo-500 hover:bg-indigo-400;
+  }
+  &.right {
+    @apply bg-green-500 hover:bg-green-600;
+  }
+}
+</style>
