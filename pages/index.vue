@@ -76,7 +76,6 @@
 
 <script>
 export default {
-  layout: 'App',
-  middleware: 'guest',
+  layout: 'out.layout',
 }
 </script>
