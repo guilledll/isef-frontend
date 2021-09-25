@@ -45,7 +45,7 @@
             </span>
           </div>
         </div>
-        <div class="flex items-center justify-between">
+        <div v-if="false" class="flex items-center justify-between">
           <div class="checkbox">
             <input
               id="remember-me"
@@ -99,8 +99,7 @@ export default {
     Input,
   },
   mixins: [validationMixin],
-  layout: 'App',
-  middleware: 'guest',
+  layout: 'out.layout',
   data() {
     return {
       user: {

@@ -8,8 +8,7 @@
 <script>
 import DepositosService from '@/services/depositos.service'
 export default {
-  layout: 'App',
-  middleware: 'auth',
+  layout: 'app.layout',
   data() {
     return {
       depositos: {},
