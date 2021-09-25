@@ -1,25 +1,138 @@
 <template>
   <div>
-    <h1>index de depositos</h1>
-    {{ depositos }}
+    <div class="flex flex-col">
+      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          <div
+            class="
+              shadow
+              overflow-hidden
+              border-b border-gray-200
+              sm:rounded-lg
+            "
+          >
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="
+                      px-6
+                      py-3
+                      text-left text-xs
+                      font-medium
+                      text-gray-500
+                      uppercase
+                      tracking-wider
+                    "
+                  >
+                    Nombre
+                  </th>
+                  <th
+                    scope="col"
+                    class="
+                      px-6
+                      py-3
+                      text-left text-xs
+                      font-medium
+                      text-gray-500
+                      uppercase
+                      tracking-wider
+                    "
+                  >
+                    Departamento
+                  </th>
+
+                  <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr v-for="deposito in depositos" :key="deposito.id">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900">
+                          {{ deposito.nombre }}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-500">
+                      {{ deposito.departamento }}
+                    </div>
+                  </td>
+                  <td
+                    class="
+                      px-6
+                      py-4
+                      whitespace-nowrap
+                      text-right text-sm
+                      font-medium
+                    "
+                  >
+                    <a
+                      class="text-indigo-600 hover:text-indigo-900"
+                      @click="seleccionarDeposito(deposito)"
+                      >Editar</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <Modal
+      v-if="showModal"
+      :show-modal="showModal"
+      :deposito="selectedDeposito"
+      @close="showModal = !showModal"
+      @update="updateDeposito"
+    ></Modal>
   </div>
 </template>
 
 <script>
 import DepositosService from '@/services/depositos.service'
+import Modal from '@/components/modals/Modal'
 export default {
+  components: {
+    Modal,
+  },
   layout: 'app.layout',
   data() {
     return {
-      depositos: {},
+      depositos: [],
+      showModal: false,
+      selectedDeposito: {},
     }
   },
-  mounted() {
-    DepositosService.index().then((res) => {
+  async mounted() {
+    await DepositosService.index().then((res) => {
       this.depositos = res.data
     })
   },
-  methods: {},
+  methods: {
+    seleccionarDeposito(deposito) {
+      this.showModal = !this.showModal
+      this.selectedDeposito = deposito
+      //console.log(deposito, this.selectedDeposito)
+    },
+    updateDeposito(data) {
+      DepositosService.update(data.id, data)
+        .then(() => {
+          let deposito = this.depositos.find((dep) => dep.id === data.id)
+          deposito.nombre = data.nombre
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    },
+  },
 }
 </script>
 
