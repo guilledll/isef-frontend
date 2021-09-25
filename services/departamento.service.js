@@ -5,4 +5,7 @@ export default {
   async index() {
     return await api().get('/api/v1/departamentos')
   },
+  async show(id) {
+    return await api().get(`/api/v1/departamentos/${id}`)
+  }
 }
