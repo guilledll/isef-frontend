@@ -89,7 +89,24 @@
                   >
                     <a
                       class="text-indigo-600 hover:text-indigo-900"
-                      @click="seleccionarDeposito(deposito)"
+                      @click="seleccionarDeposito(deposito, 'add')"
+                      >Agregar</a
+                    >
+                  </td>
+
+                  <td
+                    class="
+                      sm:px-6
+                      px-3
+                      py-4
+                      whitespace-nowrap
+                      text-right text-sm
+                      font-medium
+                    "
+                  >
+                    <a
+                      class="text-indigo-600 hover:text-indigo-900"
+                      @click="seleccionarDeposito(deposito, 'mod')"
                       >Editar</a
                     >
                   </td>
@@ -102,6 +119,14 @@
     </div>
     <Modal v-if="showModal">
       <DepositoUpdate
+        v-if="accion == 'mod'"
+        :model="selectedDeposito"
+        @close="showModal = !showModal"
+        @update="updateDeposito"
+      />
+
+      <DepositoCreate
+        v-else-if="accion == 'add'"
         :model="selectedDeposito"
         @close="showModal = !showModal"
         @update="updateDeposito"
@@ -112,10 +137,12 @@
 
 <script>
 import DepositosService from '@/services/depositos.service'
+
 export default {
   components: {
     Modal: () => import('@/components/modals/Modal'),
     DepositoUpdate: () => import('@/components/modals/forms/DepositoUpdate'),
+    DepositoCreate: () => import('@/components/modals/forms/DepositoCreate'),
   },
   layout: 'app.layout',
   data() {
@@ -123,6 +150,7 @@ export default {
       depositos: [],
       showModal: false,
       selectedDeposito: {},
+      accion: '',
     }
   },
   async mounted() {
@@ -131,23 +159,24 @@ export default {
     })
   },
   methods: {
-    seleccionarDeposito(deposito) {
+    seleccionarDeposito(deposito, accion) {
       this.showModal = !this.showModal
       this.selectedDeposito = deposito
+      this.accion = accion
       //console.log(deposito, this.selectedDeposito)
     },
     // MOVER EL UPDATE A DEPOSITO UPDATE
-    // updateDeposito(data) {
-    //   DepositosService.update(data.id, data)
-    //     .then(() => {
-    //       let deposito = this.depositos.find((dep) => dep.id === data.id)
-    //       deposito.nombre = data.nombre
-    //       this.showModal = false
-    //     })
-    //     .catch((e) => {
-    //       console.log(e)
-    //     })
-    // },
+    updateDeposito(data) {
+      DepositosService.update(data.id, data)
+        .then(() => {
+          let deposito = this.depositos.find((dep) => dep.id === data.id)
+          deposito.nombre = data.nombre
+          this.showModal = false
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    },
   },
 }
 </script>
