@@ -11,7 +11,6 @@
               sm:rounded-lg
             "
           >
-            <!-- EXTRAR LA TABLA A COMPONENTE -->
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
@@ -117,19 +116,16 @@
         </div>
       </div>
     </div>
-    <Modal v-if="showModal">
+    <Modal v-if="modal.show">
       <DepositoUpdate
-        v-if="accion == 'mod'"
+        v-if="modal.action == 'mod'"
         :model="selectedDeposito"
-        @close="showModal = !showModal"
-        @update="updateDeposito"
+        @close="modal.show = !modal.show"
       />
-
       <DepositoCreate
-        v-else-if="accion == 'add'"
+        v-else-if="modal.action == 'add'"
         :model="selectedDeposito"
-        @close="showModal = !showModal"
-        @update="updateDeposito"
+        @close="modal.show = !modal.show"
       />
     </Modal>
   </div>
@@ -137,7 +133,6 @@
 
 <script>
 import DepositosService from '@/services/depositos.service'
-
 export default {
   components: {
     Modal: () => import('@/components/modals/Modal'),
@@ -148,9 +143,11 @@ export default {
   data() {
     return {
       depositos: [],
-      showModal: false,
       selectedDeposito: {},
-      accion: '',
+      modal: {
+        show: false,
+        action: '',
+      },
     }
   },
   async mounted() {
@@ -159,23 +156,10 @@ export default {
     })
   },
   methods: {
-    seleccionarDeposito(deposito, accion) {
-      this.showModal = !this.showModal
+    seleccionarDeposito(deposito, action) {
       this.selectedDeposito = deposito
-      this.accion = accion
-      //console.log(deposito, this.selectedDeposito)
-    },
-    // MOVER EL UPDATE A DEPOSITO UPDATE
-    updateDeposito(data) {
-      DepositosService.update(data.id, data)
-        .then(() => {
-          let deposito = this.depositos.find((dep) => dep.id === data.id)
-          deposito.nombre = data.nombre
-          this.showModal = false
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+      this.modal.action = action
+      this.modal.show = !this.modal.show
     },
   },
 }
