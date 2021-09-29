@@ -39,7 +39,7 @@
               sm:p-2.5
               lg:w-full lg:h-auto lg:mt-3
             "
-            @click="modal.show = !modal.show"
+            @click="seleccionarCategoría('add')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +114,7 @@
                       </button>
                       <button
                         class="table-btn group"
-                        @click="seleccionarCategoría(categoria, 'mod')"
+                        @click="seleccionarCategoría('mod', categoria)"
                       >
                         <svg
                           class="group-hover:text-gray-900"
@@ -136,17 +136,17 @@
         </div>
       </div>
     </div>
+
     <Modal v-if="modal.show">
       <CategoriaUpdate
         v-if="modal.action == 'mod'"
         :model="selectedCategoria"
         @close="modal.show = !modal.show"
       />
-      <!-- <DepositoCreate
+      <CategoriaCreate
         v-else-if="modal.action == 'add'"
-        :model="selectedCategoria"
         @close="modal.show = !modal.show"
-      /> -->
+      />
     </Modal>
   </div>
 </template>
@@ -159,6 +159,7 @@ export default {
     Header,
     Modal: () => import('@/components/modals/Modal.vue'),
     CategoriaUpdate: () => import('@/components/forms/CategoriaUpdate.vue'),
+    CategoriaCreate: () => import('@/components/forms/CategoriaCreate.vue'),
   },
   layout: 'app.layout',
   middleware: 'admin.middleware',
@@ -182,8 +183,10 @@ export default {
     })
   },
   methods: {
-    seleccionarCategoría(categoria, action) {
-      this.selectedCategoria = categoria
+    seleccionarCategoría(action, categoria = null) {
+      if (categoria) {
+        this.selectedCategoria = categoria
+      }
       this.modal.action = action
       this.modal.show = !this.modal.show
     },
