@@ -3,9 +3,9 @@
     <button
       v-if="button"
       class="action-btn"
+      type="submit"
       :class="type"
       :disabled="disabled"
-      @click="$emit('action')"
     >
       {{ text }}
     </button>

@@ -99,7 +99,7 @@ export default {
           // IMPLEMENTAR ESTO EN LA STORE
           // let deposito = this.depositos.find((dep) => dep.id === data.id)
           // deposito.nombre = data.nombre
-          this.showModal = false
+          this.$emit('close')
         })
         .catch((e) => {
           this.error = e.response.data.errors

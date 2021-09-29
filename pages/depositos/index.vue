@@ -136,8 +136,8 @@ import DepositosService from '@/services/depositos.service'
 export default {
   components: {
     Modal: () => import('@/components/modals/Modal'),
-    DepositoUpdate: () => import('@/components/modals/forms/DepositoUpdate'),
-    DepositoCreate: () => import('@/components/modals/forms/DepositoCreate'),
+    DepositoUpdate: () => import('@/components/forms/DepositoUpdate'),
+    DepositoCreate: () => import('@/components/forms/DepositoCreate'),
   },
   layout: 'app.layout',
   data() {
