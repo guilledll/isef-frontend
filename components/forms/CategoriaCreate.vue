@@ -71,8 +71,7 @@ export default {
     createCategoria() {
       this.$v.categoria.$touch()
       if (this.$v.$invalid) return
-      CategoriaService
-        .create(this.categoria)
+      CategoriaService.create(this.categoria)
         .then(() => {
           // ALMACENAR EN STORE
           this.$router.go()
