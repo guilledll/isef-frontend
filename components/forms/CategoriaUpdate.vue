@@ -5,7 +5,7 @@
         <ModalLeftIcon />
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
           <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">
-            Modificar depósito
+            Modificar categoría
           </h3>
           <p v-if="error && error.nombre" class="text-red-500 font-medium mb-1">
             {{ error.nombre[0] }}
