@@ -56,16 +56,16 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamento.service'
-import DepositosService from '@/services/depositos.service'
-import { mensajes } from '@/services/validation.service'
-import { validationMixin } from 'vuelidate'
-import { validationMessage } from 'vuelidate-messages'
-import { required, integer, maxLength } from 'vuelidate/lib/validators'
-import Input from '@/components/forms/Input.vue'
-import ModalFooter from '@/components/modals/ModalFooter.vue'
-import ModalLeftIcon from '~/components/modals/ModalLeftIcon.vue'
-const departamento = (value) => value != 0
+import DepartamentoService from '@/services/departamento.service';
+import DepositosService from '@/services/depositos.service';
+import { mensajes } from '@/services/validation.service';
+import { validationMixin } from 'vuelidate';
+import { validationMessage } from 'vuelidate-messages';
+import { required, integer, maxLength } from 'vuelidate/lib/validators';
+import Input from '@/components/forms/Input.vue';
+import ModalFooter from '@/components/modals/ModalFooter.vue';
+import ModalLeftIcon from '~/components/modals/ModalLeftIcon.vue';
+const departamento = (value) => value != 0;
 export default {
   components: {
     Input,
@@ -81,12 +81,12 @@ export default {
       },
       sedes: [],
       error: null,
-    }
+    };
   },
   mounted() {
     DepartamentoService.index().then((res) => {
-      this.sedes = res.data
-    })
+      this.sedes = res.data;
+    });
   },
   validations: {
     deposito: {
@@ -104,17 +104,17 @@ export default {
   methods: {
     validar: validationMessage(mensajes),
     createDeposito() {
-      this.$v.deposito.$touch()
-      if (this.$v.$invalid) return
+      this.$v.deposito.$touch();
+      if (this.$v.$invalid) return;
       DepositosService.create(this.deposito)
         .then(() => {
           // ALMACENAR EN STORE
-          this.$router.go()
+          this.$router.go();
         })
         .catch((e) => {
-          this.error = e.response.data.errors
-        })
+          this.error = e.response.data.errors;
+        });
     },
   },
-}
+};
 </script>

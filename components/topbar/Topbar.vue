@@ -118,17 +118,17 @@ export default {
   data() {
     return {
       showMenu: false,
-    }
+    };
   },
   computed: {
     auth() {
-      return this.$store.state.auth.loggedIn
+      return this.$store.state.auth.loggedIn;
     },
     user() {
-      return this.$store.state.auth.user
+      return this.$store.state.auth.user;
     },
     admin() {
-      return this.user.rol === 3
+      return this.user.rol === 3;
     },
     menuItems() {
       return [
@@ -162,19 +162,19 @@ export default {
           selected: this.selected('inventario'),
           show: this.auth && this.admin,
         },
-      ]
+      ];
     },
     filterButtons() {
-      return this.menuItems.filter((btn) => btn.show)
+      return this.menuItems.filter((btn) => btn.show);
     },
   },
   methods: {
     hideMenu() {
-      this.showMenu = !this.showMenu
+      this.showMenu = !this.showMenu;
     },
     selected(path) {
-      return this.$route.path.includes(path)
+      return this.$route.path.includes(path);
     },
   },
-}
+};
 </script>

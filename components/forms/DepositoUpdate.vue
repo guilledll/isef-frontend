@@ -38,15 +38,15 @@
 </template>
 
 <script>
-import DepositosService from '@/services/depositos.service'
-import { mensajes } from '@/services/validation.service'
-import { validationMixin } from 'vuelidate'
-import { validationMessage } from 'vuelidate-messages'
-import { required, numeric, maxLength } from 'vuelidate/lib/validators'
-import { updatedDiff } from 'deep-object-diff'
-import Input from '@/components/forms/Input.vue'
-import ModalFooter from '@/components/modals/ModalFooter.vue'
-import ModalLeftIcon from '@/components/modals/ModalLeftIcon.vue'
+import DepositosService from '@/services/depositos.service';
+import { mensajes } from '@/services/validation.service';
+import { validationMixin } from 'vuelidate';
+import { validationMessage } from 'vuelidate-messages';
+import { required, numeric, maxLength } from 'vuelidate/lib/validators';
+import { updatedDiff } from 'deep-object-diff';
+import Input from '@/components/forms/Input.vue';
+import ModalFooter from '@/components/modals/ModalFooter.vue';
+import ModalLeftIcon from '@/components/modals/ModalLeftIcon.vue';
 export default {
   components: {
     Input,
@@ -65,18 +65,18 @@ export default {
         nombre: '',
         departamento_id: '',
       },
-    }
+    };
   },
   computed: {
     disabled() {
-      return Object.keys(updatedDiff(this.model, this.deposito)).length == 0
+      return Object.keys(updatedDiff(this.model, this.deposito)).length == 0;
     },
   },
   mounted() {
     // this.deposito = this.model
-    this.deposito.id = this.model.id
-    this.deposito.nombre = this.model.nombre
-    this.deposito.departamento_id = this.model.departamento_id
+    this.deposito.id = this.model.id;
+    this.deposito.nombre = this.model.nombre;
+    this.deposito.departamento_id = this.model.departamento_id;
   },
   validations: {
     deposito: {
@@ -93,18 +93,18 @@ export default {
   methods: {
     validar: validationMessage(mensajes),
     updateDeposito() {
-      if (this.$v.invalid) return
+      if (this.$v.invalid) return;
       DepositosService.update(this.deposito.id, this.deposito)
         .then(() => {
           // IMPLEMENTAR ESTO EN LA STORE
           // let deposito = this.depositos.find((dep) => dep.id === data.id)
           // deposito.nombre = data.nombre
-          this.$emit('close')
+          this.$emit('close');
         })
         .catch((e) => {
-          this.error = e.response.data.errors
-        })
+          this.error = e.response.data.errors;
+        });
     },
   },
-}
+};
 </script>

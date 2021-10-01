@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import OutTopbar from '@/components/topbar/OutTopbar.vue'
+import OutTopbar from '@/components/topbar/OutTopbar.vue';
 export default {
   components: {
     OutTopbar,
   },
   middleware: 'guest.middleware',
-}
+};
 </script>

@@ -9,21 +9,21 @@
 </template>
 
 <script>
-import MaterialesService from '@/services/materiales.service'
+import MaterialesService from '@/services/materiales.service';
 export default {
   layout: 'app.layout',
   data() {
     return {
       materiales: {},
-    }
+    };
   },
   mounted() {
     MaterialesService.index().then((res) => {
-      this.materiales = res.data
-    })
+      this.materiales = res.data;
+    });
   },
   methods: {},
-}
+};
 </script>
 
 <style></style>

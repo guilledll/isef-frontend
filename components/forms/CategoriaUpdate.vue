@@ -38,15 +38,15 @@
 </template>
 
 <script>
-import CategoriaService from '@/services/categoria.service'
-import { mensajes } from '@/services/validation.service'
-import { validationMixin } from 'vuelidate'
-import { validationMessage } from 'vuelidate-messages'
-import { required, numeric, maxLength } from 'vuelidate/lib/validators'
-import { updatedDiff } from 'deep-object-diff'
-import Input from '@/components/forms/Input.vue'
-import ModalFooter from '@/components/modals/ModalFooter.vue'
-import ModalLeftIcon from '@/components/modals/ModalLeftIcon.vue'
+import CategoriaService from '@/services/categoria.service';
+import { mensajes } from '@/services/validation.service';
+import { validationMixin } from 'vuelidate';
+import { validationMessage } from 'vuelidate-messages';
+import { required, numeric, maxLength } from 'vuelidate/lib/validators';
+import { updatedDiff } from 'deep-object-diff';
+import Input from '@/components/forms/Input.vue';
+import ModalFooter from '@/components/modals/ModalFooter.vue';
+import ModalLeftIcon from '@/components/modals/ModalLeftIcon.vue';
 export default {
   components: {
     Input,
@@ -64,16 +64,16 @@ export default {
         id: '',
         nombre: '',
       },
-    }
+    };
   },
   computed: {
     disabled() {
-      return Object.keys(updatedDiff(this.model, this.categoria)).length == 0
+      return Object.keys(updatedDiff(this.model, this.categoria)).length == 0;
     },
   },
   mounted() {
-    this.categoria.id = this.model.id
-    this.categoria.nombre = this.model.nombre
+    this.categoria.id = this.model.id;
+    this.categoria.nombre = this.model.nombre;
   },
   validations: {
     categoria: {
@@ -90,18 +90,18 @@ export default {
   methods: {
     validar: validationMessage(mensajes),
     updateCategoria() {
-      if (this.$v.invalid) return
+      if (this.$v.invalid) return;
       CategoriaService.update(this.categoria.id, this.categoria)
         .then(() => {
           // IMPLEMENTAR ESTO EN LA STORE
           // let categoria = this.depositos.find((dep) => dep.id === data.id)
           // categoria.nombre = data.nombre
-          this.$emit('close')
+          this.$emit('close');
         })
         .catch((e) => {
-          this.error = e.response.data.errors
-        })
+          this.error = e.response.data.errors;
+        });
     },
   },
-}
+};
 </script>

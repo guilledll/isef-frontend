@@ -119,20 +119,20 @@ export default {
           path: '/registro',
         },
       ],
-    }
+    };
   },
   computed: {
     auth() {
-      return this.$store.state.auth.loggedIn
+      return this.$store.state.auth.loggedIn;
     },
     topbarLink() {
-      return this.auth ? '/inicio' : '/'
+      return this.auth ? '/inicio' : '/';
     },
   },
   methods: {
     hideMenu() {
-      this.showMenu = !this.showMenu
+      this.showMenu = !this.showMenu;
     },
   },
-}
+};
 </script>

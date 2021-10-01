@@ -10,15 +10,15 @@ export default {
   layout: 'app.layout',
   computed: {
     user() {
-      return this.$auth.user
+      return this.$auth.user;
     },
   },
   methods: {
     async logout() {
-      await this.$auth.logout()
+      await this.$auth.logout();
     },
   },
-}
+};
 </script>
 
 <style></style>

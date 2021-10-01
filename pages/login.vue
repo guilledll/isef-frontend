@@ -89,11 +89,11 @@
 </template>
 
 <script>
-import { mensajes } from '@/services/validation.service'
-import { validationMixin } from 'vuelidate'
-import { validationMessage } from 'vuelidate-messages'
-import { required, maxLength } from 'vuelidate/lib/validators'
-import Input from '@/components/forms/Input'
+import { mensajes } from '@/services/validation.service';
+import { validationMixin } from 'vuelidate';
+import { validationMessage } from 'vuelidate-messages';
+import { required, maxLength } from 'vuelidate/lib/validators';
+import Input from '@/components/forms/Input';
 export default {
   components: {
     Input,
@@ -107,7 +107,7 @@ export default {
         password: '',
       },
       error: null,
-    }
+    };
   },
   validations: {
     user: {
@@ -123,11 +123,11 @@ export default {
   methods: {
     validar: validationMessage(mensajes),
     login() {
-      if (this.$v.$invalid) return
+      if (this.$v.$invalid) return;
       this.$auth.loginWith('laravelSanctum', { data: this.user }).catch((e) => {
-        this.error = e.response.data.errors.ci[0]
-      })
+        this.error = e.response.data.errors.ci[0];
+      });
     },
   },
-}
+};
 </script>

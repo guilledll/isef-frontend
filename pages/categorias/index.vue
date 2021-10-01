@@ -152,8 +152,8 @@
 </template>
 
 <script>
-import CategoriasService from '@/services/categoria.service'
-import Header from '@/components/global/Header.vue'
+import CategoriasService from '@/services/categoria.service';
+import Header from '@/components/global/Header.vue';
 export default {
   components: {
     Header,
@@ -174,19 +174,19 @@ export default {
         show: false,
         action: '',
       },
-    }
+    };
   },
   async mounted() {
     await CategoriasService.index().then((res) => {
-      this.categorias = res.data
-    })
+      this.categorias = res.data;
+    });
   },
   methods: {
     seleccionarCategoría(categoria, action) {
-      this.selectedCategoria = categoria
-      this.modal.action = action
-      this.modal.show = !this.modal.show
+      this.selectedCategoria = categoria;
+      this.modal.action = action;
+      this.modal.show = !this.modal.show;
     },
   },
-}
+};
 </script>

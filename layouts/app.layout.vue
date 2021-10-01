@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import Topbar from '@/components/topbar/Topbar'
+import Topbar from '@/components/topbar/Topbar';
 export default {
   components: {
     Topbar,
@@ -17,9 +17,9 @@ export default {
   middleware: 'auth',
   computed: {
     showHeader() {
-      let pages = [] // Paginas en las que no se debe mostar la cabecera
-      return pages.indexOf(this.$route.name) == -1
+      let pages = []; // Paginas en las que no se debe mostar la cabecera
+      return pages.indexOf(this.$route.name) == -1;
     },
   },
-}
+};
 </script>

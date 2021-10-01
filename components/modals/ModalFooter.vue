@@ -23,7 +23,7 @@ export default {
     disabled: { type: Boolean, default: false },
     button: { type: Boolean, default: true },
   },
-}
+};
 </script>
 
 <style lang="postcss" scoped>

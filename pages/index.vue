@@ -77,5 +77,5 @@
 <script>
 export default {
   layout: 'out.layout',
-}
+};
 </script>

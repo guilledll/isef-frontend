@@ -13,7 +13,7 @@ export default {
     title: { type: String, default: 'Titulo de la página' },
     text: { type: String, default: 'Breve descripción de la página' },
   },
-}
+};
 </script>
 
 <style lang="postcss" scoped>

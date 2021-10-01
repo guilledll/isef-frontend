@@ -8,4 +8,4 @@ export const mensajes = {
   email: () => 'El correo no es válido.',
   sameAsPassword: () => 'Las contraseñas no coinciden.',
   departamento: () => 'Por favor seleccione un departamento.',
-}
+};

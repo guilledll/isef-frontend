@@ -34,10 +34,10 @@ export default {
   },
   methods: {
     clicked() {
-      this.$emit('clicked', !this.value)
+      this.$emit('clicked', !this.value);
     },
   },
-}
+};
 </script>
 
 <style lang="postcss" scoped>

@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import DepositosService from '@/services/depositos.service'
+import DepositosService from '@/services/depositos.service';
 export default {
   components: {
     Modal: () => import('@/components/modals/Modal'),
@@ -148,21 +148,21 @@ export default {
         show: false,
         action: '',
       },
-    }
+    };
   },
   async mounted() {
     await DepositosService.index().then((res) => {
-      this.depositos = res.data
-    })
+      this.depositos = res.data;
+    });
   },
   methods: {
     seleccionarDeposito(deposito, action) {
-      this.selectedDeposito = deposito
-      this.modal.action = action
-      this.modal.show = !this.modal.show
+      this.selectedDeposito = deposito;
+      this.modal.action = action;
+      this.modal.show = !this.modal.show;
     },
   },
-}
+};
 </script>
 
 <style></style>

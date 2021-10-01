@@ -31,7 +31,7 @@ export default {
   props: {
     type: { type: String, default: 'mod' },
   },
-}
+};
 </script>
 
 <style lang="postcss" scoped>
