@@ -39,7 +39,7 @@
               sm:p-2.5
               lg:w-full lg:h-auto lg:mt-3
             "
-            @click="modal.show = !modal.show"
+            @click="seleccionarCategoría('add')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +114,7 @@
                       </button>
                       <button
                         class="table-btn group"
-                        @click="seleccionarCategoría(categoria, 'mod')"
+                        @click="seleccionarCategoría('mod', categoria)"
                       >
                         <svg
                           class="group-hover:text-gray-900"
@@ -137,16 +137,15 @@
       </div>
     </div>
     <LazyModal v-if="modal.show">
-      <LazyCategoriaUpdate
+      <LazyFormCategoriaUpdate
         v-if="modal.action == 'mod'"
         :model="selectedCategoria"
         @close="modal.show = !modal.show"
       />
-      <!-- <LazyDepositoCreate
+      <LazyFormCategoriaCreate
         v-else-if="modal.action == 'add'"
-        :model="selectedCategoria"
         @close="modal.show = !modal.show"
-      /> -->
+      />
     </LazyModal>
   </div>
 </template>
@@ -176,8 +175,10 @@ export default {
     });
   },
   methods: {
-    seleccionarCategoría(categoria, action) {
-      this.selectedCategoria = categoria;
+    seleccionarCategoría(action, categoria = null) {
+      if (categoria) {
+        this.selectedCategoria = categoria;
+      }
       this.modal.action = action;
       this.modal.show = !this.modal.show;
     },
