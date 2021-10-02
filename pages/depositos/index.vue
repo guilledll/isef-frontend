@@ -116,30 +116,25 @@
         </div>
       </div>
     </div>
-    <Modal v-if="modal.show">
-      <DepositoUpdate
+    <LazyModal v-if="modal.show">
+      <LazyFormDepositoUpdate
         v-if="modal.action == 'mod'"
         :model="selectedDeposito"
         @close="modal.show = !modal.show"
       />
-      <DepositoCreate
+      <LazyFormDepositoCreate
         v-else-if="modal.action == 'add'"
         :model="selectedDeposito"
         @close="modal.show = !modal.show"
       />
-    </Modal>
+    </LazyModal>
   </div>
 </template>
 
 <script>
 import DepositosService from '@/services/depositos.service';
 export default {
-  components: {
-    Modal: () => import('@/components/modals/Modal'),
-    DepositoUpdate: () => import('@/components/forms/DepositoUpdate'),
-    DepositoCreate: () => import('@/components/forms/DepositoCreate'),
-  },
-  layout: 'app.layout',
+  layout: 'AppLayout',
   data() {
     return {
       depositos: [],

@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  layout: 'app.layout',
+  layout: 'AppLayout',
   computed: {
     user() {
       return this.$auth.user;

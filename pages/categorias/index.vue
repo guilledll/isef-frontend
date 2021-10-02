@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :title="header.title" :text="header.text" />
+    <GlobalHeader :title="header.title" :text="header.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <!-- AGREGAR CATEGORIA -->
       <div class="w-full gap-3 lg:order-last lg:w-72 lg:block">
@@ -136,31 +136,25 @@
         </div>
       </div>
     </div>
-    <Modal v-if="modal.show">
-      <CategoriaUpdate
+    <LazyModal v-if="modal.show">
+      <LazyCategoriaUpdate
         v-if="modal.action == 'mod'"
         :model="selectedCategoria"
         @close="modal.show = !modal.show"
       />
-      <!-- <DepositoCreate
+      <!-- <LazyDepositoCreate
         v-else-if="modal.action == 'add'"
         :model="selectedCategoria"
         @close="modal.show = !modal.show"
       /> -->
-    </Modal>
+    </LazyModal>
   </div>
 </template>
 
 <script>
 import CategoriasService from '@/services/categoria.service';
-import Header from '@/components/global/Header.vue';
 export default {
-  components: {
-    Header,
-    Modal: () => import('@/components/modals/Modal.vue'),
-    CategoriaUpdate: () => import('@/components/forms/CategoriaUpdate.vue'),
-  },
-  layout: 'app.layout',
+  layout: 'AppLayout',
   middleware: 'admin.middleware',
   data() {
     return {

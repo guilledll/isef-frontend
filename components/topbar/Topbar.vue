@@ -35,13 +35,13 @@
                 v-for="(item, i) in filterButtons"
                 :key="i"
                 :to="item.path"
-                class="font-medium text-gray-500 hover:text-gray-900"
-                :class="{ 'text-gray-900': item.selected }"
+                class="font-medium hover:text-gray-900"
+                :class="[item.selected ? 'text-gray-900' : 'text-gray-500']"
                 >{{ item.text }}
               </router-link>
             </div>
             <div class="block md:hidden md:ml-5">
-              <MenuButton @clicked="hideMenu" />
+              <TopbarMenuButton @clicked="hideMenu" />
             </div>
           </div>
         </div>
@@ -97,10 +97,14 @@
                 />
                 ISEF
               </router-link>
-              <MenuButton class="-mr-2" icon="x" @clicked="hideMenu" />
+              <LazyTopbarMenuButton
+                class="-mr-2"
+                icon="x"
+                @clicked="hideMenu"
+              />
             </div>
             <div class="px-2 pt-2 pb-3 space-y-1" @click="hideMenu">
-              <MenuILinks :items="filterButtons" />
+              <TopbarMenuLinks :items="filterButtons" />
             </div>
           </div>
         </div>
@@ -111,10 +115,6 @@
 
 <script>
 export default {
-  components: {
-    MenuILinks: () => import('@/components/topbar/MenuLinks'),
-    MenuButton: () => import('@/components/buttons/MenuButton'),
-  },
   data() {
     return {
       showMenu: false,

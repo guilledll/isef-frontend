@@ -9,11 +9,7 @@
   </div>
 </template>
 <script>
-import Topbar from '@/components/topbar/Topbar';
 export default {
-  components: {
-    Topbar,
-  },
   middleware: 'auth',
   computed: {
     showHeader() {

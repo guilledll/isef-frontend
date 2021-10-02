@@ -76,6 +76,6 @@
 
 <script>
 export default {
-  layout: 'out.layout',
+  layout: 'OutLayout',
 };
 </script>

@@ -11,7 +11,7 @@
             {{ error.nombre[0] }}
           </p>
           <div>
-            <Input
+            <FormInput
               id="nombre"
               v-model.trim="categoria.nombre"
               name="nombre"
@@ -44,15 +44,7 @@ import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
 import { required, numeric, maxLength } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
-import Input from '@/components/forms/Input.vue';
-import ModalFooter from '@/components/modals/ModalFooter.vue';
-import ModalLeftIcon from '@/components/modals/ModalLeftIcon.vue';
 export default {
-  components: {
-    Input,
-    ModalFooter,
-    ModalLeftIcon,
-  },
   mixins: [validationMixin],
   props: {
     model: { type: Object, default: () => {} },

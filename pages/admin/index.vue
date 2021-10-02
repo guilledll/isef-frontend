@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  layout: 'app.layout',
+  layout: 'AppLayout',
   methods: {
     goTo(ruta) {
       this.$router.push(`/${ruta}`);

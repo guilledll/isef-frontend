@@ -22,7 +22,7 @@
         <div class="space-y-2">
           <!-- CEDULA -->
           <div>
-            <Input
+            <FormInput
               id="ci"
               v-model.trim="form.ci"
               name="ci"
@@ -37,7 +37,7 @@
           </div>
           <!-- NOMBRE -->
           <div>
-            <Input
+            <FormInput
               id="nombre"
               v-model.trim="form.nombre"
               name="nombre"
@@ -52,7 +52,7 @@
           </div>
           <!-- APELLIDO -->
           <div>
-            <Input
+            <FormInput
               id="apellido"
               v-model.trim="form.apellido"
               name="apellido"
@@ -67,7 +67,7 @@
           </div>
           <!-- CORREO -->
           <div>
-            <Input
+            <FormInput
               id="correo"
               v-model.trim="form.correo"
               name="correo"
@@ -84,7 +84,7 @@
           </div>
           <!-- TELEFONO -->
           <div>
-            <Input
+            <FormInput
               id="telefono"
               v-model.trim="form.telefono"
               name="telefono"
@@ -100,7 +100,7 @@
           </div>
           <!-- CONTRASEÑA -->
           <div>
-            <Input
+            <FormInput
               id="password"
               v-model.trim="form.password"
               name="password"
@@ -116,7 +116,7 @@
           </div>
           <!-- REPETIR CONTRASEÑA -->
           <div>
-            <Input
+            <FormInput
               id="password_confirmation"
               v-model.trim="form.password_confirmation"
               name="password_confirmation"
@@ -186,14 +186,13 @@ import {
   email,
   sameAs,
 } from 'vuelidate/lib/validators';
-import Input from '@/components/forms/Input';
 const departamento = (value) => value != 0;
+function cedula(value) {
+  return this.validateCi(value);
+}
 export default {
-  components: {
-    Input,
-  },
   mixins: [validationMixin],
-  layout: 'out.layout',
+  layout: 'OutLayout',
   data() {
     return {
       form: {
@@ -217,6 +216,7 @@ export default {
         minLength: minLength(8),
         maxLength: maxLength(8),
         numeric,
+        cedula,
       },
       nombre: {
         required,
@@ -286,10 +286,6 @@ export default {
     },
     registro() {
       if (this.$v.$invalid) return;
-      if (!this.validateCi(this.form.ci)) {
-        this.errors = [['La cédula no es válida.']];
-        return;
-      }
       AuthService.register(this.form)
         .then(() => {
           this.$auth.loginWith('laravelSanctum', {

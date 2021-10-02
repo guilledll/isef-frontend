@@ -13,7 +13,7 @@
           </p>
           <div class="space-y-2">
             <div>
-              <Input
+              <FormInput
                 id="nombre"
                 v-model.trim="deposito.nombre"
                 name="nombre"
@@ -62,16 +62,8 @@ import { mensajes } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
 import { required, integer, maxLength } from 'vuelidate/lib/validators';
-import Input from '@/components/forms/Input.vue';
-import ModalFooter from '@/components/modals/ModalFooter.vue';
-import ModalLeftIcon from '~/components/modals/ModalLeftIcon.vue';
 const departamento = (value) => value != 0;
 export default {
-  components: {
-    Input,
-    ModalFooter,
-    ModalLeftIcon,
-  },
   mixins: [validationMixin],
   data() {
     return {
