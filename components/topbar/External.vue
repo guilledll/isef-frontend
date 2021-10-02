@@ -24,7 +24,7 @@
             </router-link>
             <!-- Boton navbar disponible en mobile -->
             <div class="-mr-2 flex items-center md:hidden">
-              <MenuButton @clicked="hideMenu" />
+              <TopbarMenuButton @clicked="hideMenu" />
             </div>
           </div>
         </div>
@@ -88,11 +88,11 @@
               ISEF
             </a>
             <div class="-mr-2">
-              <MenuButton icon="x" @clicked="hideMenu" />
+              <TopbarMenuButton icon="x" @clicked="hideMenu" />
             </div>
           </div>
           <div class="px-2 pt-2 pb-3 space-y-1" @click="hideMenu">
-            <MenuILinks :items="menuItems" />
+            <TopbarMenuLinks :items="menuItems" />
           </div>
         </div>
       </div>
@@ -102,10 +102,6 @@
 
 <script>
 export default {
-  components: {
-    MenuILinks: () => import('@/components/topbar/MenuLinks'),
-    MenuButton: () => import('@/components/buttons/MenuButton'),
-  },
   data() {
     return {
       showMenu: false,
@@ -119,20 +115,20 @@ export default {
           path: '/registro',
         },
       ],
-    }
+    };
   },
   computed: {
     auth() {
-      return this.$store.state.auth.loggedIn
+      return this.$store.state.auth.loggedIn;
     },
     topbarLink() {
-      return this.auth ? '/inicio' : '/'
+      return this.auth ? '/inicio' : '/';
     },
   },
   methods: {
     hideMenu() {
-      this.showMenu = !this.showMenu
+      this.showMenu = !this.showMenu;
     },
   },
-}
+};
 </script>

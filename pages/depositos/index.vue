@@ -17,7 +17,8 @@
                   <th
                     scope="col"
                     class="
-                      px-6
+                      sm:px-6
+                      px-3
                       py-3
                       text-left text-xs
                       font-medium
@@ -31,7 +32,8 @@
                   <th
                     scope="col"
                     class="
-                      px-6
+                      sm:px-6
+                      px-3
                       py-3
                       text-left text-xs
                       font-medium
@@ -42,31 +44,42 @@
                   >
                     Departamento
                   </th>
-
-                  <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Edit</span>
+                  <th
+                    scope="col"
+                    class="
+                      sm:px-6
+                      px-3
+                      py-3
+                      text-xs
+                      font-medium
+                      text-gray-500
+                      uppercase
+                      tracking-wider
+                      text-right
+                    "
+                  >
+                    Acción
                   </th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="deposito in depositos" :key="deposito.id">
-                  <td class="px-6 py-4 whitespace-nowrap">
+                  <td class="sm:px-6 px-3 py-4 whitespace-nowrap">
                     <div class="flex items-center">
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900">
-                          {{ deposito.nombre }}
-                        </div>
+                      <div class="text-sm font-medium text-gray-900">
+                        {{ deposito.nombre }}
                       </div>
                     </div>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
+                  <td class="sm:px-6 px-3 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-500">
                       {{ deposito.departamento }}
                     </div>
                   </td>
                   <td
                     class="
-                      px-6
+                      sm:px-6
+                      px-3
                       py-4
                       whitespace-nowrap
                       text-right text-sm
@@ -75,7 +88,24 @@
                   >
                     <a
                       class="text-indigo-600 hover:text-indigo-900"
-                      @click="seleccionarDeposito(deposito)"
+                      @click="seleccionarDeposito(deposito, 'add')"
+                      >Agregar</a
+                    >
+                  </td>
+
+                  <td
+                    class="
+                      sm:px-6
+                      px-3
+                      py-4
+                      whitespace-nowrap
+                      text-right text-sm
+                      font-medium
+                    "
+                  >
+                    <a
+                      class="text-indigo-600 hover:text-indigo-900"
+                      @click="seleccionarDeposito(deposito, 'mod')"
                       >Editar</a
                     >
                   </td>
@@ -86,54 +116,48 @@
         </div>
       </div>
     </div>
-    <Modal
-      v-if="showModal"
-      :show-modal="showModal"
-      :deposito="selectedDeposito"
-      @close="showModal = !showModal"
-      @update="updateDeposito"
-    ></Modal>
+    <LazyModal v-if="modal.show">
+      <LazyFormDepositoUpdate
+        v-if="modal.action == 'mod'"
+        :model="selectedDeposito"
+        @close="modal.show = !modal.show"
+      />
+      <LazyFormDepositoCreate
+        v-else-if="modal.action == 'add'"
+        :model="selectedDeposito"
+        @close="modal.show = !modal.show"
+      />
+    </LazyModal>
   </div>
 </template>
 
 <script>
-import DepositosService from '@/services/depositos.service'
-import Modal from '@/components/modals/Modal'
+import DepositosService from '@/services/depositos.service';
 export default {
-  components: {
-    Modal,
-  },
-  layout: 'app.layout',
+  layout: 'AppLayout',
   data() {
     return {
       depositos: [],
-      showModal: false,
       selectedDeposito: {},
-    }
+      modal: {
+        show: false,
+        action: '',
+      },
+    };
   },
   async mounted() {
     await DepositosService.index().then((res) => {
-      this.depositos = res.data
-    })
+      this.depositos = res.data;
+    });
   },
   methods: {
-    seleccionarDeposito(deposito) {
-      this.showModal = !this.showModal
-      this.selectedDeposito = deposito
-      //console.log(deposito, this.selectedDeposito)
-    },
-    updateDeposito(data) {
-      DepositosService.update(data.id, data)
-        .then(() => {
-          let deposito = this.depositos.find((dep) => dep.id === data.id)
-          deposito.nombre = data.nombre
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+    seleccionarDeposito(deposito, action) {
+      this.selectedDeposito = deposito;
+      this.modal.action = action;
+      this.modal.show = !this.modal.show;
     },
   },
-}
+};
 </script>
 
 <style></style>

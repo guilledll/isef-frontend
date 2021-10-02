@@ -35,13 +35,13 @@
                 v-for="(item, i) in filterButtons"
                 :key="i"
                 :to="item.path"
-                class="font-medium text-gray-500 hover:text-gray-900"
-                :class="{ 'text-gray-900': item.selected }"
+                class="font-medium hover:text-gray-900"
+                :class="[item.selected ? 'text-gray-900' : 'text-gray-500']"
                 >{{ item.text }}
               </router-link>
             </div>
             <div class="block md:hidden md:ml-5">
-              <MenuButton @clicked="hideMenu" />
+              <TopbarMenuButton @clicked="hideMenu" />
             </div>
           </div>
         </div>
@@ -97,10 +97,14 @@
                 />
                 ISEF
               </router-link>
-              <MenuButton class="-mr-2" icon="x" @clicked="hideMenu" />
+              <LazyTopbarMenuButton
+                class="-mr-2"
+                icon="x"
+                @clicked="hideMenu"
+              />
             </div>
             <div class="px-2 pt-2 pb-3 space-y-1" @click="hideMenu">
-              <MenuILinks :items="filterButtons" />
+              <TopbarMenuLinks :items="filterButtons" />
             </div>
           </div>
         </div>
@@ -111,24 +115,20 @@
 
 <script>
 export default {
-  components: {
-    MenuILinks: () => import('@/components/topbar/MenuLinks'),
-    MenuButton: () => import('@/components/buttons/MenuButton'),
-  },
   data() {
     return {
       showMenu: false,
-    }
+    };
   },
   computed: {
     auth() {
-      return this.$store.state.auth.loggedIn
+      return this.$store.state.auth.loggedIn;
     },
     user() {
-      return this.$store.state.auth.user
+      return this.$store.state.auth.user;
     },
     admin() {
-      return this.user.rol === 3
+      return this.user.rol === 3;
     },
     menuItems() {
       return [
@@ -162,19 +162,19 @@ export default {
           selected: this.selected('inventario'),
           show: this.auth && this.admin,
         },
-      ]
+      ];
     },
     filterButtons() {
-      return this.menuItems.filter((btn) => btn.show)
+      return this.menuItems.filter((btn) => btn.show);
     },
   },
   methods: {
     hideMenu() {
-      this.showMenu = !this.showMenu
+      this.showMenu = !this.showMenu;
     },
     selected(path) {
-      return this.$route.path.includes(path)
+      return this.$route.path.includes(path);
     },
   },
-}
+};
 </script>

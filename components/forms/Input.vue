@@ -33,7 +33,7 @@ export default {
     error: { type: Boolean, default: false },
     sr: { type: Boolean, default: true },
   },
-}
+};
 </script>
 
 <style></style>

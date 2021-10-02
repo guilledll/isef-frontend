@@ -7,18 +7,18 @@
 
 <script>
 export default {
-  layout: 'app.layout',
+  layout: 'AppLayout',
   computed: {
     user() {
-      return this.$auth.user
+      return this.$auth.user;
     },
   },
   methods: {
     async logout() {
-      await this.$auth.logout()
+      await this.$auth.logout();
     },
   },
-}
+};
 </script>
 
 <style></style>

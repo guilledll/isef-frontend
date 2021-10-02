@@ -22,7 +22,7 @@
         <div class="space-y-2">
           <!-- CEDULA -->
           <div>
-            <Input
+            <FormInput
               id="ci"
               v-model.trim="form.ci"
               name="ci"
@@ -37,7 +37,7 @@
           </div>
           <!-- NOMBRE -->
           <div>
-            <Input
+            <FormInput
               id="nombre"
               v-model.trim="form.nombre"
               name="nombre"
@@ -52,7 +52,7 @@
           </div>
           <!-- APELLIDO -->
           <div>
-            <Input
+            <FormInput
               id="apellido"
               v-model.trim="form.apellido"
               name="apellido"
@@ -67,7 +67,7 @@
           </div>
           <!-- CORREO -->
           <div>
-            <Input
+            <FormInput
               id="correo"
               v-model.trim="form.correo"
               name="correo"
@@ -84,7 +84,7 @@
           </div>
           <!-- TELEFONO -->
           <div>
-            <Input
+            <FormInput
               id="telefono"
               v-model.trim="form.telefono"
               name="telefono"
@@ -100,7 +100,7 @@
           </div>
           <!-- CONTRASEÑA -->
           <div>
-            <Input
+            <FormInput
               id="password"
               v-model.trim="form.password"
               name="password"
@@ -116,7 +116,7 @@
           </div>
           <!-- REPETIR CONTRASEÑA -->
           <div>
-            <Input
+            <FormInput
               id="password_confirmation"
               v-model.trim="form.password_confirmation"
               name="password_confirmation"
@@ -172,11 +172,11 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamento.service'
-import AuthService from '~/services/auth.service'
-import { mensajes } from '@/services/validation.service'
-import { validationMixin } from 'vuelidate'
-import { validationMessage } from 'vuelidate-messages'
+import DepartamentoService from '@/services/departamento.service';
+import AuthService from '~/services/auth.service';
+import { mensajes } from '@/services/validation.service';
+import { validationMixin } from 'vuelidate';
+import { validationMessage } from 'vuelidate-messages';
 import {
   required,
   minLength,
@@ -185,15 +185,14 @@ import {
   integer,
   email,
   sameAs,
-} from 'vuelidate/lib/validators'
-import Input from '@/components/forms/Input'
-const departamento = (value) => value != 0
+} from 'vuelidate/lib/validators';
+const departamento = (value) => value != 0;
+function cedula(value) {
+  return this.validateCi(value);
+}
 export default {
-  components: {
-    Input,
-  },
   mixins: [validationMixin],
-  layout: 'out.layout',
+  layout: 'OutLayout',
   data() {
     return {
       form: {
@@ -208,7 +207,7 @@ export default {
       },
       sedes: {},
       errors: [],
-    }
+    };
   },
   validations: {
     form: {
@@ -217,6 +216,7 @@ export default {
         minLength: minLength(8),
         maxLength: maxLength(8),
         numeric,
+        cedula,
       },
       nombre: {
         required,
@@ -253,54 +253,50 @@ export default {
   },
   mounted() {
     DepartamentoService.index().then((res) => {
-      this.sedes = res.data
-    })
+      this.sedes = res.data;
+    });
   },
   methods: {
     validar: validationMessage(mensajes),
     clean_ci(ci) {
-      return ci.replace(/\D/g, '')
+      return ci.replace(/\D/g, '');
     },
     validation_digit(ci) {
-      var a = 0
-      var i = 0
+      var a = 0;
+      var i = 0;
       if (ci.length <= 6) {
         for (i = ci.length; i < 7; i++) {
-          ci = '0' + ci
+          ci = '0' + ci;
         }
       }
       for (i = 0; i < 7; i++) {
-        a += (parseInt('2987634'[i]) * parseInt(ci[i])) % 10
+        a += (parseInt('2987634'[i]) * parseInt(ci[i])) % 10;
       }
       if (a % 10 === 0) {
-        return 0
+        return 0;
       } else {
-        return 10 - (a % 10)
+        return 10 - (a % 10);
       }
     },
     validateCi(ci) {
-      ci = this.clean_ci(ci)
-      var dig = ci[ci.length - 1]
-      ci = ci.replace(/[0-9]$/, '')
-      return dig == this.validation_digit(ci)
+      ci = this.clean_ci(ci);
+      var dig = ci[ci.length - 1];
+      ci = ci.replace(/[0-9]$/, '');
+      return dig == this.validation_digit(ci);
     },
     registro() {
-      if (this.$v.$invalid) return
-      if (!this.validateCi(this.form.ci)) {
-        this.errors = [['La cédula no es válida.']]
-        return
-      }
+      if (this.$v.$invalid) return;
       AuthService.register(this.form)
         .then(() => {
           this.$auth.loginWith('laravelSanctum', {
             correo: this.form.correo,
             password: this.form.password,
-          })
+          });
         })
         .catch((e) => {
-          this.errors = e.response.data.errors
-        })
+          this.errors = e.response.data.errors;
+        });
     },
   },
-}
+};
 </script>

@@ -1,167 +1,186 @@
 <template>
   <div>
-    <div class="rounded-xl bg-blue-500 px-8 py-6 w-full text-white">
-      <h4 class="title">Categorías de materiales</h4>
-      <span class="text-lg leading-5 font-medium">
-        Listado de las categorías asignadas a los materiales. Como ejemplo
-        algunas categorías pueden ser: Fútbol, Tennis, Pesas, Natación,
-        Colchonetas, etc.
-      </span>
-    </div>
-    <div class="w-full flex items-center justify-between mt-6 mb-10 gap-3">
-      <div class="btn btn-options left">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 mr-2"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+    <GlobalHeader :title="header.title" :text="header.text" />
+    <div class="flex flex-col gap-3 lg:flex-row">
+      <!-- AGREGAR CATEGORIA -->
+      <div class="w-full gap-3 lg:order-last lg:w-72 lg:block">
+        <div
+          class="
+            flex
+            items-center
+            justify-between
+            h-auto
+            bg-gray-50
+            border border-green-100
+            rounded-md
+            p-2
+            lg:flex-col lg:top-0 lg:sticky lg:border-green-200
+          "
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-          />
-        </svg>
-        Materiales
-      </div>
-      <div class="btn btn-options right">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 mr-2"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-        Agregar categoría
-      </div>
-    </div>
-    <div class="flex flex-col">
-      <h4 class="font-medium mb-4 text-3xl text-gray-800">Categorías</h4>
-      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div
+          <div class="flex pl-1 lg:block">
+            <span class="text-sm sm:text-base lg:text-lg">
+              Agregar
+              <b class="text-gray-800">nueva categoría</b>
+              para materiales.
+            </span>
+          </div>
+          <button
             class="
-              shadow
-              overflow-hidden
-              border-b border-gray-200
-              sm:rounded-lg
+              flex
+              items-center
+              justify-center
+              rounded-md
+              text-white
+              h-full
+              px-1.5
+              py-2
+              bg-green-600
+              hover:bg-green-500
+              sm:p-2.5
+              lg:w-full lg:h-auto lg:mt-3
             "
+            @click="modal.show = !modal.show"
           >
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    class="
-                      px-6
-                      py-3
-                      text-left text-xs
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
-                  >
-                    Nombre
-                  </th>
-                  <th
-                    scope="col"
-                    class="
-                      px-6
-                      py-3
-                      text-left text-xs
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
-                  >
-                    Departamento
-                  </th>
-                  <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Edit</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="categoria in categorias" :key="categoria.id">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900">
-                          {{ categoria.nombre }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-500">
-                      {{ categoria.id }}
-                    </div>
-                  </td>
-                  <td
-                    class="
-                      px-6
-                      py-4
-                      whitespace-nowrap
-                      text-right text-sm
-                      font-medium
-                    "
-                  >
-                    <a
-                      href="updateDeposito"
-                      class="text-indigo-600 hover:text-indigo-900"
-                      >Edit</a
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- TABLA -->
+      <div class="flex flex-col lg:flex-grow">
+        <div class="overflow-x-auto">
+          <div class="align-middle inline-block min-w-full">
+            <div
+              class="shadow overflow-hidden border border-gray-200 sm:rounded"
+            >
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col" class="table-th">Nombre</th>
+                    <th scope="col" class="table-th">Materiales</th>
+                    <th scope="col" class="table-th text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr v-for="categoria in categorias" :key="categoria.id">
+                    <td class="table-td">
+                      {{ categoria.nombre }}
+                    </td>
+                    <td class="table-td text-gray-500">
+                      {{ categoria.materiales || 0 }}
+                    </td>
+                    <td class="table-td text-right">
+                      <button v-if="false" class="table-btn group">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="group-hover:text-gray-900"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        class="table-btn group"
+                        @click="seleccionarCategoría(categoria, 'mod')"
+                      >
+                        <svg
+                          class="group-hover:text-gray-900"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <LazyModal v-if="modal.show">
+      <LazyCategoriaUpdate
+        v-if="modal.action == 'mod'"
+        :model="selectedCategoria"
+        @close="modal.show = !modal.show"
+      />
+      <!-- <LazyDepositoCreate
+        v-else-if="modal.action == 'add'"
+        :model="selectedCategoria"
+        @close="modal.show = !modal.show"
+      /> -->
+    </LazyModal>
   </div>
 </template>
 
 <script>
-import CategoriasService from '@/services/categoria.service'
+import CategoriasService from '@/services/categoria.service';
 export default {
-  layout: 'app.layout',
+  layout: 'AppLayout',
   middleware: 'admin.middleware',
   data() {
     return {
-      categorias: {},
-    }
+      categorias: [],
+      selectedCategoria: {},
+      header: {
+        title: 'Categorías de materiales',
+        text: 'Los materiales pertenecen a categorías, por ejemplo: fútbol, pesas, atletismo, etc.',
+      },
+      modal: {
+        show: false,
+        action: '',
+      },
+    };
   },
-  mounted() {
-    CategoriasService.index().then((res) => {
-      this.categorias = res.data
-    })
+  async mounted() {
+    await CategoriasService.index().then((res) => {
+      this.categorias = res.data;
+    });
   },
-}
+  methods: {
+    seleccionarCategoría(categoria, action) {
+      this.selectedCategoria = categoria;
+      this.modal.action = action;
+      this.modal.show = !this.modal.show;
+    },
+  },
+};
 </script>
-
-<style lang="postcss" scoped>
-.title {
-  @apply font-medium text-4xl leading-6 mb-5;
-}
-.btn-options {
-  @apply border border-transparent rounded-lg text-white text-center text-2xl h-16 cursor-pointer w-full;
-  &.left {
-    @apply bg-indigo-500 hover:bg-indigo-400;
-  }
-  &.right {
-    @apply bg-green-500 hover:bg-green-600;
-  }
-}
-</style>
