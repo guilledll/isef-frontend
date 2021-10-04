@@ -87,12 +87,12 @@
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="deposito in depositos" :key="deposito.id">
+                  <tr v-for="dep in depositos" :key="dep.id">
                     <td class="table-td">
-                      {{ deposito.nombre }}
+                      {{ dep.nombre }}
                     </td>
                     <td class="table-td text-gray-500">
-                      {{ deposito.departamento || 0 }}
+                      {{ dep.departamento || 0 }}
                     </td>
                     <td class="table-td text-right">
                       <button v-if="false" class="table-btn group">
@@ -113,7 +113,7 @@
                       </button>
                       <button
                         class="table-btn group"
-                        @click="seleccionarDeposito('mod', deposito)"
+                        @click="seleccionarDeposito('mod', dep)"
                       >
                         <svg
                           class="group-hover:text-gray-900"
@@ -138,12 +138,10 @@
     <LazyModal v-if="modal.show">
       <LazyFormDepositoUpdate
         v-if="modal.action == 'mod'"
-        :model="selectedDeposito"
         @close="modal.show = !modal.show"
       />
       <LazyFormDepositoCreate
         v-else-if="modal.action == 'add'"
-        :model="selectedDeposito"
         @close="modal.show = !modal.show"
       />
     </LazyModal>
@@ -151,13 +149,10 @@
 </template>
 
 <script>
-import DepositosService from '@/services/depositos.service';
 export default {
   layout: 'AppLayout',
   data() {
     return {
-      depositos: [],
-      selectedDeposito: {},
       header: {
         title: 'Depósitos',
         text: 'En los depósitos se encuentran los materiales, por ejemplo: Cure, Campus, etc.',
@@ -168,16 +163,17 @@ export default {
       },
     };
   },
-  async mounted() {
-    await DepositosService.index().then((res) => {
-      this.depositos = res.data;
-    });
+  computed: {
+    depositos() {
+      return this.$store.state.depositos.depositos;
+    },
+  },
+  mounted() {
+    this.$store.dispatch('depositos/getAll');
   },
   methods: {
     seleccionarDeposito(action, deposito = null) {
-      if (deposito) {
-        this.selectedDeposito = deposito;
-      }
+      if (deposito) this.$store.dispatch('depositos/select', deposito);
       this.modal.action = action;
       this.modal.show = !this.modal.show;
     },

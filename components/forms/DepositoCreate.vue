@@ -37,6 +37,7 @@
                 :error="$v.deposito.departamento_id.$anyError"
                 @input="$v.deposito.departamento_id.$reset()"
                 @blur="$v.deposito.departamento_id.$touch()"
+                @change="selectDepartamento"
               >
                 <option value="0">Seleccionar sede</option>
                 <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
@@ -57,7 +58,6 @@
 
 <script>
 import DepartamentoService from '@/services/departamento.service';
-import DepositosService from '@/services/depositos.service';
 import { mensajes } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
@@ -70,6 +70,7 @@ export default {
       deposito: {
         nombre: '',
         departamento_id: 0,
+        departamento: '',
       },
       sedes: [],
       error: null,
@@ -98,14 +99,18 @@ export default {
     createDeposito() {
       this.$v.deposito.$touch();
       if (this.$v.$invalid) return;
-      DepositosService.create(this.deposito)
+      this.$store
+        .dispatch('depositos/create', this.deposito)
         .then(() => {
-          // ALMACENAR EN STORE
-          this.$router.go();
+          this.$emit('close');
         })
         .catch((e) => {
           this.error = e.response.data.errors;
         });
+    },
+    selectDepartamento(e) {
+      this.deposito.departamento =
+        e.target[e.target.options.selectedIndex].text;
     },
   },
 };

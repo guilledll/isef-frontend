@@ -13,19 +13,19 @@
           <div>
             <FormInput
               id="nombre"
-              v-model.trim="deposito.nombre"
+              v-model.trim="form.nombre"
               name="nombre"
               autocomplete="on"
-              placeholder="nombre de deposito"
-              :error="$v.deposito.nombre.$anyError"
-              @input="$v.deposito.nombre.$reset()"
-              @blur="$v.deposito.nombre.$touch()"
+              placeholder="Nombre del depósito"
+              :error="$v.form.nombre.$anyError"
+              @input="$v.form.nombre.$reset()"
+              @blur="$v.form.nombre.$touch()"
             />
-            <span v-if="$v.deposito.nombre.$anyError" class="error">
-              {{ validar($v.deposito.nombre) }}
+            <span v-if="$v.form.nombre.$anyError" class="error">
+              {{ validar($v.form.nombre) }}
             </span>
           </div>
-          <input type="hidden" name="id" :value="deposito.id" />
+          <input type="hidden" name="id" :value="form.id" />
         </div>
       </div>
     </div>
@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import DepositosService from '@/services/depositos.service';
 import { mensajes } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
@@ -46,13 +45,10 @@ import { required, numeric, maxLength } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
   mixins: [validationMixin],
-  props: {
-    model: { type: Object, default: () => {} },
-  },
   data() {
     return {
       error: null,
-      deposito: {
+      form: {
         id: '',
         nombre: '',
         departamento_id: '',
@@ -60,18 +56,20 @@ export default {
     };
   },
   computed: {
+    deposito() {
+      return this.$store.state.depositos.deposito;
+    },
     disabled() {
-      return Object.keys(updatedDiff(this.model, this.deposito)).length == 0;
+      return Object.keys(updatedDiff(this.deposito, this.form)).length == 0;
     },
   },
   mounted() {
-    // this.deposito = this.model
-    this.deposito.id = this.model.id;
-    this.deposito.nombre = this.model.nombre;
-    this.deposito.departamento_id = this.model.departamento_id;
+    this.form.id = this.deposito.id;
+    this.form.nombre = this.deposito.nombre;
+    this.form.departamento_id = this.deposito.departamento_id;
   },
   validations: {
-    deposito: {
+    form: {
       id: {
         required,
         numeric,
@@ -86,16 +84,10 @@ export default {
     validar: validationMessage(mensajes),
     updateDeposito() {
       if (this.$v.invalid) return;
-      DepositosService.update(this.deposito.id, this.deposito)
-        .then(() => {
-          // IMPLEMENTAR ESTO EN LA STORE
-          // let deposito = this.depositos.find((dep) => dep.id === data.id)
-          // deposito.nombre = data.nombre
-          this.$emit('close');
-        })
-        .catch((e) => {
-          this.error = e.response.data.errors;
-        });
+      this.$store
+        .dispatch('depositos/update', this.form)
+        .then(() => this.$emit('close'))
+        .catch((e) => (this.error = e.response.data.errors));
     },
   },
 };

@@ -1,3 +1,6 @@
+/**
+ * Mensajes de validación utilizandos por Vulidate
+ */
 export const mensajes = {
   required: () => 'Campo requerido',
   minLength: ({ $params }) =>
