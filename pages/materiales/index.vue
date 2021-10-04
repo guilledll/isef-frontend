@@ -23,7 +23,8 @@
               <b class="text-gray-800"> nuevo material.</b>
             </span>
           </div>
-          <button
+          <router-link
+            to="/materiales/agregar"
             class="
               flex
               items-center
@@ -38,8 +39,8 @@
               sm:p-2.5
               lg:w-full lg:h-auto lg:mt-3
             "
-            @click="seleccionarMaterial('add')"
           >
+            agregar material
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6"
@@ -68,7 +69,7 @@
                 d="M12 4v16m8-8H4"
               />
             </svg>
-          </button>
+          </router-link>
         </div>
       </div>
       <!-- TABLA -->
@@ -89,7 +90,7 @@
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="material in materials" :key="material.id">
+                  <tr v-for="material in materiales" :key="material.id">
                     <td class="table-td">
                       {{ material.nombre }}
                     </td>
@@ -150,11 +151,7 @@
         :model="selectedmaterial"
         @close="modal.show = !modal.show"
       />
-      <LazyFormMaterialCreate
-        v-else-if="modal.action == 'add'"
-        :model="selectedmaterial"
-        @close="modal.show = !modal.show"
-      />
+
     </LazyModal>
   </div>
 </template>
@@ -165,11 +162,12 @@ export default {
   layout: 'AppLayout',
   data() {
     return {
-      materials: [],
+      depositos: [],
+      materiales: [],
       selectedmaterial: {},
       header: {
-        title: 'Depósitos',
-        text: 'En los depósitos se encuentran los materiales, por ejemplo: Cure, Campus, etc.',
+        title: 'Materiales',
+        text: 'materiales... etc.',
       },
       modal: {
         show: false,
@@ -179,7 +177,7 @@ export default {
   },
   async mounted() {
     await MaterialesService.index().then((res) => {
-      this.materials = res.data;
+      this.materiales = res.data;
     });
   },
   methods: {

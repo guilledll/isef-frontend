@@ -157,6 +157,18 @@ export default {
           show: this.auth && this.admin,
         },
         {
+          text: 'Categorias',
+          path: '/categorias',
+          selected: this.selected('categorias'),
+          show: this.auth && this.admin,
+        },
+        {
+          text: 'Departamentos',
+          path: '/departamentos',
+          selected: this.selected('departamentos'),
+          show: this.auth && this.admin,
+        },
+        {
           text: 'Registros',
           path: '/inventario',
           selected: this.selected('inventario'),
