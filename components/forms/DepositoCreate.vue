@@ -56,8 +56,8 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamento.service';
-import DepositosService from '@/services/depositos.service';
+import departamentoService from '@/services/departamento.service';
+import depositosService from '@/services/depositos.service';
 import { mensajes } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
@@ -76,7 +76,7 @@ export default {
     };
   },
   mounted() {
-    DepartamentoService.index().then((res) => {
+    departamentoService.index().then((res) => {
       this.sedes = res.data;
     });
   },
@@ -98,7 +98,8 @@ export default {
     createDeposito() {
       this.$v.deposito.$touch();
       if (this.$v.$invalid) return;
-      DepositosService.create(this.deposito)
+      depositosService
+        .create(this.deposito)
         .then(() => {
           // ALMACENAR EN STORE
           this.$router.go();
