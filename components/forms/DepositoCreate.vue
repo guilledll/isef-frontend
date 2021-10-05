@@ -58,11 +58,10 @@
 
 <script>
 import DepartamentoService from '@/services/departamento.service';
-import { mensajes } from '@/services/validation.service';
+import { mensajes, departamento } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
 import { required, integer, maxLength } from 'vuelidate/lib/validators';
-const departamento = (value) => value != 0;
 export default {
   mixins: [validationMixin],
   data() {
@@ -101,12 +100,8 @@ export default {
       if (this.$v.$invalid) return;
       this.$store
         .dispatch('depositos/create', this.deposito)
-        .then(() => {
-          this.$emit('close');
-        })
-        .catch((e) => {
-          this.error = e.response.data.errors;
-        });
+        .then(() => this.$emit('close'))
+        .catch((e) => (this.error = e.response.data.errors));
     },
     selectDepartamento(e) {
       this.deposito.departamento =

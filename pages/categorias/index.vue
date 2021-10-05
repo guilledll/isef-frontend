@@ -39,7 +39,7 @@
               sm:p-2.5
               lg:w-full lg:h-auto lg:mt-3
             "
-            @click="seleccionarCategoría('add')"
+            @click="seleccionarCategoria('add')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +114,7 @@
                       </button>
                       <button
                         class="table-btn group"
-                        @click="seleccionarCategoría('mod', categoria)"
+                        @click="seleccionarCategoria('mod', categoria)"
                       >
                         <svg
                           class="group-hover:text-gray-900"
@@ -139,7 +139,6 @@
     <LazyModal v-if="modal.show">
       <LazyFormCategoriaUpdate
         v-if="modal.action == 'mod'"
-        :model="selectedCategoria"
         @close="modal.show = !modal.show"
       />
       <LazyFormCategoriaCreate
@@ -151,14 +150,10 @@
 </template>
 
 <script>
-import CategoriasService from '@/services/categoria.service';
 export default {
   layout: 'AppLayout',
-  middleware: 'admin.middleware',
   data() {
     return {
-      categorias: [],
-      selectedCategoria: {},
       header: {
         title: 'Categorías de materiales',
         text: 'Los materiales pertenecen a categorías, por ejemplo: fútbol, pesas, atletismo, etc.',
@@ -169,16 +164,17 @@ export default {
       },
     };
   },
+  computed: {
+    categorias() {
+      return this.$store.state.categorias.categorias;
+    },
+  },
   async mounted() {
-    await CategoriasService.index().then((res) => {
-      this.categorias = res.data;
-    });
+    this.$store.dispatch('categorias/getAll');
   },
   methods: {
-    seleccionarCategoría(action, categoria = null) {
-      if (categoria) {
-        this.selectedCategoria = categoria;
-      }
+    seleccionarCategoria(action, categoria = null) {
+      if (categoria) this.$store.dispatch('categorias/select', categoria);
       this.modal.action = action;
       this.modal.show = !this.modal.show;
     },

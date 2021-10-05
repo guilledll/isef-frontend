@@ -87,12 +87,12 @@
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="dep in depositos" :key="dep.id">
+                  <tr v-for="deposito in depositos" :key="deposito.id">
                     <td class="table-td">
-                      {{ dep.nombre }}
+                      {{ deposito.nombre }}
                     </td>
                     <td class="table-td text-gray-500">
-                      {{ dep.departamento || 0 }}
+                      {{ deposito.departamento || 0 }}
                     </td>
                     <td class="table-td text-right">
                       <button v-if="false" class="table-btn group">
@@ -113,7 +113,7 @@
                       </button>
                       <button
                         class="table-btn group"
-                        @click="seleccionarDeposito('mod', dep)"
+                        @click="seleccionarDeposito('mod', deposito)"
                       >
                         <svg
                           class="group-hover:text-gray-900"

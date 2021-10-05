@@ -13,19 +13,19 @@
           <div>
             <FormInput
               id="nombre"
-              v-model.trim="categoria.nombre"
+              v-model.trim="form.nombre"
               name="nombre"
               autocomplete="on"
               placeholder="Nombre de categoría"
-              :error="$v.categoria.nombre.$anyError"
-              @input="$v.categoria.nombre.$reset()"
-              @blur="$v.categoria.nombre.$touch()"
+              :error="$v.form.nombre.$anyError"
+              @input="$v.form.nombre.$reset()"
+              @blur="$v.form.nombre.$touch()"
             />
-            <span v-if="$v.categoria.nombre.$anyError" class="error">
-              {{ validar($v.categoria.nombre) }}
+            <span v-if="$v.form.nombre.$anyError" class="error">
+              {{ validar($v.form.nombre) }}
             </span>
           </div>
-          <input type="hidden" name="id" :value="categoria.id" />
+          <input type="hidden" name="id" :value="form.id" />
         </div>
       </div>
     </div>
@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import CategoriaService from '@/services/categoria.service';
 import { mensajes } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
@@ -46,29 +45,30 @@ import { required, numeric, maxLength } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
   mixins: [validationMixin],
-  props: {
-    model: { type: Object, default: () => {} },
-  },
   data() {
     return {
       error: null,
-      categoria: {
+      form: {
         id: '',
         nombre: '',
       },
     };
   },
   computed: {
+    categoria() {
+      return this.$store.state.categorias.categoria;
+    },
     disabled() {
-      return Object.keys(updatedDiff(this.model, this.categoria)).length == 0;
+      return Object.keys(updatedDiff(this.categoria, this.form)).length == 0;
     },
   },
   mounted() {
-    this.categoria.id = this.model.id;
-    this.categoria.nombre = this.model.nombre;
+    console.log(this.categoria);
+    this.form.id = this.categoria.id;
+    this.form.nombre = this.categoria.nombre;
   },
   validations: {
-    categoria: {
+    form: {
       id: {
         required,
         numeric,
@@ -83,16 +83,10 @@ export default {
     validar: validationMessage(mensajes),
     updateCategoria() {
       if (this.$v.invalid) return;
-      CategoriaService.update(this.categoria.id, this.categoria)
-        .then(() => {
-          // IMPLEMENTAR ESTO EN LA STORE
-          // let categoria = this.depositos.find((dep) => dep.id === data.id)
-          // categoria.nombre = data.nombre
-          this.$emit('close');
-        })
-        .catch((e) => {
-          this.error = e.response.data.errors;
-        });
+      this.$store
+        .dispatch('categorias/update', this.form)
+        .then(() => this.$emit('close'))
+        .catch((e) => (this.error = e.response.data.errors));
     },
   },
 };
