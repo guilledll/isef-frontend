@@ -6,6 +6,7 @@
       type="submit"
       :class="type"
       :disabled="disabled"
+      @click="$emit('action')"
     >
       {{ text }}
     </button>

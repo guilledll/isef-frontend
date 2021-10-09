@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-    <ModalFooter text="Nuevo material" type="add" />
+
   </form>
 </template>
 
