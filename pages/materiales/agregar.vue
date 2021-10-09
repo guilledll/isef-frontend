@@ -1,73 +1,88 @@
 <template>
   <div>
     <GlobalHeader :title="header.title" :text="header.text" />
-    <div class="flex flex-col gap-3 lg:flex-row">
-      <!-- AGREGAR MATERIALES -->
-      <div class="w-full gap-3 lg:order-last lg:w-72 lg:block"></div>
+    <div>
+      <select
+        id="deposito_id"
+        v-model="dataMaterial.deposito"
+        name="deposito_id"
+        required
+        class="input-text bg-white h-11 text-gray-900"
+      >
+        <option
+          v-for="(deposito, i) in depositos"
+          :key="i"
+          :value="deposito.id"
+        >
+          {{ deposito.nombre }}
+        </option>
+      </select>
     </div>
     <div>
-      <form @submit.prevent="addForm">
-        <!--<label for="new-form">Agregar form</label> -->
-        <button>Agregar más materiales</button>
-      </form>
-    </div>
-    <div>
+      <FormMaterialCreate :categorias="categorias" @agregar="agregarMaterial" />
       <ul>
-        <li v-for="(form, index) in forms" :key="form.id">
-          <FormMaterialCreate @agregar="agregarMaterial" />
-          <button @click="deleteForm(index)">Quitar</button>
+        <li v-for="(form, index) in dataMaterial.materiales" :key="form.id">
+          {{ form }}
+          <button class="btn red" @click="deleteForm(index)">Quitar</button>
         </li>
       </ul>
     </div>
     <ModalFooter text="Confirmar" type="add" @action="createMateriales" />
-    <button @click="createMateriales">Guardar materiales</button>
   </div>
 </template>
 
 <script>
-import materialesService from '~/services/materiales.service';
+import MaterialesService from '~/services/materiales.service';
+import CategoriasService from '@/services/categoria.service';
+import DepositosService from '@/services/depositos.service';
 export default {
   layout: 'AppLayout',
   data() {
     return {
-      forms: [{ id: '' }], //Formularios
       nextformId: 0,
       dataMaterial: {
         //El material que se envía
         usuario_ci: this.$auth.user.ci,
+        deposito: 1,
         materiales: [],
       },
       header: {
         title: 'Materiales',
-        text: 'materiales... etc.',
+        text: 'Materiales... etc.',
       },
+      depositos: [],
+      categorias: [],
     };
+  },
+  mounted() {
+    DepositosService.index().then((res) => {
+      this.depositos = res.data;
+    });
+    CategoriasService.index().then((res) => {
+      this.categorias = res.data;
+    });
   },
   methods: {
     agregarMaterial(data) {
+      if (this.verificarNombre(data)) return;
       this.dataMaterial.materiales.push(data);
-      //console.log(this.dataMaterial.materiales);
-    },
-    addForm() {
-      this.forms.push({
-        id: this.nextformId++,
-      });
     },
     deleteForm: function (index) {
-      this.forms.splice(index, 1);
+      this.dataMaterial.materiales.splice(index, 1);
     },
     createMateriales() {
-      //  this.$v.material.$touch();
-      // if (this.$v.$invalid) return;
-      materialesService
-        .create(this.dataMaterial)
+      MaterialesService.create(this.dataMaterial)
         .then(() => {
-          // ALMACENAR EN STORE
           this.$router.go();
         })
         .catch((e) => {
           this.error = e.response.data.errors;
         });
+    },
+    verificarNombre(data) {
+      return this.dataMaterial.materiales.find((m) => {
+        return m.nombre === data.nombre && m.categoria_id === data.categoria_id;
+      });
     },
   },
 };

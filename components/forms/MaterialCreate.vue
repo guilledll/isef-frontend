@@ -29,26 +29,6 @@
             </div>
             <div>
               <select
-                id="deposito_id"
-                v-model.trim="material.deposito_id"
-                name="deposito_id"
-                required
-                class="input-text bg-white h-11 text-gray-900"
-                :error="$v.material.deposito_id.$anyError"
-                @input="$v.material.deposito_id.$reset()"
-                @blur="$v.material.deposito_id.$touch()"
-              >
-                <option value="0">Seleccionar deposito</option>
-                <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
-                  {{ sede.nombre }}
-                </option>
-              </select>
-              <span v-if="$v.material.deposito_id.$anyError" class="error">
-                {{ validar($v.material.deposito_id) }}
-              </span>
-            </div>
-            <div>
-              <select
                 id="categoria_id"
                 v-model.trim="material.categoria_id"
                 name="categoria_id"
@@ -89,53 +69,37 @@
           </div>
         </div>
       </div>
+      <button type="submit" class="btn green">Agregar más materiales</button>
     </div>
-
   </form>
 </template>
 
 <script>
-import categoriasService from '@/services/categoria.service';
-import depositosService from '@/services/depositos.service';
 import { mensajes } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
 import { required, integer, maxLength } from 'vuelidate/lib/validators';
 const categoria = (value) => value != 0;
-const deposito = (value) => value != 0;
 export default {
   mixins: [validationMixin],
+  props: {
+    categorias: { type: Array, default: () => [] },
+  },
   data() {
     return {
       material: {
         nombre: '',
-        deposito_id: 0,
         categoria_id: 0,
-        cantidad: 0,
+        cantidad: 1,
       },
-      sedes: [],
-      categorias: [],
       error: null,
     };
-  },
-  mounted() {
-    depositosService.index().then((res) => {
-      this.sedes = res.data;
-    });
-    categoriasService.index().then((res) => {
-      this.categorias = res.data;
-    });
   },
   validations: {
     material: {
       nombre: {
         required,
         maxLength: maxLength(50),
-      },
-      deposito_id: {
-        required,
-        integer,
-        deposito,
       },
       categoria_id: {
         required,
@@ -150,12 +114,22 @@ export default {
   },
   methods: {
     validar: validationMessage(mensajes),
-
     createMaterial() {
       this.$v.material.$touch();
       if (this.$v.$invalid) return;
 
-      this.$emit('agregar', this.material);
+      let form = {
+        nombre: this.material.nombre,
+        categoria_id: this.material.categoria_id,
+        cantidad: this.material.cantidad,
+      };
+
+      this.material.nombre = '';
+      this.material.categoria_id = 0;
+      this.material.cantidad = 1;
+
+      this.$v.$reset();
+      this.$emit('agregar', form);
     },
   },
 };
