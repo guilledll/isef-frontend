@@ -25,6 +25,7 @@ export default {
     '~/components',
     { path: '~/components/modals/', prefix: 'modal' },
     { path: '~/components/forms/', prefix: 'form' },
+    { path: '~/components/tables/', prefix: 'table' },
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

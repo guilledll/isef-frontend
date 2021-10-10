@@ -174,7 +174,7 @@
 <script>
 import DepartamentoService from '@/services/departamento.service';
 import AuthService from '~/services/auth.service';
-import { mensajes } from '@/services/validation.service';
+import { mensajes, departamento, cedula } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
 import {
@@ -186,10 +186,7 @@ import {
   email,
   sameAs,
 } from 'vuelidate/lib/validators';
-const departamento = (value) => value != 0;
-function cedula(value) {
-  return this.validateCi(value);
-}
+
 export default {
   mixins: [validationMixin],
   layout: 'OutLayout',
@@ -258,32 +255,6 @@ export default {
   },
   methods: {
     validar: validationMessage(mensajes),
-    clean_ci(ci) {
-      return ci.replace(/\D/g, '');
-    },
-    validation_digit(ci) {
-      var a = 0;
-      var i = 0;
-      if (ci.length <= 6) {
-        for (i = ci.length; i < 7; i++) {
-          ci = '0' + ci;
-        }
-      }
-      for (i = 0; i < 7; i++) {
-        a += (parseInt('2987634'[i]) * parseInt(ci[i])) % 10;
-      }
-      if (a % 10 === 0) {
-        return 0;
-      } else {
-        return 10 - (a % 10);
-      }
-    },
-    validateCi(ci) {
-      ci = this.clean_ci(ci);
-      var dig = ci[ci.length - 1];
-      ci = ci.replace(/[0-9]$/, '');
-      return dig == this.validation_digit(ci);
-    },
     registro() {
       if (this.$v.$invalid) return;
       AuthService.register(this.form)

@@ -1,16 +1,15 @@
 import api from '@/services/api.service';
 
-/**
- * API Sanctum para obtener cookies
- * @returns Cookie
- */
-function setCookie() {
-  return api().get('/sanctum/csrf-cookie');
-}
-
 export default {
+  /**
+   * Registro de nuevos usuarios
+   * @param {*} data
+   */
   async register(data) {
-    await setCookie();
-    return api().post('/register', data);
+    await api()
+      .get('/sanctum/csrf-cookie')
+      .then(() => {
+        return api().post('/register', data);
+      });
   },
 };

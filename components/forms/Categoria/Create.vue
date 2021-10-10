@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import CategoriaService from '@/services/categoria.service';
 import { mensajes } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
@@ -62,14 +61,10 @@ export default {
     createCategoria() {
       this.$v.categoria.$touch();
       if (this.$v.$invalid) return;
-      CategoriaService.create(this.categoria)
-        .then(() => {
-          // ALMACENAR EN STORE
-          this.$router.go();
-        })
-        .catch((e) => {
-          this.error = e.response.data.errors;
-        });
+      this.$store
+        .dispatch('categorias/create', this.categoria)
+        .then(() => this.$emit('close'))
+        .catch((e) => (this.error = e.response.data.errors));
     },
   },
 };
