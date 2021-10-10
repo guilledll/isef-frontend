@@ -32,7 +32,7 @@
     <ModalFooter
       text="Modificar depósito"
       :disabled="disabled"
-      @close="$emit('close')"
+      @close="closeModal"
     />
   </form>
 </template>
@@ -88,6 +88,10 @@ export default {
         .dispatch('depositos/update', this.form)
         .then(() => this.$emit('close'))
         .catch((e) => (this.error = e.response.data.errors));
+    },
+    closeModal() {
+      this.$store.dispatch('depositos/clear');
+      this.$emit('close');
     },
   },
 };
