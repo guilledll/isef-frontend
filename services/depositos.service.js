@@ -1,6 +1,6 @@
 import api from '@/services/api.service';
 
-export default {
+export default { 
   /**
    * Devuelve todos los depósitos.
    */

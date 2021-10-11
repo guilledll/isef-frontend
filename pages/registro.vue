@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamento.service';
+import DepartamentoService from '@/services/departamentos.service';
 import AuthService from '~/services/auth.service';
 import { mensajes, departamento, cedula } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';

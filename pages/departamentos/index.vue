@@ -91,43 +91,32 @@
                     :key="departamento.id"
                   >
                     <td class="table-td">
-                      {{ departamento.nombre }}
-                    </td>
-                    <td class="table-td text-gray-500">
-                      {{ departamento.departamento || 0 }}
+                      <router-link
+                        :to="`/departamentos/${departamento.id}`"
+                        class="text-black hover:text-blue-600 hover:underline"
+                        @click.native="
+                          seleccionarDepartamento('view', departamento)
+                        "
+                      >
+                        {{ departamento.nombre }}
+                      </router-link>
                     </td>
                     <td class="table-td text-right">
-                      <button v-if="false" class="table-btn group">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="group-hover:text-gray-900"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </button>
-                      <button
-                        class="table-btn group"
+                      <TableButton
+                        svg="view"
+                        @click="
+                          $router.push(`/departamentos/${departamento.id}`)
+                        "
+                      />
+                      <TableButton
+                        v-if="!departamento.cantidad_materiales"
+                        svg="del"
+                        @click="seleccionarDepartamento('del', departamento)"
+                      />
+                      <TableButton
+                        svg="mod"
                         @click="seleccionarDepartamento('mod', departamento)"
-                      >
-                        <svg
-                          class="group-hover:text-gray-900"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
-                          />
-                        </svg>
-                      </button>
+                      />
                     </td>
                   </tr>
                 </tbody>
@@ -140,12 +129,14 @@
     <LazyModal v-if="modal.show">
       <LazyFormDepartamentoUpdate
         v-if="modal.action == 'mod'"
-        :model="selectedDepartamento"
         @close="modal.show = !modal.show"
       />
       <LazyFormDepartamentoCreate
         v-else-if="modal.action == 'add'"
-        :model="selectedDepartamento"
+        @close="modal.show = !modal.show"
+      />
+      <LazyFormDepartamentoDelete
+        v-else-if="modal.action == 'del'"
         @close="modal.show = !modal.show"
       />
     </LazyModal>
@@ -153,13 +144,10 @@
 </template>
 
 <script>
-import departamentoService from '@/services/departamento.service';
 export default {
   layout: 'AppLayout',
   data() {
     return {
-      departamentos: [],
-      selectedDepartamento: {},
       header: {
         title: 'Departamentos',
         text: 'En los departamentos.. etc.',
@@ -170,18 +158,22 @@ export default {
       },
     };
   },
+  computed: {
+    departamentos() {
+      return this.$store.state.departamentos.departamentos;
+    },
+  },
   async mounted() {
-    await departamentoService.index().then((res) => {
-      this.departamentos = res.data;
-    });
+    this.$store.dispatch('departamentos/getAll');
   },
   methods: {
     seleccionarDepartamento(action, departamento = null) {
-      if (departamento) {
-        this.selectedDepartamento = departamento;
+      if (departamento)
+        this.$store.dispatch('departamentos/select', departamento);
+      if (action != 'view') {
+        this.modal.action = action;
+        this.modal.show = !this.modal.show;
       }
-      this.modal.action = action;
-      this.modal.show = !this.modal.show;
     },
   },
 };

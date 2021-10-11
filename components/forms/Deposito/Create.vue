@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import departamentoService from '@/services/departamento.service';
+import departamentoService from '@/services/departamentos.service';
 import { mensajes, departamento } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';

@@ -28,7 +28,17 @@
                     <td class="table-td text-gray-500">
                       {{ usuario.departamento_id }}
                     </td>
-                    <td class="table-td text-gray-500">
+                    <td
+                      class="table-td text-gray-500"
+                      :class="[
+                        {
+                          'text-red-500': usuario.rol === 0,
+                        },
+                        {
+                          'text-green-500': usuario.rol === 2,
+                        },
+                      ]"
+                    >
                       {{ mostrarRol(usuario.rol) }}
                     </td>
                     <td class="table-td text-right">

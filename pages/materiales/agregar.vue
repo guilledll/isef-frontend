@@ -33,7 +33,7 @@
 
 <script>
 import MaterialesService from '~/services/materiales.service';
-import CategoriasService from '@/services/categoria.service';
+import CategoriasService from '~/services/categorias.service';
 import DepositosService from '@/services/depositos.service';
 export default {
   layout: 'AppLayout',

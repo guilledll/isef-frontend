@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div> 
     <GlobalHeader :title="header.title" :text="header.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <!-- AGREGAR DEPOSITO -->

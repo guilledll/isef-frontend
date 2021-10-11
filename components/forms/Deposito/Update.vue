@@ -58,7 +58,7 @@ export default {
   computed: {
     deposito() {
       return this.$store.state.depositos.deposito;
-    },
+    }, 
     disabled() {
       return Object.keys(updatedDiff(this.deposito, this.form)).length == 0;
     },
