@@ -8,10 +8,4 @@
   .table-td {
     @apply px-3 py-2 text-sm whitespace-nowrap md:px-6 md:py-3 md:text-base;
   }
-  .table-btn {
-    @apply p-2 rounded-md hover:shadow hover:bg-gray-100;
-    & > svg {
-      @apply h-5 w-5 text-gray-500;
-    }
-  }
 }

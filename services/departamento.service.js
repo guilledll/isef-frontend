@@ -2,7 +2,7 @@ import api from '@/services/api.service';
 
 export default {
   /**
-   * Devuelve todos los depósitos.
+   * Obtiene todos los departamentos
    */
   async index() {
     return await api().get('/api/v1/departamentos');
@@ -22,4 +22,13 @@ export default {
   async update(id, data) {
     return await api().put(`/api/v1/departamentos/${id}`, data);
   },
+
+  /**
+   * Devuelve un departamento específico
+   * @param {int} id
+   */
+  async show(id) {
+    return await api().get(`/api/v1/departamentos/${id}`);
+  },
 };
+

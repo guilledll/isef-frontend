@@ -181,7 +181,8 @@ export default {
     },
   },
   methods: {
-    hideMenu() {
+    hideMenu(data) {
+      console.log(data);
       this.showMenu = !this.showMenu;
     },
     selected(path) {
