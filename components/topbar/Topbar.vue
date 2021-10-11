@@ -169,6 +169,12 @@ export default {
           show: this.auth && this.admin,
         },
         {
+          text: 'Usuarios',
+          path: '/usuarios',
+          selected: this.selected('usuarios'),
+          show: this.auth && this.admin,
+        },
+        {
           text: 'Registros',
           path: '/inventario',
           selected: this.selected('inventario'),

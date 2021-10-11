@@ -63,7 +63,7 @@
                 @blur="$v.material.cantidad.$touch()"
               />
               <span v-if="$v.material.cantidad.$anyError" class="error">
-                {{ validar($v.material.caantidad) }}
+                {{ validar($v.material.cantidad) }}
               </span>
             </div>
           </div>

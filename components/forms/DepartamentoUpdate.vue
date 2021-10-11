@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="updatedepartamento">
+  <form @submit.prevent="updateDepartamento">
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon />
@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     validar: validationMessage(mensajes),
-    updatedepartamento() {
+    updateDepartamento() {
       if (this.$v.invalid) return;
       departamentoService
         .update(this.departamento.id, this.departamento)
