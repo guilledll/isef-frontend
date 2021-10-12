@@ -4,52 +4,48 @@
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon type="add" />
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">
-            Agregar categoria
-          </h3>
-          <p v-if="error && error.nombre" class="text-red-500 font-medium mb-1">
-            {{ error.nombre[0] }}
-          </p>
+          <h3 class="modal-form-heading">Agregar categoría</h3>
           <div>
             <FormInput
               id="nombre"
-              v-model.trim="categoria.nombre"
+              v-model.trim="form.nombre"
               name="nombre"
               autocomplete="on"
-              placeholder="nombre de categoria"
-              :error="$v.categoria.nombre.$anyError"
-              @input="$v.categoria.nombre.$reset()"
-              @blur="$v.categoria.nombre.$touch()"
-            />
-            <span v-if="$v.categoria.nombre.$anyError" class="error">
-              {{ validar($v.categoria.nombre) }}
-            </span>
+              placeholder="Nombre de la categoría"
+              :error="hasError($v.form.nombre, 'nombre')"
+              @input="fieldReset($v.form.nombre, 'nombre')"
+              @blur="$v.form.nombre.$touch()"
+            >
+              <LazyFormError
+                v-if="hasError($v.form.nombre, 'nombre')"
+                :text="errorText($v.form.nombre, 'nombre')"
+                :val="errorValidation($v.form.nombre)"
+              />
+            </FormInput>
           </div>
-          <input type="hidden" name="id" :value="categoria.id" />
         </div>
       </div>
     </div>
-    <ModalFooter text="Nueva categoria" type="add" @close="$emit('close')" />
+    <ModalFooter text="Nueva categoría" type="add" @close="$emit('close')" />
   </form>
 </template>
 
 <script>
-import { mensajes } from '@/services/validation.service';
+import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { validationMixin } from 'vuelidate';
-import { validationMessage } from 'vuelidate-messages';
 import { required, maxLength } from 'vuelidate/lib/validators';
 export default {
-  mixins: [validationMixin],
+  mixins: [validationMixin, InputValidationMixin],
   data() {
     return {
-      categoria: {
+      form: {
         nombre: '',
       },
-      error: null,
+      errors: [],
     };
   },
   validations: {
-    categoria: {
+    form: {
       nombre: {
         required,
         maxLength: maxLength(50),
@@ -57,14 +53,14 @@ export default {
     },
   },
   methods: {
-    validar: validationMessage(mensajes),
     createCategoria() {
-      this.$v.categoria.$touch();
+      this.$v.form.$touch();
       if (this.$v.$invalid) return;
+
       this.$store
-        .dispatch('categorias/create', this.categoria)
+        .dispatch('categorias/create', this.form)
         .then(() => this.$emit('close'))
-        .catch((e) => (this.error = e.response.data.errors));
+        .catch((e) => (this.errors = e.response.data.errors));
     },
   },
 };

@@ -169,8 +169,7 @@ export default {
     },
   },
   methods: {
-    hideMenu(data) {
-      console.log(data);
+    hideMenu() {
       this.showMenu = !this.showMenu;
     },
     selected(path) {

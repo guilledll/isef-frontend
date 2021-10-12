@@ -1,0 +1,18 @@
+<template>
+  <div class="flex flex-col lg:flex-grow">
+    <div class="overflow-x-auto">
+      <div class="align-middle inline-block min-w-full">
+        <div class="shadow overflow-hidden border border-gray-200 sm:rounded">
+          <table class="min-w-full divide-y divide-gray-200">
+            <slot name="header"></slot>
+            <slot name="body"></slot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {};
+</script>

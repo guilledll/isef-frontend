@@ -23,6 +23,7 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: [
     '~/components',
+    { path: '~/components/globals/', prefix: 'global' },
     { path: '~/components/modals/', prefix: 'modal' },
     { path: '~/components/forms/', prefix: 'form' },
     { path: '~/components/tables/', prefix: 'table' },

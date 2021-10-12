@@ -4,49 +4,51 @@
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon type="add" />
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <h3 class="text-xl leading-6 font-medium text-gray-900 mb-3">
-            Agregar depósito
-          </h3>
+          <h3 class="modal-form-heading">Agregar depósito</h3>
           <p class="mb-3">Se creará un nuevo depósitos para los materiales.</p>
-          <p v-if="error" class="text-red-500 font-medium mb-1">
-            {{ error.nombre[0] }}
-          </p>
           <div class="space-y-2">
             <div>
               <FormInput
                 id="nombre"
-                v-model.trim="deposito.nombre"
+                v-model.trim="form.nombre"
                 name="nombre"
                 autocomplete="on"
-                placeholder="Nombre de deposito"
-                :error="$v.deposito.nombre.$anyError"
-                @input="$v.deposito.nombre.$reset()"
-                @blur="$v.deposito.nombre.$touch()"
-              />
-              <span v-if="$v.deposito.nombre.$anyError" class="error">
-                {{ validar($v.deposito.nombre) }}
-              </span>
+                placeholder="Nombre del deposito"
+                :error="hasError($v.form.nombre, 'nombre')"
+                @input="fieldReset($v.form.nombre, 'nombre')"
+                @blur="$v.form.nombre.$touch()"
+              >
+                <LazyFormError
+                  v-if="hasError($v.form.nombre, 'nombre')"
+                  :text="errorText($v.form.nombre, 'nombre')"
+                  :val="errorValidation($v.form.nombre)"
+                />
+              </FormInput>
             </div>
             <div>
-              <select
+              <FormSelect
                 id="departamento_id"
-                v-model.trim="deposito.departamento_id"
+                v-model.trim="form.departamento_id"
                 name="departamento_id"
                 required
-                class="input-text bg-white h-11 text-gray-900"
-                :error="$v.deposito.departamento_id.$anyError"
-                @input="$v.deposito.departamento_id.$reset()"
-                @blur="$v.deposito.departamento_id.$touch()"
+                :error="hasError($v.form.departamento_id)"
+                @input="fieldReset($v.form.departamento_id)"
+                @blur="$v.form.departamento_id.$touch()"
                 @change="selectDepartamento"
               >
-                <option value="0">Seleccionar sede</option>
-                <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
-                  {{ sede.nombre }}
-                </option>
-              </select>
-              <span v-if="$v.deposito.departamento_id.$anyError" class="error">
-                {{ validar($v.deposito.departamento_id) }}
-              </span>
+                <template #options>
+                  <option value="0">Seleccionar sede</option>
+                  <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
+                    {{ sede.nombre }}
+                  </option>
+                </template>
+                <template #error>
+                  <LazyFormError
+                    v-if="hasError($v.form.departamento_id)"
+                    :text="errorText($v.form.departamento_id)"
+                  />
+                </template>
+              </FormSelect>
             </div>
           </div>
         </div>
@@ -58,21 +60,21 @@
 
 <script>
 import DepartamentoService from '@/services/departamento.service';
-import { mensajes, departamento } from '@/services/validation.service';
+import InputValidationMixin from '@/mixins/InputValidationMixin';
+import { departamento } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
-import { validationMessage } from 'vuelidate-messages';
 import { required, integer, maxLength } from 'vuelidate/lib/validators';
 export default {
-  mixins: [validationMixin],
+  mixins: [validationMixin, InputValidationMixin],
   data() {
     return {
-      deposito: {
+      form: {
         nombre: '',
         departamento_id: 0,
         departamento: '',
       },
       sedes: [],
-      error: null,
+      errors: [],
     };
   },
   mounted() {
@@ -81,7 +83,7 @@ export default {
     });
   },
   validations: {
-    deposito: {
+    form: {
       nombre: {
         required,
         maxLength: maxLength(50),
@@ -94,18 +96,17 @@ export default {
     },
   },
   methods: {
-    validar: validationMessage(mensajes),
     createDeposito() {
-      this.$v.deposito.$touch();
-      if (this.$v.$invalid) return;
+      this.$v.form.$touch();
+      if (this.invalid) return;
+
       this.$store
-        .dispatch('depositos/create', this.deposito)
+        .dispatch('depositos/create', this.form)
         .then(() => this.$emit('close'))
-        .catch((e) => (this.error = e.response.data.errors));
+        .catch((e) => (this.errors = e.response.data.errors));
     },
     selectDepartamento(e) {
-      this.deposito.departamento =
-        e.target[e.target.options.selectedIndex].text;
+      this.form.departamento = e.target[e.target.options.selectedIndex].text;
     },
   },
 };
