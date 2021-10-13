@@ -184,7 +184,7 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamento.service';
+import DepartamentoService from '@/services/departamentos.service';
 import AuthService from '@/services/auth.service';
 import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { departamento, cedula } from '@/services/validation.service';
