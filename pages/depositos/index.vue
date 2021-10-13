@@ -11,37 +11,35 @@
           <TableHead :header="table.header" />
         </template>
         <template #body>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="deposito in depositos" :key="deposito.id">
-              <td class="table-td">
-                <router-link
-                  :to="`/depositos/${deposito.id}`"
-                  class="text-black hover:text-blue-600 hover:underline"
-                  @click.native="seleccionarDeposito('view', deposito)"
-                >
-                  {{ deposito.nombre }}
-                </router-link>
-              </td>
-              <td class="table-td text-gray-500">
-                {{ deposito.departamento }}
-              </td>
-              <td class="table-td text-right">
-                <TableButton
-                  svg="view"
-                  @click="$router.push(`/depositos/${deposito.id}`)"
-                />
-                <TableButton
-                  v-if="!deposito.cantidad_materiales"
-                  svg="del"
-                  @click="seleccionarDeposito('del', deposito)"
-                />
-                <TableButton
-                  svg="mod"
-                  @click="seleccionarDeposito('mod', deposito)"
-                />
-              </td>
-            </tr>
-          </tbody>
+          <tr v-for="deposito in depositos" :key="deposito.id">
+            <td class="table-td">
+              <router-link
+                :to="`/depositos/${deposito.id}`"
+                class="text-black hover:text-blue-600 hover:underline"
+                @click.native="seleccionarDeposito('view', deposito)"
+              >
+                {{ deposito.nombre }}
+              </router-link>
+            </td>
+            <td class="table-td text-gray-500">
+              {{ deposito.departamento }}
+            </td>
+            <td class="table-td text-right">
+              <TableButton
+                svg="view"
+                @click="$router.push(`/depositos/${deposito.id}`)"
+              />
+              <TableButton
+                v-if="!deposito.cantidad_materiales"
+                svg="del"
+                @click="seleccionarDeposito('del', deposito)"
+              />
+              <TableButton
+                svg="mod"
+                @click="seleccionarDeposito('mod', deposito)"
+              />
+            </td>
+          </tr>
         </template>
       </Table>
     </div>
