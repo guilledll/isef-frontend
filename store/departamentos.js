@@ -47,8 +47,8 @@ export const actions = {
     });
   },
   async create(context, data) {
-    return await DepartamentosService.create(data).then(() => {
-      context.commit('ADD_DEPARTAMENTO', data);
+    return await DepartamentosService.create(data).then((res) => {
+      context.commit('ADD_DEPARTAMENTO', res.data);
     });
   },
   async update(context, data) {
@@ -59,6 +59,7 @@ export const actions = {
   async delete(context, id) {
     return await DepartamentosService.delete(id).then(() => {
       context.commit('DEL_DEPARTAMENTO', id);
+      context.commit('CLEAR_SELECTED');
     });
   },
 };

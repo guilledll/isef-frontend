@@ -9,16 +9,7 @@
           Regístarte para reservar el uso de materiales en las sedes de ISEF.
         </p>
       </div>
-      <form class="mt-8 space-y-6" @submit.prevent="registro">
-        <div>
-          <p
-            v-for="(e, i) in errors"
-            :key="i"
-            class="text-red-500 font-medium text-center"
-          >
-            {{ e[0] }}
-          </p>
-        </div>
+      <form class="mt-8 space-y-4" @submit.prevent="registro">
         <div class="space-y-2">
           <!-- CEDULA -->
           <div>
@@ -27,13 +18,16 @@
               v-model.trim="form.ci"
               name="ci"
               placeholder="Cédula (sin puntos ni guión)"
-              :error="$v.form.ci.$anyError"
-              @input="$v.form.ci.$reset()"
+              :error="hasError($v.form.ci, 'ci')"
+              @input="fieldReset($v.form.ci, 'ci')"
               @blur="$v.form.ci.$touch()"
-            />
-            <span v-if="$v.form.ci.$anyError" class="error">
-              {{ validar($v.form.ci) }}
-            </span>
+            >
+              <LazyFormError
+                v-if="hasError($v.form.ci, 'ci')"
+                :text="errorText($v.form.ci, 'ci')"
+                :val="errorValidation($v.form.ci)"
+              />
+            </FormInput>
           </div>
           <!-- NOMBRE -->
           <div>
@@ -42,13 +36,15 @@
               v-model.trim="form.nombre"
               name="nombre"
               placeholder="Nombre"
-              :error="$v.form.nombre.$anyError"
-              @input="$v.form.nombre.$reset()"
+              :error="hasError($v.form.nombre)"
+              @input="fieldReset($v.form.nombre)"
               @blur="$v.form.nombre.$touch()"
-            />
-            <span v-if="$v.form.nombre.$anyError" class="error">
-              {{ validar($v.form.nombre) }}
-            </span>
+            >
+              <LazyFormError
+                v-if="hasError($v.form.nombre)"
+                :text="errorText($v.form.nombre)"
+              />
+            </FormInput>
           </div>
           <!-- APELLIDO -->
           <div>
@@ -57,13 +53,15 @@
               v-model.trim="form.apellido"
               name="apellido"
               placeholder="Apellido"
-              :error="$v.form.apellido.$anyError"
-              @input="$v.form.apellido.$reset()"
+              :error="hasError($v.form.apellido)"
+              @input="fieldReset($v.form.apellido)"
               @blur="$v.form.apellido.$touch()"
-            />
-            <span v-if="$v.form.apellido.$anyError" class="error">
-              {{ validar($v.form.apellido) }}
-            </span>
+            >
+              <LazyFormError
+                v-if="hasError($v.form.apellido)"
+                :text="errorText($v.form.apellido)"
+              />
+            </FormInput>
           </div>
           <!-- CORREO -->
           <div>
@@ -74,13 +72,16 @@
               type="email"
               autocomplete="email"
               placeholder="Correo"
-              :error="$v.form.correo.$anyError"
-              @input="$v.form.correo.$reset()"
+              :error="hasError($v.form.correo, 'correo')"
+              @input="fieldReset($v.form.correo, 'correo')"
               @blur="$v.form.correo.$touch()"
-            />
-            <span v-if="$v.form.correo.$anyError" class="error">
-              {{ validar($v.form.correo) }}
-            </span>
+            >
+              <LazyFormError
+                v-if="hasError($v.form.correo, 'correo')"
+                :text="errorText($v.form.correo, 'correo')"
+                :val="errorValidation($v.form.correo)"
+              />
+            </FormInput>
           </div>
           <!-- TELEFONO -->
           <div>
@@ -90,13 +91,16 @@
               name="telefono"
               type="tel"
               placeholder="Teléfono de contacto"
-              :error="$v.form.telefono.$anyError"
-              @input="$v.form.telefono.$reset()"
+              :error="hasError($v.form.telefono, 'telefono')"
+              @input="fieldReset($v.form.telefono, 'telefono')"
               @blur="$v.form.telefono.$touch()"
-            />
-            <span v-if="$v.form.telefono.$anyError" class="error">
-              {{ validar($v.form.telefono) }}
-            </span>
+            >
+              <LazyFormError
+                v-if="hasError($v.form.telefono, 'telefono')"
+                :text="errorText($v.form.telefono, 'telefono')"
+                :val="errorValidation($v.form.telefono)"
+              />
+            </FormInput>
           </div>
           <!-- CONTRASEÑA -->
           <div>
@@ -106,13 +110,15 @@
               name="password"
               type="password"
               placeholder="Contraseña"
-              :error="$v.form.password.$anyError"
-              @input="$v.form.password.$reset()"
+              :error="hasError($v.form.password)"
+              @input="fieldReset($v.form.password)"
               @blur="$v.form.password.$touch()"
-            />
-            <span v-if="$v.form.password.$anyError" class="error">
-              {{ validar($v.form.password) }}
-            </span>
+            >
+              <LazyFormError
+                v-if="hasError($v.form.password)"
+                :text="errorText($v.form.password)"
+              />
+            </FormInput>
           </div>
           <!-- REPETIR CONTRASEÑA -->
           <div>
@@ -122,34 +128,40 @@
               name="password_confirmation"
               type="password"
               placeholder="Repetir contraseña"
-              :error="$v.form.password_confirmation.$anyError"
-              @input="$v.form.password_confirmation.$reset()"
+              :error="hasError($v.form.password_confirmation)"
+              @input="fieldReset($v.form.password_confirmation)"
               @blur="$v.form.password_confirmation.$touch()"
-            />
-            <span v-if="$v.form.password_confirmation.$anyError" class="error">
-              {{ validar($v.form.password_confirmation) }}
-            </span>
+            >
+              <LazyFormError
+                v-if="hasError($v.form.password_confirmation)"
+                :text="errorText($v.form.password_confirmation)"
+              />
+            </FormInput>
           </div>
           <!-- SEDE -->
           <div>
-            <select
+            <FormSelect
               id="sede"
               v-model.trim="form.departamento"
               name="sede"
               required
-              class="input-text bg-white h-11 text-gray-900"
-              :error="$v.form.departamento.$anyError"
-              @input="$v.form.departamento.$reset()"
+              :error="hasError($v.form.departamento)"
+              @input="fieldReset($v.form.departamento)"
               @blur="$v.form.departamento.$touch()"
             >
-              <option value="0">Sede a la que perteneces</option>
-              <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
-                {{ sede.nombre }}
-              </option>
-            </select>
-            <span v-if="$v.form.departamento.$anyError" class="error">
-              {{ validar($v.form.departamento) }}
-            </span>
+              <template #options>
+                <option value="0">Sede a la que perteneces</option>
+                <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
+                  {{ sede.nombre }}
+                </option>
+              </template>
+              <template #error>
+                <LazyFormError
+                  v-if="hasError($v.form.departamento)"
+                  :text="errorText($v.form.departamento)"
+                />
+              </template>
+            </FormSelect>
           </div>
         </div>
         <button class="btn full green">Registrarme</button>
@@ -173,10 +185,10 @@
 
 <script>
 import DepartamentoService from '@/services/departamentos.service';
-import AuthService from '~/services/auth.service';
-import { mensajes, departamento, cedula } from '@/services/validation.service';
+import AuthService from '@/services/auth.service';
+import InputValidationMixin from '@/mixins/InputValidationMixin';
+import { departamento, cedula } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
-import { validationMessage } from 'vuelidate-messages';
 import {
   required,
   minLength,
@@ -188,7 +200,7 @@ import {
 } from 'vuelidate/lib/validators';
 
 export default {
-  mixins: [validationMixin],
+  mixins: [validationMixin, InputValidationMixin],
   layout: 'OutLayout',
   data() {
     return {
@@ -202,7 +214,7 @@ export default {
         password_confirmation: '',
         departamento: 0,
       },
-      sedes: {},
+      sedes: [],
       errors: [],
     };
   },
@@ -230,6 +242,7 @@ export default {
       },
       telefono: {
         required,
+        minLength: minLength(9),
         maxLength: maxLength(9),
         numeric,
       },
@@ -239,6 +252,7 @@ export default {
         maxLength: maxLength(50),
       },
       password_confirmation: {
+        required,
         sameAsPassword: sameAs('password'),
       },
       departamento: {
@@ -254,10 +268,10 @@ export default {
     });
   },
   methods: {
-    validar: validationMessage(mensajes),
-    registro() {
-      if (this.$v.$invalid) return;
-      AuthService.register(this.form)
+    async registro() {
+      // VALIDAR TAMBIEN QUE SI HAY THIS.ERRORS NO SE ENVIE EL FORM
+      if (this.invalid) return;
+      await AuthService.register(this.form)
         .then(() => {
           this.$auth.loginWith('laravelSanctum', {
             correo: this.form.correo,

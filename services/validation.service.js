@@ -18,8 +18,8 @@ export const mensajes = {
 
 /**
  * Retorna el digito verificador
- * @param {int} ci
- * @returns Float
+ *
+ * @param {*} ci
  */
 function validation_digit(ci) {
   var a = 0;
@@ -41,8 +41,8 @@ function validation_digit(ci) {
 
 /**
  * Valida la cedula con el digito verificador
+ *
  * @param {*} ci
- * @returns Boolean
  */
 function validateCi(ci) {
   ci = ci.replace(/\D/g, '');
@@ -53,8 +53,8 @@ function validateCi(ci) {
 
 /**
  * Validación de la cédula
+ *
  * @param {int} value
- * @returns Boolean
  */
 export function cedula(value) {
   return !!validateCi(value);
@@ -62,7 +62,7 @@ export function cedula(value) {
 
 /**
  * Valida que se haya seleccionado un departamento
+ *
  * @param {string} dep
- * @returns Boolean
  */
 export const departamento = (dep) => dep != 0;

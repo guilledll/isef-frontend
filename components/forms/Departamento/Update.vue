@@ -4,78 +4,72 @@
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon />
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">
-            Modificar departamento
-          </h3>
-          <p v-if="error && error.nombre" class="text-red-500 font-medium mb-1">
-            {{ error.nombre[0] }}
-          </p>
+          <h3 class="modal-form-heading">Modificar departamento</h3>
           <div>
             <FormInput
               id="nombre"
-              v-model.trim="departamento.nombre"
+              v-model.trim="form.nombre"
               name="nombre"
               autocomplete="on"
-              placeholder="nombre de departamento"
-              :error="$v.departamento.nombre.$anyError"
-              @input="$v.departamento.nombre.$reset()"
-              @blur="$v.departamento.nombre.$touch()"
-            />
-            <span v-if="$v.departamento.nombre.$anyError" class="error">
-              {{ validar($v.departamento.nombre) }}
-            </span>
+              placeholder="Nombre del departamento"
+              :error="hasError($v.form.nombre, 'nombre')"
+              @input="fieldReset($v.form.nombre, 'nombre')"
+              @blur="$v.form.nombre.$touch()"
+            >
+              <LazyFormError
+                v-if="hasError($v.form.nombre, 'nombre')"
+                :text="errorText($v.form.nombre, 'nombre')"
+                :val="errorValidation($v.form.nombre)"
+              />
+            </FormInput>
           </div>
-          <input type="hidden" name="id" :value="departamento.id" />
         </div>
       </div>
     </div>
     <ModalFooter
       text="Modificar departamento"
       :disabled="disabled"
-      @close="$emit('close')"
+      @close="closeModal"
     />
   </form>
 </template>
 
 <script>
-import departamentoService from '@/services/departamentos.service';
-import { mensajes } from '@/services/validation.service';
+import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { validationMixin } from 'vuelidate';
-import { validationMessage } from 'vuelidate-messages';
-import { required, numeric, maxLength } from 'vuelidate/lib/validators';
+import { required, integer, maxLength } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
-  mixins: [validationMixin],
-  props: {
-    model: { type: Object, default: () => {} },
-  },
+  mixins: [validationMixin, InputValidationMixin],
   data() {
     return {
-      error: null,
-      departamento: {
+      form: {
         id: '',
         nombre: '',
-        departamento_id: '',
       },
+      errors: [],
     };
   },
   computed: {
+    departamento() {
+      return this.$store.state.departmentos.departamento;
+    },
     disabled() {
       return (
-        Object.keys(updatedDiff(this.model, this.departamento)).length == 0
+        Object.keys(updatedDiff(this.departamento, this.form)).length == 0 ||
+        this.form.nombre.length == 0
       );
     },
   },
   mounted() {
-    // this.departamento = this.model
-    this.departamento.id = this.model.id;
-    this.departamento.nombre = this.model.nombre;
+    this.model.id = this.departamento.id;
+    this.model.nombre = this.departamento.nombre;
   },
   validations: {
-    departamento: {
+    form: {
       id: {
         required,
-        numeric,
+        integer,
       },
       nombre: {
         required,
@@ -84,20 +78,16 @@ export default {
     },
   },
   methods: {
-    validar: validationMessage(mensajes),
     updateDepartamento() {
-      if (this.$v.invalid) return;
-      departamentoService
-        .update(this.departamento.id, this.departamento)
-        .then(() => {
-          // IMPLEMENTAR ESTO EN LA STORE
-          // let departamento = this.departamentos.find((dep) => dep.id === data.id)
-          // departamento.nombre = data.nombre
-          this.$emit('close');
-        })
-        .catch((e) => {
-          this.error = e.response.data.errors;
-        });
+      if (this.invalid) return;
+      this.$store
+        .dispatch('departamentos/update', this.form)
+        .then(() => this.$emit('close'))
+        .catch((e) => (this.errors = e.response.data.errors));
+    },
+    closeModal() {
+      this.$store.dispatch('departamentos/clear');
+      this.$emit('close');
     },
   },
 };
