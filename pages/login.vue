@@ -8,41 +8,43 @@
         <p class="text-gray-500 text-xl">Gestión de materiales y reservas</p>
       </div>
       <form class="mt-8 space-y-4" @submit.prevent="login">
-        <input type="hidden" name="remember" value="true" />
+        <!-- <input type="hidden" name="remember" value="true" /> -->
         <div class="space-y-2">
-          <p v-if="error" class="text-center text-red-500 font-medium">
-            {{ error }}
-          </p>
           <div>
             <FormInput
               id="ci"
-              v-model.trim="user.ci"
+              v-model.trim="form.ci"
               name="ci"
               autocomplete="on"
               placeholder="Correo o CI"
-              :error="$v.user.ci.$anyError"
-              @input="$v.user.ci.$reset()"
-              @blur="$v.user.ci.$touch()"
-            />
-            <span v-if="$v.user.ci.$anyError || error" class="error">
-              {{ validar($v.user.ci) }}
-            </span>
+              :error="hasError($v.form.ci, 'ci')"
+              @input="fieldReset($v.form.ci, 'ci')"
+              @blur="$v.form.ci.$touch()"
+            >
+              <LazyFormError
+                v-if="hasError($v.form.ci, 'ci')"
+                :text="errorText($v.form.ci, 'ci')"
+                :val="errorValidation($v.form.ci)"
+              />
+            </FormInput>
           </div>
           <div>
             <FormInput
               id="password"
-              v-model.trim="user.password"
+              v-model.trim="form.password"
               name="password"
               type="password"
               autocomplete="current-password"
               placeholder="Contraseña"
-              :error="$v.user.password.$anyError"
-              @input="$v.user.password.$reset()"
-              @blur="$v.user.password.$touch()"
-            />
-            <span v-if="$v.user.password.$anyError" class="error">
-              {{ validar($v.user.password) }}
-            </span>
+              :error="hasError($v.form.password)"
+              @input="fieldReset($v.form.password, 'ci')"
+              @blur="$v.form.password.$touch()"
+            >
+              <LazyFormError
+                v-if="hasError($v.form.password)"
+                :text="errorText($v.form.password)"
+              />
+            </FormInput>
           </div>
         </div>
         <div v-if="false" class="flex items-center justify-between">
@@ -89,24 +91,24 @@
 </template>
 
 <script>
-import { mensajes } from '@/services/validation.service';
+import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { validationMixin } from 'vuelidate';
-import { validationMessage } from 'vuelidate-messages';
 import { required, maxLength } from 'vuelidate/lib/validators';
+
 export default {
-  mixins: [validationMixin],
+  mixins: [validationMixin, InputValidationMixin],
   layout: 'OutLayout',
   data() {
     return {
-      user: {
+      form: {
         ci: '',
         password: '',
       },
-      error: null,
+      errors: [],
     };
   },
   validations: {
-    user: {
+    form: {
       ci: {
         required,
         maxLength: maxLength(255),
@@ -117,11 +119,10 @@ export default {
     },
   },
   methods: {
-    validar: validationMessage(mensajes),
     login() {
-      if (this.$v.$invalid) return;
-      this.$auth.loginWith('laravelSanctum', { data: this.user }).catch((e) => {
-        this.error = e.response.data.errors.ci[0];
+      if (this.invalid) return;
+      this.$auth.loginWith('laravelSanctum', { data: this.form }).catch((e) => {
+        this.errors = e.response.data.errors;
       });
     },
   },

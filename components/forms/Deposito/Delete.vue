@@ -4,9 +4,7 @@
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon type="del" />
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <h3 class="text-xl leading-6 font-medium text-gray-800 mb-3 mt-2">
-            Eliminar depósito
-          </h3>
+          <h3 class="modal-form-heading">Eliminar depósito</h3>
           <p class="mb-2">
             <span class="font-medium text-gray-900 mr-1">Atención:</span>
             Estas a punto de eliminar un depósito, este será removido del

@@ -42,7 +42,7 @@ export const actions = {
       context.dispatch('select', res.data);
     });
   },
-  async getAll(context) {
+  async all(context) {
     return await DepositosService.index().then((res) => {
       context.commit('GET_ALL_DEPOSITOS', res.data);
     });

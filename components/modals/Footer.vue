@@ -38,7 +38,7 @@ export default {
       @apply bg-blue-500 hover:bg-blue-600 focus:ring-blue-500 disabled:bg-blue-300;
     }
     &.add {
-      @apply bg-green-500 hover:bg-green-600 focus:ring-green-500 disabled:bg-green-300;
+      @apply bg-green-600 hover:bg-green-500 focus:ring-green-600 disabled:bg-green-300;
     }
     &.del {
       @apply bg-red-500 hover:bg-red-600 focus:ring-red-500 disabled:bg-red-300;
