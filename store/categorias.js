@@ -23,6 +23,11 @@ export const mutations = {
       cat.id == categoria.id ? { ...cat, nombre: categoria.nombre } : cat
     );
   },
+  DEL_CATEGORIA(state, id) {
+    state.categorias.map((cat, index) => {
+      cat.id == id ? state.categorias.splice(index, 1) : cat;
+    });
+  },
 };
 
 export const actions = {
@@ -32,19 +37,30 @@ export const actions = {
   clear(context) {
     context.commit('CLEAR_SELECTED');
   },
+  async get(context, id) {
+    return await CategoriasService.show(id).then((res) => {
+      context.dispatch('select', res.data);
+    });
+  },
   async all(context) {
     return await CategoriasService.index().then((res) => {
       context.commit('GET_ALL_CATEGORIAS', res.data);
     });
   },
   async create(context, data) {
-    return await CategoriasService.create(data).then(() => {
-      context.commit('ADD_CATEGORIA', data);
+    return await CategoriasService.create(data).then((res) => {
+      context.commit('ADD_CATEGORIA', res.data);
     });
   },
   async update(context, data) {
     return await CategoriasService.update(data.id, data).then(() => {
       context.commit('MOD_CATEGORIA', data);
+    });
+  },
+  async delete(context, id) {
+    return await CategoriasService.delete(id).then(() => {
+      context.commit('DEL_CATEGORIA', id);
+      context.dispatch('clear');
     });
   },
 };

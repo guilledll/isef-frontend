@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamento.service';
+import DepartamentoService from '@/services/departamentos.service';
 import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { departamento } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
