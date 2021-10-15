@@ -49,6 +49,7 @@ export const actions = {
   },
   async create(context, data) {
     return await DepositosService.create(data).then((res) => {
+      res.data.departamento = data.departamento;
       context.commit('ADD_DEPOSITO', res.data);
     });
   },

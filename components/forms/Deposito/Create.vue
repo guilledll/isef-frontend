@@ -37,9 +37,13 @@
                 @change="selectDepartamento"
               >
                 <template #options>
-                  <option value="0">Seleccionar sede</option>
-                  <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
-                    {{ sede.nombre }}
+                  <option value="0">Seleccionar departamento</option>
+                  <option
+                    v-for="departamento in departamentos"
+                    :key="departamento.id"
+                    :value="departamento.id"
+                  >
+                    {{ departamento.nombre }}
                   </option>
                 </template>
                 <template #error>
@@ -59,7 +63,6 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamentos.service';
 import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { departamento } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
@@ -73,14 +76,15 @@ export default {
         departamento_id: 0,
         departamento: '',
       },
-      sedes: [],
-      errors: [],
     };
   },
-  mounted() {
-    DepartamentoService.index().then((res) => {
-      this.sedes = res.data;
-    });
+  computed: {
+    departamentos() {
+      return this.$store.state.departamentos.departamentos;
+    },
+  },
+  async mounted() {
+    await this.$store.dispatch('departamentos/getAll');
   },
   validations: {
     form: {

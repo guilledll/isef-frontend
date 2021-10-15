@@ -47,12 +47,11 @@ export default {
         id: '',
         nombre: '',
       },
-      errors: [],
     };
   },
   computed: {
     departamento() {
-      return this.$store.state.departmentos.departamento;
+      return this.$store.state.departamentos.departamento;
     },
     disabled() {
       return (
@@ -62,8 +61,8 @@ export default {
     },
   },
   mounted() {
-    this.model.id = this.departamento.id;
-    this.model.nombre = this.departamento.nombre;
+    this.form.id = this.departamento.id;
+    this.form.nombre = this.departamento.nombre;
   },
   validations: {
     form: {

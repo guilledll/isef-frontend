@@ -22,7 +22,12 @@
               </router-link>
             </td>
             <td class="table-td text-gray-500">
-              {{ deposito.departamento }}
+              <router-link
+                :to="`/departamentos/${deposito.departamento_id}`"
+                class="hover:text-blue-600 hover:underline"
+              >
+                {{ deposito.departamento }}
+              </router-link>
             </td>
             <td class="table-td text-right">
               <TableButton
@@ -83,8 +88,8 @@ export default {
       return this.$store.state.depositos.depositos;
     },
   },
-  mounted() {
-    this.$store.dispatch('depositos/all');
+  async mounted() {
+    await this.$store.dispatch('depositos/all');
   },
   methods: {
     seleccionarDeposito(action, deposito = null) {

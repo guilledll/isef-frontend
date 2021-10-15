@@ -11,37 +11,35 @@
           <TableHead :header="table.header" />
         </template>
         <template #body>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="categoria in categorias" :key="categoria.id">
-              <td class="table-td">
-                <router-link
-                  :to="`/categorias/${categoria.id}`"
-                  class="text-black hover:text-blue-600 hover:underline"
-                  @click.native="seleccionarCategoria('view', categoria)"
-                >
-                  {{ categoria.nombre }}
-                </router-link>
-              </td>
-              <td class="table-td text-gray-500">
-                {{ categoria.cantidad_materiales || 0 }}
-              </td>
-              <td class="table-td text-right">
-                <TableButton
-                  svg="view"
-                  @click="$router.push(`/categorias/${categoria.id}`)"
-                />
-                <TableButton
-                  v-if="!categoria.cantidad_materiales"
-                  svg="del"
-                  @click="seleccionarCategoria('del', categoria)"
-                />
-                <TableButton
-                  svg="mod"
-                  @click="seleccionarCategoria('mod', categoria)"
-                />
-              </td>
-            </tr>
-          </tbody>
+          <tr v-for="categoria in categorias" :key="categoria.id">
+            <td class="table-td">
+              <router-link
+                :to="`/categorias/${categoria.id}`"
+                class="text-black hover:text-blue-600 hover:underline"
+                @click.native="seleccionarCategoria('view', categoria)"
+              >
+                {{ categoria.nombre }}
+              </router-link>
+            </td>
+            <td class="table-td text-gray-500">
+              {{ categoria.cantidad_materiales || 0 }}
+            </td>
+            <td class="table-td text-right">
+              <TableButton
+                svg="view"
+                @click="$router.push(`/categorias/${categoria.id}`)"
+              />
+              <TableButton
+                v-if="!categoria.cantidad_materiales"
+                svg="del"
+                @click="seleccionarCategoria('del', categoria)"
+              />
+              <TableButton
+                svg="mod"
+                @click="seleccionarCategoria('mod', categoria)"
+              />
+            </td>
+          </tr>
         </template>
       </Table>
     </div>
@@ -52,6 +50,10 @@
       />
       <LazyFormCategoriaCreate
         v-else-if="modal.action == 'add'"
+        @close="modal.show = !modal.show"
+      />
+      <LazyFormCategoriaDelete
+        v-else-if="modal.action == 'del'"
         @close="modal.show = !modal.show"
       />
     </LazyModal>

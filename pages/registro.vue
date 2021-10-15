@@ -151,8 +151,12 @@
             >
               <template #options>
                 <option value="0">Sede a la que perteneces</option>
-                <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
-                  {{ sede.nombre }}
+                <option
+                  v-for="departamento in departamentos"
+                  :key="departamento.id"
+                  :value="departamento.id"
+                >
+                  {{ departamento.nombre }}
                 </option>
               </template>
               <template #error>
@@ -184,7 +188,6 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamentos.service';
 import AuthService from '@/services/auth.service';
 import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { departamento, cedula } from '@/services/validation.service';
@@ -214,9 +217,15 @@ export default {
         password_confirmation: '',
         departamento: 0,
       },
-      sedes: [],
-      errors: [],
     };
+  },
+  computed: {
+    departamentos() {
+      return this.$store.state.departamentos.departamentos;
+    },
+  },
+  async mounted() {
+    await this.$store.dispatch('departamentos/getAll');
   },
   validations: {
     form: {
@@ -262,15 +271,10 @@ export default {
       },
     },
   },
-  mounted() {
-    DepartamentoService.index().then((res) => {
-      this.sedes = res.data;
-    });
-  },
   methods: {
     async registro() {
-      // VALIDAR TAMBIEN QUE SI HAY THIS.ERRORS NO SE ENVIE EL FORM
       if (this.invalid) return;
+
       await AuthService.register(this.form)
         .then(() => {
           this.$auth.loginWith('laravelSanctum', {

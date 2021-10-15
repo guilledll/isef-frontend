@@ -1,4 +1,12 @@
 export default {
+  data() {
+    return {
+      /**
+       * Array de errores para las validaciones
+       */
+      errors: [],
+    };
+  },
   computed: {
     /**
      * Valida si hay errores de Vuelidate en el formulario

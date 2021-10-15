@@ -48,7 +48,6 @@ export default {
         nombre: '',
         departamento_id: '',
       },
-      errors: [],
     };
   },
   computed: {

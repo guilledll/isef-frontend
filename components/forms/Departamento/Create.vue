@@ -7,26 +7,24 @@
           <h3 class="text-xl leading-6 font-medium text-gray-900 mb-3">
             Agregar departamento
           </h3>
-          <p class="mb-3">Se creará un nuevo departamento.</p>
-          <p v-if="error" class="text-red-500 font-medium mb-1">
-            {{ error.nombre[0] }}
-          </p>
-          <div class="space-y-2">
-            <div>
-              <FormInput
-                id="nombre"
-                v-model.trim="departamento.nombre"
-                name="nombre"
-                autocomplete="on"
-                placeholder="Nombre de departamento"
-                :error="$v.departamento.nombre.$anyError"
-                @input="$v.departamento.nombre.$reset()"
-                @blur="$v.departamento.nombre.$touch()"
+          <p class="mb-3">Un nuevo departamento será incluido al sistema.</p>
+          <div>
+            <FormInput
+              id="nombre"
+              v-model.trim="form.nombre"
+              name="nombre"
+              autocomplete="on"
+              placeholder="Nombre del departamento"
+              :error="hasError($v.form.nombre, 'nombre')"
+              @input="fieldReset($v.form.nombre, 'nombre')"
+              @blur="$v.form.nombre.$touch()"
+            >
+              <LazyFormError
+                v-if="hasError($v.form.nombre, 'nombre')"
+                :text="errorText($v.form.nombre, 'nombre')"
+                :val="errorValidation($v.form.nombre)"
               />
-              <span v-if="$v.departamento.nombre.$anyError" class="error">
-                {{ validar($v.departamento.nombre) }}
-              </span>
-            </div>
+            </FormInput>
           </div>
         </div>
       </div>
@@ -36,29 +34,20 @@
 </template>
 
 <script>
-import departamentoService from '@/services/departamentos.service';
-import { mensajes } from '@/services/validation.service';
+import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { validationMixin } from 'vuelidate';
-import { validationMessage } from 'vuelidate-messages';
 import { required, maxLength } from 'vuelidate/lib/validators';
 export default {
-  mixins: [validationMixin],
+  mixins: [validationMixin, InputValidationMixin],
   data() {
     return {
-      departamento: {
+      form: {
         nombre: '',
       },
-      sedes: [],
-      error: null,
     };
   },
-  mounted() {
-    departamentoService.index().then((res) => {
-      this.sedes = res.data;
-    });
-  },
   validations: {
-    departamento: {
+    form: {
       nombre: {
         required,
         maxLength: maxLength(50),
@@ -66,14 +55,14 @@ export default {
     },
   },
   methods: {
-    validar: validationMessage(mensajes),
     createDepartamento() {
-      this.$v.departamento.$touch();
-      if (this.$v.$invalid) return;
+      this.$v.form.$touch();
+      if (this.invalid) return;
+
       this.$store
-        .dispatch('departamentos/create', this.departamento)
+        .dispatch('departamentos/create', this.form)
         .then(() => this.$emit('close'))
-        .catch((e) => (this.error = e.response.data.errors));
+        .catch((e) => (this.errors = e.response.data.errors));
     },
   },
 };
