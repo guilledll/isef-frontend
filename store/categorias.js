@@ -1,4 +1,4 @@
-import CategoriasService from '@/services/categoria.service';
+import CategoriasService from '~/services/categorias.service';
 
 export const state = () => ({
   categorias: [],

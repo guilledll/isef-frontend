@@ -1,47 +1,45 @@
 <template>
   <div>
-    <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+    <GlobalHeader :title="header.title" :text="header.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <GlobalAddAction
-        text="Agregar un <b>nuevo depósito</b>."
-        @click="seleccionarDeposito('add')"
+        text="Agregar un <b>departamento</b>."
+        @click="seleccionarDepartamento('add')"
       />
       <Table>
         <template #header>
           <TableHead :header="table.header" />
         </template>
         <template #body>
-          <tr v-for="deposito in depositos" :key="deposito.id">
+          <tr v-for="departamento in departamentos" :key="departamento.id">
             <td class="table-td">
               <router-link
-                :to="`/depositos/${deposito.id}`"
+                :to="`/departamentos/${departamento.id}`"
                 class="text-black hover:text-blue-600 hover:underline"
-                @click.native="seleccionarDeposito('view', deposito)"
+                @click.native="seleccionarDepartamento('view', departamento)"
               >
-                {{ deposito.nombre }}
+                {{ departamento.nombre }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
-              <router-link
-                :to="`/departamentos/${deposito.departamento_id}`"
-                class="hover:text-blue-600 hover:underline"
-              >
-                {{ deposito.departamento }}
-              </router-link>
+              {{ departamento.users_count || 0 }}
+            </td>
+            <td class="table-td text-gray-500">
+              {{ departamento.depositos_count || 0 }}
             </td>
             <td class="table-td text-right">
               <TableButton
                 svg="view"
-                @click="$router.push(`/depositos/${deposito.id}`)"
+                @click="$router.push(`/departamentos/${departamento.id}`)"
               />
               <TableButton
-                v-if="!deposito.cantidad_materiales"
+                v-if="!departamento.users_count"
                 svg="del"
-                @click="seleccionarDeposito('del', deposito)"
+                @click="seleccionarDepartamento('del', departamento)"
               />
               <TableButton
                 svg="mod"
-                @click="seleccionarDeposito('mod', deposito)"
+                @click="seleccionarDepartamento('mod', departamento)"
               />
             </td>
           </tr>
@@ -49,15 +47,15 @@
       </Table>
     </div>
     <LazyModal v-if="modal.show">
-      <LazyFormDepositoUpdate
+      <LazyFormDepartamentoUpdate
         v-if="modal.action == 'mod'"
         @close="modal.show = !modal.show"
       />
-      <LazyFormDepositoCreate
+      <LazyFormDepartamentoCreate
         v-else-if="modal.action == 'add'"
         @close="modal.show = !modal.show"
       />
-      <LazyFormDepositoDelete
+      <LazyFormDepartamentoDelete
         v-else-if="modal.action == 'del'"
         @close="modal.show = !modal.show"
       />
@@ -70,12 +68,12 @@ export default {
   layout: 'AppLayout',
   data() {
     return {
-      pageHeader: {
-        title: 'Depósitos',
-        text: 'En los depósitos se encuentran los materiales. Ejemplo de depósitos: Cure, Campus, etc.',
+      header: {
+        title: 'Departamentos',
+        text: 'Cualquiera de los 19 departamentos donde ISEF tenga sede, en caso de expandirese a uno nuevo, se debe registrar el departamentos aquí.',
       },
       table: {
-        header: ['Nombre', 'Departamento'],
+        header: ['Nombre', 'Cantidad Usuarios', 'Cantidad Depósitos'],
       },
       modal: {
         show: false,
@@ -84,16 +82,17 @@ export default {
     };
   },
   computed: {
-    depositos() {
-      return this.$store.state.depositos.depositos;
+    departamentos() {
+      return this.$store.state.departamentos.departamentos;
     },
   },
   async mounted() {
-    await this.$store.dispatch('depositos/all');
+    await this.$store.dispatch('departamentos/getAll');
   },
   methods: {
-    seleccionarDeposito(action, deposito = null) {
-      if (deposito) this.$store.dispatch('depositos/select', deposito);
+    seleccionarDepartamento(action, departamento = null) {
+      if (departamento)
+        this.$store.dispatch('departamentos/select', departamento);
       if (action != 'view') {
         this.modal.action = action;
         this.modal.show = !this.modal.show;

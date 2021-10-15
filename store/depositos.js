@@ -48,8 +48,9 @@ export const actions = {
     });
   },
   async create(context, data) {
-    return await DepositosService.create(data).then(() => {
-      context.commit('ADD_DEPOSITO', data);
+    return await DepositosService.create(data).then((res) => {
+      res.data.departamento = data.departamento;
+      context.commit('ADD_DEPOSITO', res.data);
     });
   },
   async update(context, data) {
@@ -60,6 +61,7 @@ export const actions = {
   async delete(context, id) {
     return await DepositosService.delete(id).then(() => {
       context.commit('DEL_DEPOSITO', id);
+      context.commit('CLEAR_SELECTED');
     });
   },
 };

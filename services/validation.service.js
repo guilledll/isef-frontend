@@ -12,6 +12,8 @@ export const mensajes = {
   sameAsPassword: () => 'Las contraseñas no coinciden.',
   departamento: () => 'Por favor seleccione un departamento.',
   cedula: () => 'La cédula no es válida.',
+  categoria: () => 'La categoría no es válida.',
+  deposito: () => 'El depósito no es válido.',
 };
 
 /**
