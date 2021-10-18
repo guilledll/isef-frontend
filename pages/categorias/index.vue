@@ -83,7 +83,7 @@ export default {
       return this.$store.state.categorias.categorias;
     },
   },
-  async mounted() {
+  mounted() {
     this.$store.dispatch('categorias/all');
   },
   methods: {

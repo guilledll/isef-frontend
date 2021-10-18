@@ -19,7 +19,7 @@
               placeholder="Correo o CI"
               :error="hasError($v.form.ci, 'ci')"
               @input="fieldReset($v.form.ci, 'ci')"
-              @blur="$v.form.ci.$touch()"
+              @blur="touch($v.form.ci)"
             >
               <LazyFormError
                 v-if="hasError($v.form.ci, 'ci')"
@@ -38,7 +38,7 @@
               placeholder="Contraseña"
               :error="hasError($v.form.password)"
               @input="fieldReset($v.form.password, 'ci')"
-              @blur="$v.form.password.$touch()"
+              @blur="touch($v.form.password)"
             >
               <LazyFormError
                 v-if="hasError($v.form.password)"
@@ -104,7 +104,6 @@ export default {
         ci: '',
         password: '',
       },
-      errors: [],
     };
   },
   validations: {
@@ -120,7 +119,7 @@ export default {
   },
   methods: {
     login() {
-      if (this.invalid) return;
+      if (this.invalid()) return;
       this.$auth.loginWith('laravelSanctum', { data: this.form }).catch((e) => {
         this.errors = e.response.data.errors;
       });

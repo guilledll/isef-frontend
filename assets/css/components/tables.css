@@ -2,4 +2,7 @@
   .table-td {
     @apply px-3 py-2 text-sm whitespace-nowrap md:px-6 md:py-3 md:text-base;
   }
+  .table-actions {
+    @apply w-full space-y-3 lg:order-last lg:w-72 lg:block;
+  }
 }

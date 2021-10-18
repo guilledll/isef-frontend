@@ -16,7 +16,7 @@
                 placeholder="Nombre del deposito"
                 :error="hasError($v.form.nombre, 'nombre')"
                 @input="fieldReset($v.form.nombre, 'nombre')"
-                @blur="$v.form.nombre.$touch()"
+                @blur="touch($v.form.nombre)"
               >
                 <LazyFormError
                   v-if="hasError($v.form.nombre, 'nombre')"
@@ -33,13 +33,17 @@
                 required
                 :error="hasError($v.form.departamento_id)"
                 @input="fieldReset($v.form.departamento_id)"
-                @blur="$v.form.departamento_id.$touch()"
+                @blur="touch($v.form.departamento_id)"
                 @change="selectDepartamento"
               >
                 <template #options>
-                  <option value="0">Seleccionar sede</option>
-                  <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
-                    {{ sede.nombre }}
+                  <option value="0">Seleccionar departamento</option>
+                  <option
+                    v-for="departamento in departamentos"
+                    :key="departamento.id"
+                    :value="departamento.id"
+                  >
+                    {{ departamento.nombre }}
                   </option>
                 </template>
                 <template #error>
@@ -59,7 +63,6 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamentos.service';
 import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { departamento } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
@@ -73,14 +76,14 @@ export default {
         departamento_id: 0,
         departamento: '',
       },
-      sedes: [],
-      errors: [],
     };
   },
-  mounted() {
-    DepartamentoService.index().then((res) => {
-      this.sedes = res.data;
-    });
+  computed: {
+    departamentos() {
+      return this.$store.state.departamentos.departamentos.length
+        ? this.$store.state.departamentos.departamentos
+        : this.$store.dispatch('departamentos/getAll');
+    },
   },
   validations: {
     form: {
@@ -97,9 +100,7 @@ export default {
   },
   methods: {
     createDeposito() {
-      this.$v.form.$touch();
-      if (this.invalid) return;
-
+      if (this.invalid()) return;
       this.$store
         .dispatch('depositos/create', this.form)
         .then(() => this.$emit('close'))

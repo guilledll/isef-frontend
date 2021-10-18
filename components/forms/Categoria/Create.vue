@@ -14,7 +14,7 @@
               placeholder="Nombre de la categoría"
               :error="hasError($v.form.nombre, 'nombre')"
               @input="fieldReset($v.form.nombre, 'nombre')"
-              @blur="$v.form.nombre.$touch()"
+              @blur="touch($v.form.nombre)"
             >
               <LazyFormError
                 v-if="hasError($v.form.nombre, 'nombre')"
@@ -41,7 +41,6 @@ export default {
       form: {
         nombre: '',
       },
-      errors: [],
     };
   },
   validations: {
@@ -54,9 +53,7 @@ export default {
   },
   methods: {
     createCategoria() {
-      this.$v.form.$touch();
-      if (this.$v.$invalid) return;
-
+      if (this.invalid()) return;
       this.$store
         .dispatch('categorias/create', this.form)
         .then(() => this.$emit('close'))

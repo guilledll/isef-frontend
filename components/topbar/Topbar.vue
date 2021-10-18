@@ -121,9 +121,6 @@ export default {
     };
   },
   computed: {
-    auth() {
-      return this.$store.state.auth.loggedIn;
-    },
     user() {
       return this.$store.state.auth.user;
     },
@@ -133,34 +130,52 @@ export default {
     menuItems() {
       return [
         {
-          text: 'Perfil',
-          path: '/perfil',
-          selected: this.selected('perfil'),
-          show: this.auth,
-        },
-        {
           text: 'Reservas',
           path: '/reservas',
           selected: this.selected('reservas'),
-          show: this.auth,
+          show: true,
         },
         {
           text: 'Depósitos',
           path: '/depositos',
           selected: this.selected('depositos'),
-          show: this.auth && this.admin,
+          show: this.admin,
         },
         {
           text: 'Materiales',
           path: '/materiales',
           selected: this.selected('materiales'),
-          show: this.auth && this.admin,
+          show: this.admin,
+        },
+        // {
+        //   text: 'Categorias',
+        //   path: '/categorias',
+        //   selected: this.selected('categorias'),
+        //   show: this.admin,
+        // },
+        // {
+        //   text: 'Departamentos',
+        //   path: '/departamentos',
+        //   selected: this.selected('departamentos'),
+        //   show: this.admin,
+        // },
+        {
+          text: 'Usuarios',
+          path: '/usuarios',
+          selected: this.selected('usuarios'),
+          show: this.admin,
         },
         {
           text: 'Registros',
           path: '/inventario',
           selected: this.selected('inventario'),
-          show: this.auth && this.admin,
+          show: this.admin,
+        },
+        {
+          text: 'Perfil',
+          path: '/perfil',
+          selected: this.selected('perfil'),
+          show: true,
         },
       ];
     },

@@ -37,29 +37,31 @@ export const actions = {
   clear(context) {
     context.commit('CLEAR_SELECTED');
   },
-  async get(context, id) {
-    return await DepositosService.show(id).then((res) => {
+  get(context, id) {
+    return DepositosService.show(id).then((res) => {
       context.dispatch('select', res.data);
     });
   },
-  async all(context) {
-    return await DepositosService.index().then((res) => {
+  all(context) {
+    return DepositosService.index().then((res) => {
       context.commit('GET_ALL_DEPOSITOS', res.data);
     });
   },
-  async create(context, data) {
-    return await DepositosService.create(data).then(() => {
-      context.commit('ADD_DEPOSITO', data);
+  create(context, data) {
+    return DepositosService.create(data).then((res) => {
+      res.data.departamento = data.departamento;
+      context.commit('ADD_DEPOSITO', res.data);
     });
   },
-  async update(context, data) {
-    return await DepositosService.update(data.id, data).then(() => {
+  update(context, data) {
+    return DepositosService.update(data.id, data).then(() => {
       context.commit('MOD_DEPOSITO', data);
     });
   },
-  async delete(context, id) {
-    return await DepositosService.delete(id).then(() => {
+  delete(context, id) {
+    return DepositosService.delete(id).then(() => {
       context.commit('DEL_DEPOSITO', id);
+      context.commit('CLEAR_SELECTED');
     });
   },
 };

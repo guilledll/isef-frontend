@@ -20,7 +20,7 @@
               placeholder="Cédula (sin puntos ni guión)"
               :error="hasError($v.form.ci, 'ci')"
               @input="fieldReset($v.form.ci, 'ci')"
-              @blur="$v.form.ci.$touch()"
+              @blur="touch($v.form.ci)"
             >
               <LazyFormError
                 v-if="hasError($v.form.ci, 'ci')"
@@ -38,7 +38,7 @@
               placeholder="Nombre"
               :error="hasError($v.form.nombre)"
               @input="fieldReset($v.form.nombre)"
-              @blur="$v.form.nombre.$touch()"
+              @blur="touch($v.form.nombre)"
             >
               <LazyFormError
                 v-if="hasError($v.form.nombre)"
@@ -55,7 +55,7 @@
               placeholder="Apellido"
               :error="hasError($v.form.apellido)"
               @input="fieldReset($v.form.apellido)"
-              @blur="$v.form.apellido.$touch()"
+              @blur="touch($v.form.apellido)"
             >
               <LazyFormError
                 v-if="hasError($v.form.apellido)"
@@ -74,7 +74,7 @@
               placeholder="Correo"
               :error="hasError($v.form.correo, 'correo')"
               @input="fieldReset($v.form.correo, 'correo')"
-              @blur="$v.form.correo.$touch()"
+              @blur="touch($v.form.correo)"
             >
               <LazyFormError
                 v-if="hasError($v.form.correo, 'correo')"
@@ -93,7 +93,7 @@
               placeholder="Teléfono de contacto"
               :error="hasError($v.form.telefono, 'telefono')"
               @input="fieldReset($v.form.telefono, 'telefono')"
-              @blur="$v.form.telefono.$touch()"
+              @blur="touch($v.form.telefono)"
             >
               <LazyFormError
                 v-if="hasError($v.form.telefono, 'telefono')"
@@ -112,7 +112,7 @@
               placeholder="Contraseña"
               :error="hasError($v.form.password)"
               @input="fieldReset($v.form.password)"
-              @blur="$v.form.password.$touch()"
+              @blur="touch($v.form.password)"
             >
               <LazyFormError
                 v-if="hasError($v.form.password)"
@@ -130,7 +130,7 @@
               placeholder="Repetir contraseña"
               :error="hasError($v.form.password_confirmation)"
               @input="fieldReset($v.form.password_confirmation)"
-              @blur="$v.form.password_confirmation.$touch()"
+              @blur="touch($v.form.password_confirmation)"
             >
               <LazyFormError
                 v-if="hasError($v.form.password_confirmation)"
@@ -147,12 +147,16 @@
               required
               :error="hasError($v.form.departamento)"
               @input="fieldReset($v.form.departamento)"
-              @blur="$v.form.departamento.$touch()"
+              @blur="touch($v.form.departamento)"
             >
               <template #options>
                 <option value="0">Sede a la que perteneces</option>
-                <option v-for="(sede, i) in sedes" :key="i" :value="sede.id">
-                  {{ sede.nombre }}
+                <option
+                  v-for="departamento in departamentos"
+                  :key="departamento.id"
+                  :value="departamento.id"
+                >
+                  {{ departamento.nombre }}
                 </option>
               </template>
               <template #error>
@@ -184,8 +188,6 @@
 </template>
 
 <script>
-import DepartamentoService from '@/services/departamentos.service';
-import AuthService from '@/services/auth.service';
 import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { departamento, cedula } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
@@ -214,9 +216,14 @@ export default {
         password_confirmation: '',
         departamento: 0,
       },
-      sedes: [],
-      errors: [],
     };
+  },
+  computed: {
+    departamentos() {
+      return this.$store.state.departamentos.departamentos.length
+        ? this.$store.state.departamentos.departamentos
+        : this.$store.dispatch('departamentos/getAll');
+    },
   },
   validations: {
     form: {
@@ -262,16 +269,11 @@ export default {
       },
     },
   },
-  mounted() {
-    DepartamentoService.index().then((res) => {
-      this.sedes = res.data;
-    });
-  },
   methods: {
-    async registro() {
-      // VALIDAR TAMBIEN QUE SI HAY THIS.ERRORS NO SE ENVIE EL FORM
-      if (this.invalid) return;
-      await AuthService.register(this.form)
+    registro() {
+      if (this.invalid()) return;
+      this.$store
+        .dispatch('users/register', this.form)
         .then(() => {
           this.$auth.loginWith('laravelSanctum', {
             correo: this.form.correo,

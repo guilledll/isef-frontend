@@ -4,93 +4,52 @@
     <div class="flex flex-col gap-3 lg:flex-row">
       <!-- Listar Usuarios -->
       <div class="w-full gap-3 lg:order-last lg:w-72 lg:block"></div>
-      <!-- TABLA -->
-      <div class="flex flex-col lg:flex-grow">
-        <div class="overflow-x-auto">
-          <div class="align-middle inline-block min-w-full">
-            <div
-              class="shadow overflow-hidden border border-gray-200 sm:rounded"
-            >
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th scope="col" class="table-th">Nombre</th>
-                    <th scope="col" class="table-th">Departamento</th>
-                    <th scope="col" class="table-th">Rol</th>
-                    <th scope="col" class="table-th text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="usuario in Usuarios" :key="usuario.id">
-                    <td class="table-td">
-                      {{ usuario.nombre }}
-                    </td>
-                    <td class="table-td text-gray-500">
-                      {{ usuario.departamento }}
-                    </td>
-                    <td
-                      class="table-td text-gray-500"
-                      :class="[
-                        {
-                          'text-red-500': usuario.rol === 0,
-                        },
-                        {
-                          'text-green-500': usuario.rol === 2,
-                        },
-                      ]"
-                    >
-                      {{ mostrarRol(usuario.rol) }}
-                    </td>
-                    <td class="table-td text-right">
-                      <button v-if="false" class="table-btn group">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="group-hover:text-gray-900"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </button>
-                      <button
-                        class="table-btn group"
-                        @click="seleccionarUsuario('mod', usuario)"
-                      >
-                        <svg
-                          class="group-hover:text-gray-900"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
-                          />
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Table>
+        <template #header>
+          <TableHead :header="table.header" />
+        </template>
+        <template #body>
+          <tr v-for="user in users" :key="user.id">
+            <td class="table-td">
+              <router-link
+                :to="`/users/${user.ci}`"
+                class="text-black hover:text-blue-600 hover:underline"
+                @click.native="seleccionarUsuario('view', user)"
+              >
+                {{ user.nombre }}
+              </router-link>
+            </td>
+            <td class="table-td text-gray-500">
+              <router-link
+                :to="`/departamentos/${user.departamento_id}`"
+                class="hover:text-blue-600 hover:underline"
+                @click.native="verDepartamento(user)"
+              >
+                {{ user.departamento }}
+              </router-link>
+            </td>
+            <td class="table-td" :class="`rol-${user.rol}`">
+              {{ mostrarRol(user.rol) }}
+            </td>
+            <td class="table-td text-right">
+              <TableButton
+                svg="view"
+                @click="$router.push(`/users/${user.ci}`)"
+              />
+              <TableButton svg="del" @click="seleccionarUsuario('del', user)" />
+              <TableButton svg="mod" @click="seleccionarUsuario('mod', user)" />
+            </td>
+          </tr>
+        </template>
+      </Table>
     </div>
     <LazyModal v-if="modal.show">
       <LazyFormUsuarioRol
         v-if="modal.action == 'mod'"
-        :model="selectedUsuario"
         @close="modal.show = !modal.show"
       />
-      <LazyFormusUsuarioCreate
-        v-else-if="modal.action == 'add'"
-        :model="selectedUsuario"
+      <LazyFormUsuarioDelete
+        v-else-if="modal.action == 'del'"
         @close="modal.show = !modal.show"
       />
     </LazyModal>
@@ -98,23 +57,16 @@
 </template>
 
 <script>
-import usuarioService from '@/services/user.service';
 export default {
   layout: 'AppLayout',
   data() {
     return {
       pageHeader: {
         title: 'Usuarios',
-        text: 'Usuarios registrados en el sistema',
+        text: 'Usuarios registrados en el sistema.',
       },
       table: {
-        header: ['Nombre', 'Usuario'],
-      },
-      Usuarios: [],
-      selectedUsuario: {},
-      header: {
-        title: 'Usuarios',
-        text: 'En los Usuarios.. etc.',
+        header: ['Nombre', 'Departamento', 'Rol'],
       },
       modal: {
         show: false,
@@ -122,30 +74,55 @@ export default {
       },
     };
   },
-  async mounted() {
-    await usuarioService.index().then((res) => {
-      this.Usuarios = res.data;
-    });
+  computed: {
+    users() {
+      return this.$store.state.users.users;
+    },
+  },
+  mounted() {
+    this.$store.dispatch('users/all');
   },
   methods: {
-    seleccionarUsuario(action, usuario = null) {
-      if (usuario) {
-        this.selectedUsuario = usuario;
+    seleccionarUsuario(action, user = null) {
+      if (user) this.$store.dispatch('users/select', user);
+      if (action != 'view') {
+        this.modal.action = action;
+        this.modal.show = !this.modal.show;
       }
-      this.modal.action = action;
-      this.modal.show = !this.modal.show;
     },
     mostrarRol(rol) {
-      return rol === 1
-        ? 'Usuario'
-        : rol === 2
-        ? 'Guardia'
-        : rol === 3
-        ? 'Administrador'
-        : 'Sin asignar';
+      switch (rol) {
+        case 1:
+          return 'Usuario';
+        case 2:
+          return 'Guardia';
+        case 3:
+          return 'Administrador';
+        default:
+          return 'Sin asignar';
+      }
+    },
+    verDepartamento(dep) {
+      this.$store.dispatch('departamentos/select', {
+        id: dep.departamento_id,
+        nombre: dep.departamento,
+      });
     },
   },
 };
 </script>
 
-<style></style>
+<style lang="postcss" scoped>
+.rol-0 {
+  @apply text-red-500;
+}
+.rol-1 {
+  @apply text-gray-500;
+}
+.rol-2 {
+  @apply text-indigo-500;
+}
+.rol-3 {
+  @apply text-green-500;
+}
+</style>

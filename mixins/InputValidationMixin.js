@@ -1,11 +1,11 @@
 export default {
-  computed: {
-    /**
-     * Valida si hay errores de Vuelidate en el formulario
-     */
-    invalid() {
-      return this.$v.$invalid ? true : false;
-    },
+  data() {
+    return {
+      /**
+       * Array de errores para las validaciones
+       */
+      errors: [],
+    };
   },
   methods: {
     /**
@@ -56,6 +56,21 @@ export default {
     fieldReset(model, field = null) {
       model.$reset();
       if (field && this.errors[field]) this.errors[field] = [];
+    },
+    /**
+     * Valida si hay errores de Vuelidate en el formulario
+     */
+    invalid() {
+      this.$v.$touch();
+      return this.$v.$invalid ? true : false;
+    },
+    /**
+     * Verifica si el formulario fue tocado o no
+     *
+     * @param {object} model
+     */
+    touch(model) {
+      model.$touch();
     },
   },
 };
