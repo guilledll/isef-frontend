@@ -4,6 +4,7 @@ export const state = () => ({
   departamentos: [],
   departamento: null,
 });
+
 export const mutations = {
   SELECT_DEPARTAMENTO(state, departamento) {
     state.departamento = departamento;
@@ -19,7 +20,9 @@ export const mutations = {
   },
   MOD_DEPARTAMENTO(state, departamentos) {
     state.departamentos = state.departamentos.map((dep) =>
-      dep.id == departamentos.id ? { ...dep, nombre: departamentos.nombre } : dep
+      dep.id == departamentos.id
+        ? { ...dep, nombre: departamentos.nombre }
+        : dep
     );
   },
   DEL_DEPARTAMENTO(state, id) {
@@ -36,28 +39,28 @@ export const actions = {
   clear(context) {
     context.commit('CLEAR_SELECTED');
   },
-  async get(context, id) {
-    return await DepartamentosService.show(id).then((res) => {
+  get(context, id) {
+    return DepartamentosService.show(id).then((res) => {
       context.dispatch('select', res.data);
     });
   },
-  async getAll(context) {
-    return await DepartamentosService.index().then((res) => {
+  getAll(context) {
+    return DepartamentosService.index().then((res) => {
       context.commit('GET_ALL_DEPARTAMENTOS', res.data);
     });
   },
-  async create(context, data) {
-    return await DepartamentosService.create(data).then((res) => {
+  create(context, data) {
+    return DepartamentosService.create(data).then((res) => {
       context.commit('ADD_DEPARTAMENTO', res.data);
     });
   },
-  async update(context, data) {
-    return await DepartamentosService.update(data.id, data).then(() => {
+  update(context, data) {
+    return DepartamentosService.update(data.id, data).then(() => {
       context.commit('MOD_DEPARTAMENTO', data);
     });
   },
-  async delete(context, id) {
-    return await DepartamentosService.delete(id).then(() => {
+  delete(context, id) {
+    return DepartamentosService.delete(id).then(() => {
       context.commit('DEL_DEPARTAMENTO', id);
       context.commit('CLEAR_SELECTED');
     });
