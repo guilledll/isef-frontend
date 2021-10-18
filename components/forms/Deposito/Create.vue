@@ -16,7 +16,7 @@
                 placeholder="Nombre del deposito"
                 :error="hasError($v.form.nombre, 'nombre')"
                 @input="fieldReset($v.form.nombre, 'nombre')"
-                @blur="$v.form.nombre.$touch()"
+                @blur="touch($v.form.nombre)"
               >
                 <LazyFormError
                   v-if="hasError($v.form.nombre, 'nombre')"
@@ -33,7 +33,7 @@
                 required
                 :error="hasError($v.form.departamento_id)"
                 @input="fieldReset($v.form.departamento_id)"
-                @blur="$v.form.departamento_id.$touch()"
+                @blur="touch($v.form.departamento_id)"
                 @change="selectDepartamento"
               >
                 <template #options>
@@ -80,11 +80,10 @@ export default {
   },
   computed: {
     departamentos() {
-      return this.$store.state.departamentos.departamentos;
+      return this.$store.state.departamentos.departamentos.length
+        ? this.$store.state.departamentos.departamentos
+        : this.$store.dispatch('departamentos/getAll');
     },
-  },
-  async mounted() {
-    await this.$store.dispatch('departamentos/getAll');
   },
   validations: {
     form: {
@@ -101,9 +100,7 @@ export default {
   },
   methods: {
     createDeposito() {
-      this.$v.form.$touch();
-      if (this.invalid) return;
-
+      if (this.invalid()) return;
       this.$store
         .dispatch('depositos/create', this.form)
         .then(() => this.$emit('close'))

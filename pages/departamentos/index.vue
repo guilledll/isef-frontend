@@ -86,8 +86,8 @@ export default {
       return this.$store.state.departamentos.departamentos;
     },
   },
-  async mounted() {
-    await this.$store.dispatch('departamentos/getAll');
+  mounted() {
+    this.$store.dispatch('departamentos/getAll');
   },
   methods: {
     seleccionarDepartamento(action, departamento = null) {

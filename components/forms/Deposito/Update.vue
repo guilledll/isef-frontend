@@ -14,7 +14,7 @@
               placeholder="Nombre del deposito"
               :error="hasError($v.form.nombre, 'nombre')"
               @input="fieldReset($v.form.nombre, 'nombre')"
-              @blur="$v.form.nombre.$touch()"
+              @blur="touch($v.form.nombre)"
             >
               <LazyFormError
                 v-if="hasError($v.form.nombre, 'nombre')"
@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     updateDeposito() {
-      if (this.invalid) return;
+      if (this.invalid()) return;
       this.$store
         .dispatch('depositos/update', this.form)
         .then(() => this.$emit('close'))

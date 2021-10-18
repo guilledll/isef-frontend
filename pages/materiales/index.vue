@@ -151,7 +151,6 @@
         :model="selectedmaterial"
         @close="modal.show = !modal.show"
       />
-
     </LazyModal>
   </div>
 </template>
@@ -175,8 +174,8 @@ export default {
       },
     };
   },
-  async mounted() {
-    await MaterialesService.index().then((res) => {
+  mounted() {
+    MaterialesService.index().then((res) => {
       this.materiales = res.data;
     });
   },

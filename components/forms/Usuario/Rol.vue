@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import usuarioService from '@/services/user.service';
+import usuarioService from '@/services/users.service';
 import { mensajes } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { validationMessage } from 'vuelidate-messages';
@@ -88,7 +88,7 @@ export default {
   methods: {
     validar: validationMessage(mensajes),
     updateDeposito() {
-      if (this.$v.invalid) return;
+      if (this.invalid()) return;
       usuarioService
         .updateRol(this.usuario.ci, this.usuario)
         .then(() => {

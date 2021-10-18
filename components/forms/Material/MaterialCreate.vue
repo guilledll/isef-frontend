@@ -115,8 +115,7 @@ export default {
   methods: {
     validar: validationMessage(mensajes),
     createMaterial() {
-      this.$v.material.$touch();
-      if (this.$v.$invalid) return;
+      if (this.invalid()) return;
 
       let form = {
         nombre: this.material.nombre,

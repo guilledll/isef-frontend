@@ -2,10 +2,18 @@
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
-      <GlobalAddAction
-        text="Agregar un <b>nuevo depósito</b>."
-        @click="seleccionarDeposito('add')"
-      />
+      <div class="table-actions">
+        <GlobalAddAction
+          text="Agregar un <b>nuevo depósito</b>."
+          @click="seleccionarDeposito('add')"
+        />
+        <GlobalAddAction
+          text="Ir a <b>departamentos</b>."
+          color="indigo"
+          svg="departamento"
+          @click="$router.push('/departamentos')"
+        />
+      </div>
       <Table>
         <template #header>
           <TableHead :header="table.header" />
@@ -25,9 +33,13 @@
               <router-link
                 :to="`/departamentos/${deposito.departamento_id}`"
                 class="hover:text-blue-600 hover:underline"
+                @click.native="verDepartamento(deposito)"
               >
                 {{ deposito.departamento }}
               </router-link>
+            </td>
+            <td class="table-td text-gray-500">
+              {{ deposito.cantidad_materiales || 0 }}
             </td>
             <td class="table-td text-right">
               <TableButton
@@ -75,7 +87,7 @@ export default {
         text: 'En los depósitos se encuentran los materiales. Ejemplo de depósitos: Cure, Campus, etc.',
       },
       table: {
-        header: ['Nombre', 'Departamento'],
+        header: ['Nombre', 'Sede', 'Materiales'],
       },
       modal: {
         show: false,
@@ -88,8 +100,8 @@ export default {
       return this.$store.state.depositos.depositos;
     },
   },
-  async mounted() {
-    await this.$store.dispatch('depositos/all');
+  mounted() {
+    this.$store.dispatch('depositos/all');
   },
   methods: {
     seleccionarDeposito(action, deposito = null) {
@@ -98,6 +110,12 @@ export default {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
       }
+    },
+    verDepartamento(dep) {
+      this.$store.dispatch('departamentos/select', {
+        id: dep.departamento_id,
+        nombre: dep.departamento,
+      });
     },
   },
 };
