@@ -26,11 +26,7 @@
         </div>
       </div>
     </div>
-    <ModalFooter
-      text="Modificar depósito"
-      :disabled="disabled"
-      @close="closeModal"
-    />
+    <ModalFooter text="Modificar depósito" @close="closeModal" />
   </form>
 </template>
 

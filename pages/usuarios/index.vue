@@ -7,7 +7,7 @@
       <Table>
         <template #header>
           <TableHead :header="table.header" />
-        </template>
+        </template> 
         <template #body>
           <tr v-for="user in users" :key="user.id">
             <td class="table-td">

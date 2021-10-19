@@ -1,154 +1,76 @@
 <template>
   <div>
-    <GlobalHeader :title="header.title" :text="header.text" />
+    <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <!-- AGREGAR MATERIALES -->
-      <div class="w-full gap-3 lg:order-last lg:w-72 lg:block">
-        <div
-          class="
-            flex
-            items-center
-            justify-between
-            h-auto
-            bg-gray-50
-            border border-green-100
-            rounded-md
-            p-2
-            lg:flex-col lg:top-0 lg:sticky lg:border-green-200
-          "
-        >
-          <div class="flex pl-1 lg:block">
-            <span class="text-sm sm:text-base lg:text-lg">
-              Agregar un
-              <b class="text-gray-800"> nuevo material.</b>
-            </span>
-          </div>
-          <router-link
-            to="/materiales/agregar"
-            class="
-              flex
-              items-center
-              justify-center
-              rounded-md
-              text-white
-              h-full
-              px-1.5
-              py-2
-              bg-green-600
-              hover:bg-green-500
-              sm:p-2.5
-              lg:w-full lg:h-auto lg:mt-3
-            "
-          >
-            agregar material
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+    </div>
+    <div class="flex flex-col gap-3 lg:flex-row">
+      <Table>
+        <template #header>
+          <TableHead :header="table.header" />
+        </template>
+        <template #body>
+          <tr v-for="material in materiales" :key="material.id">
+            <td class="table-td text-gray-500">
+              <router-link
+                :to="`/materiales/${material.id}`"
+                class="text-black hover:text-blue-600 hover:underline"
+                @click.native="seleccionarMaterial('view', material)"
+              >
+                {{ material.nombre }}
+              </router-link>
+            </td>
+            <td class="table-td text-gray-500">
+              <router-link
+                :to="`/deposito/${material.deposito}`"
+                class="hover:text-blue-600 hover:underline"
+                @click.native="verDeposito(material.deposito)"
+              >
+                {{ material.deposito }}
+              </router-link>
+            </td>
+            <td class="table-td text-gray-500">
+              <router-link
+                :to="`/categoria/${material.categoria}`"
+                class="hover:text-blue-600 hover:underline"
+                @click.native="verCategoria(material.categoria)"
+              >
+                {{ material.categoria }}
+              </router-link>
+            </td>
+            <td class="table-td text-gray-500">
+              {{ material.cantidad_materiales || 0 }}
+            </td>
+            <td class="table-td text-right">
+              <TableButton
+                svg="view"
+                @click="$router.push(`/materiales/${material.id}`)"
               />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 4v16m8-8H4"
+              <TableButton
+                v-if="!material.cantidad_materiales"
+                svg="del"
+                @click="seleccionarMaterial('del', material)"
               />
-            </svg>
-          </router-link>
-        </div>
-      </div>
-      <!-- TABLA -->
-      <div class="flex flex-col lg:flex-grow">
-        <div class="overflow-x-auto">
-          <div class="align-middle inline-block min-w-full">
-            <div
-              class="shadow overflow-hidden border border-gray-200 sm:rounded"
-            >
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th scope="col" class="table-th">Nombre</th>
-                    <th scope="col" class="table-th">Deposito</th>
-                    <th scope="col" class="table-th">Categoria</th>
-                    <th scope="col" class="table-th">Cantidad</th>
-                    <th scope="col" class="table-th text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="material in materiales" :key="material.id">
-                    <td class="table-td">
-                      {{ material.nombre }}
-                    </td>
-                    <td class="table-td text-gray-500">
-                      {{ material.deposito }}
-                    </td>
-                    <td class="table-td text-gray-500">
-                      {{ material.categoria }}
-                    </td>
-                    <td class="table-td text-gray-500">
-                      {{ material.cantidad }}
-                    </td>
-
-                    <td class="table-td text-right">
-                      <button v-if="false" class="table-btn group">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="group-hover:text-gray-900"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </button>
-                      <button
-                        class="table-btn group"
-                        @click="seleccionarMaterial('mod', material)"
-                      >
-                        <svg
-                          class="group-hover:text-gray-900"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
-                          />
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+              <TableButton
+                svg="mod"
+                @click="seleccionarMaterial('mod', material)"
+              />
+            </td>
+          </tr>
+        </template>
+      </Table>
     </div>
     <LazyModal v-if="modal.show">
       <LazyFormMaterialUpdate
         v-if="modal.action == 'mod'"
-        :model="selectedmaterial"
+        @close="modal.show = !modal.show"
+      />
+      <LazyFormMaterialCreate
+        v-else-if="modal.action == 'add'"
+        @close="modal.show = !modal.show"
+      />
+      <LazyFormMaterialDelete
+        v-else-if="modal.action == 'del'"
         @close="modal.show = !modal.show"
       />
     </LazyModal>
@@ -156,17 +78,17 @@
 </template>
 
 <script>
-import MaterialesService from '@/services/materiales.service';
 export default {
   layout: 'AppLayout',
   data() {
     return {
-      depositos: [],
-      materiales: [],
-      selectedmaterial: {},
-      header: {
+      pageHeader: {
+        materiales: [],
         title: 'Materiales',
-        text: 'materiales... etc.',
+        text: 'En los materiales.. etc.',
+      },
+      table: {
+        header: ['Nombre', 'Deposito', 'Categoría', 'Cantidad'],
       },
       modal: {
         show: false,
@@ -174,18 +96,32 @@ export default {
       },
     };
   },
+  computed: {
+    materiales() {
+      return this.$store.state.materiales.materiales;
+    },
+  },
   mounted() {
-    MaterialesService.index().then((res) => {
-      this.materiales = res.data;
-    });
+    this.$store.dispatch('materiales/all');
   },
   methods: {
     seleccionarMaterial(action, material = null) {
-      if (material) {
-        this.selectedmaterial = material;
+      console.log(material);
+      if (material) this.$store.dispatch('materiales/select', material);
+      if (action != 'view') {
+        this.modal.action = action;
+        this.modal.show = !this.modal.show;
       }
-      this.modal.action = action;
-      this.modal.show = !this.modal.show;
+    },
+    verDeposito(dep) {
+      this.$store.dispatch('depositos/get', {
+        id: dep,
+      });
+    },
+    verCategoria(cat) {
+      this.$store.dispatch('categorias/get', {
+        id: cat,
+      });
     },
   },
 };

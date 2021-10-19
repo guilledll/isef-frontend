@@ -5,21 +5,23 @@
         <ModalLeftIcon />
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
           <h3 class="modal-form-heading">Modificar rol</h3>
-          <select
-            id="rol"
-            v-model.trim="form.rol"
-            name="rol"
-            required
-            class="input-text bg-white h-11 text-gray-900"
-            :error="$v.form.rol.$anyError"
-            @input="$v.form.rol.$reset()"
-            @blur="$v.form.rol.$touch()"
-          >
-            <option value="0">Sin asignar</option>
-            <option value="1">Usuario</option>
-            <option value="2">Guardia</option>
-            <option value="3">Administrador</option>
-          </select>
+          <div>
+            <select
+              id="rol"
+              v-model.trim="form.rol"
+              name="rol"
+              required
+              class="input-text bg-white h-11 text-gray-900"
+              :error="$v.form.rol.$anyError"
+              @input="$v.form.rol.$reset()"
+              @blur="$v.form.rol.$touch()"
+            >
+              <option value="0">Sin asignar</option>
+              <option value="1">Usuario</option>
+              <option value="2">Guardia</option>
+              <option value="3">Administrador</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -34,7 +36,7 @@
 <script>
 import InputValidationMixin from '@/mixins/InputValidationMixin';
 import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
+import { required, integer } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
   mixins: [validationMixin, InputValidationMixin],
@@ -53,7 +55,7 @@ export default {
     disabled() {
       return (
         Object.keys(updatedDiff(this.usuario, this.form)).length == 0 ||
-        this.form.rol.length == 0
+        this.form.ci.length == 0
       );
     },
   },
@@ -65,6 +67,7 @@ export default {
     form: {
       rol: {
         required,
+        integer,
       },
     },
   },
