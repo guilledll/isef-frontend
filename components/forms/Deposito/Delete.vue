@@ -28,7 +28,7 @@ export default {
       return this.$store.state.depositos.deposito;
     },
   },
-  mounted() {},
+
   methods: {
     deleteDeposito() {
       this.$store
