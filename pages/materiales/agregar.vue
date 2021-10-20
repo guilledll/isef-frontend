@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GlobalHeader :title="header.title" :text="header.text" />
+    <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div>
       <select
         id="deposito_id"
@@ -39,16 +39,16 @@ export default {
   layout: 'AppLayout',
   data() {
     return {
+      pageHeader: {
+        title: 'Materiales',
+        text: 'Registrar materiales en el sistema. Ejemplo de materiales: Pelotas, Chalecos, Conos, etc.',
+      },
       nextformId: 0,
       dataMaterial: {
         //El material que se envía
         usuario_ci: this.$auth.user.ci,
         deposito: 1,
         materiales: [],
-      },
-      header: {
-        title: 'Materiales',
-        text: 'Materiales... etc.',
       },
       depositos: [],
       categorias: [],

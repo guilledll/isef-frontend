@@ -69,6 +69,7 @@
           </div>
         </div>
       </div>
+      {{ material }}
       <button type="submit" class="btn green">Agregar más materiales</button>
     </div>
   </form>

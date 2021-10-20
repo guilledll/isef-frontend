@@ -2,9 +2,12 @@
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
-      <!-- AGREGAR MATERIALES -->
-    </div>
-    <div class="flex flex-col gap-3 lg:flex-row">
+      <div class="table-actions">
+        <GlobalAddAction
+          text="Agregar <b>materiales</b>."
+          @click="$router.push('/materiales/agregar')"
+        />
+      </div>
       <Table>
         <template #header>
           <TableHead :header="table.header" />
@@ -85,7 +88,7 @@ export default {
       pageHeader: {
         materiales: [],
         title: 'Materiales',
-        text: 'En los materiales.. etc.',
+        text: 'Materiales registrados en el sistema. Ejemplo de materiales: Pelotas, Chalecos, Conos, etc.',
       },
       table: {
         header: ['Nombre', 'Deposito', 'Categoría', 'Cantidad'],
@@ -114,12 +117,12 @@ export default {
       }
     },
     verDeposito(dep) {
-      this.$store.dispatch('depositos/get', {
+      this.$store.dispatch('depositos/select', {
         id: dep,
       });
     },
     verCategoria(cat) {
-      this.$store.dispatch('categorias/get', {
+      this.$store.dispatch('categorias/select', {
         id: cat,
       });
     },
