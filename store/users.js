@@ -37,7 +37,12 @@ export const actions = {
     });
   },
   register(context, data) {
-    return UsersService.register(data);
+    return UsersService.register(data).then(() => {
+      context.dispatch('emailVerification', data);
+    });
+  },
+  emailVerification(context, data) {
+    return UsersService.emailVerification(data);
   },
   clear(context) {
     context.commit('CLEAR_SELECTED');

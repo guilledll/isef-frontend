@@ -275,10 +275,10 @@ export default {
       this.$store
         .dispatch('users/register', this.form)
         .then(() => {
-          this.$auth.loginWith('laravelSanctum', {
-            correo: this.form.correo,
-            password: this.form.password,
-          });
+          // this.$auth.loginWith('laravelSanctum', {
+          //   correo: this.form.correo,
+          //   password: this.form.password,
+          // });
         })
         .catch((e) => {
           this.errors = e.response.data.errors;

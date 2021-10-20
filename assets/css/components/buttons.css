@@ -13,5 +13,8 @@
     &.red {
       @apply bg-red-600 hover:bg-red-700 focus:ring-red-500;
     }
+    &.gray {
+      @apply bg-gray-200 hover:bg-gray-300 focus:ring-gray-400 text-gray-800;
+    }
   }
 }

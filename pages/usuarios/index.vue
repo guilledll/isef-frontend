@@ -68,9 +68,6 @@ export default {
       table: {
         header: ['Nombre', 'Departamento', 'Rol'],
       },
-      table: {
-        header: ['Nombre', 'Departamento', 'Rol'],
-      },
       modal: {
         show: false,
         action: '',
@@ -94,6 +91,7 @@ export default {
       }
     },
     mostrarRol(rol) {
+      console.log(rol);
       switch (rol) {
         case 1:
           return 'Usuario';

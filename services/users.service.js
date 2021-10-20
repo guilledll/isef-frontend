@@ -52,4 +52,8 @@ export default {
         return api().post('/register', data);
       });
   },
+
+  emailVerification(data) {
+    return api().post('/email/verification-notification', data);
+  },
 };
