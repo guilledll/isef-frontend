@@ -1,6 +1,10 @@
 @layer components {
-  .input-text {
-    @apply w-full rounded-md px-3 py-2 border border-gray-300  placeholder-gray-500 text-base text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10;
+  .form-input-text,
+  .form-select {
+    @apply w-full rounded-md px-3 py-2 border border-gray-300  placeholder-gray-500 text-base text-gray-900 focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10;
+    &.error {
+      @apply border-red-500 focus:ring-red-400 focus:border-red-400;
+    }
   }
   .checkbox {
     @apply flex items-center;
@@ -10,5 +14,8 @@
     & > .check {
       @apply h-4 w-4 border-gray-300 rounded;
     }
+  }
+  .modal-form-heading {
+    @apply text-lg leading-6 font-medium text-gray-900 mb-3 mt-2;
   }
 }

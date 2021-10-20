@@ -1,26 +1,24 @@
 <template>
   <div>
-    Home
-    <button class="btn-indigo" @click="logout">Chau</button>
-    {{ user }}
+    <button class="btn indigo" @click="logout">Chau</button>
+    <router-link class="btn green" to="/admin"> Admin </router-link>
   </div>
 </template>
 
 <script>
 export default {
-  layout: 'App',
-  middleware: 'auth',
+  layout: 'AppLayout',
   computed: {
     user() {
-      return this.$auth.user
+      return this.$auth.user;
     },
   },
   methods: {
-    async logout() {
-      await this.$auth.logout()
+    logout() {
+      this.$auth.logout();
     },
   },
-}
+};
 </script>
 
 <style></style>
