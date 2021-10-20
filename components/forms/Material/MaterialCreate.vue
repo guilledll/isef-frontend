@@ -116,7 +116,7 @@ export default {
   methods: {
     validar: validationMessage(mensajes),
     createMaterial() {
-      if (this.invalid()) return;
+      // if (this.invalid()) return;
 
       let form = {
         nombre: this.material.nombre,
