@@ -42,7 +42,7 @@
               </router-link>
             </td>
             <td class="table-td text-gray-500">
-              {{ material.cantidad_materiales || 0 }}
+              {{ material.cantidad || 0 }}
             </td>
             <td class="table-td text-right">
               <TableButton
@@ -109,7 +109,6 @@ export default {
   },
   methods: {
     seleccionarMaterial(action, material = null) {
-      console.log(material);
       if (material) this.$store.dispatch('materiales/select', material);
       if (action != 'view') {
         this.modal.action = action;

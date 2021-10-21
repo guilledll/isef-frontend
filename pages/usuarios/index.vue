@@ -91,7 +91,6 @@ export default {
       }
     },
     mostrarRol(rol) {
-      console.log(rol);
       switch (rol) {
         case 1:
           return 'Usuario';

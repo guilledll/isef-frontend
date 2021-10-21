@@ -44,7 +44,7 @@ export const actions = {
   },
   all(context) {
     return MaterialesService.index().then((res) => {
-      context.commit('GET_ALL_MATERIALS', res.data);
+      context.commit('GET_ALL_MATERIALES', res.data);
     });
   },
   create(context, data) {
