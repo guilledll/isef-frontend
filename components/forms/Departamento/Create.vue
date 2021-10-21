@@ -3,7 +3,7 @@
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon type="add" />
-        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+        <div class="modal-form-body">
           <h3 class="text-xl leading-6 font-medium text-gray-900 mb-3">
             Agregar departamento
           </h3>

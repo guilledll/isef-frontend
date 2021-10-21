@@ -5,14 +5,13 @@
       class="action-btn"
       type="submit"
       :class="type"
-      :disabled="disabled"
+      :disabled="disabled || loading"
       @click="$emit('action')"
     >
-      {{ text }}
+      <span v-if="!loading">{{ text }}</span>
+      <GlobalSvg v-else class="h-5 w-5 animate-spin mx-4" svg="spin" />
     </button>
-    <button type="button" class="cancel-btn" @click="$emit('close')">
-      Cancelar
-    </button>
+    <button type="button" class="cancel-btn" @click="close">Cancelar</button>
   </div>
 </template>
 
@@ -23,6 +22,20 @@ export default {
     text: { type: String, default: 'Acción' },
     disabled: { type: Boolean, default: false },
     button: { type: Boolean, default: true },
+  },
+  computed: {
+    loading() {
+      return this.$store.state.global.loading;
+    },
+  },
+  mounted() {
+    this.$store.dispatch('global/loading', false);
+  },
+  methods: {
+    close() {
+      this.$store.dispatch('global/loading', false);
+      this.$emit('close');
+    },
   },
 };
 </script>

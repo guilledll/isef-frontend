@@ -3,7 +3,7 @@
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon type="add" />
-        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+        <div class="modal-form-body">
           <h3 class="modal-form-heading">Agregar depósito</h3>
           <p class="mb-3">Se creará un nuevo depósitos para los materiales.</p>
           <div class="space-y-2">

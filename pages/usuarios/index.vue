@@ -28,7 +28,7 @@
                 {{ user.departamento }}
               </router-link>
             </td>
-            <td class="table-td" :class="`rol-${user.rol}`">
+            <td class="table-td" :class="claseRol(user.rol)">
               {{ mostrarRol(user.rol) }}
             </td>
             <td class="table-td text-right">
@@ -91,17 +91,23 @@ export default {
       }
     },
     mostrarRol(rol) {
-      console.log(rol);
-      switch (rol) {
+      switch (parseInt(rol)) {
         case 1:
-          return 'Usuario';
+          rol = 'Usuario';
+          break;
         case 2:
-          return 'Guardia';
+          rol = 'Guardia';
+          break;
         case 3:
-          return 'Administrador';
+          rol = 'Administrador';
+          break;
         default:
-          return 'Sin asignar';
+          rol = 'Sin asignar';
       }
+      return rol;
+    },
+    claseRol(rol) {
+      return `rol-${rol}`;
     },
     verDepartamento(dep) {
       this.$store.dispatch('departamentos/select', {
