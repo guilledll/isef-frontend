@@ -28,7 +28,10 @@
             </div>
           </div>
         </div>
-        <div class="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
+        <div
+          v-if="showActions"
+          class="hidden md:block md:ml-10 md:pr-4 md:space-x-8"
+        >
           <router-link
             to="/registro"
             class="font-medium text-gray-500 hover:text-gray-900"
@@ -123,6 +126,10 @@ export default {
     },
     topbarLink() {
       return this.auth ? '/inicio' : '/';
+    },
+    showActions() {
+      let pages = ['validar']; // Paginas en las que no se debe mostar la cabecera
+      return pages.indexOf(this.$route.name) == -1;
     },
   },
   methods: {

@@ -43,16 +43,16 @@
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/depositos/${deposito.id}`)"
               />
               <TableButton
                 v-if="!deposito.cantidad_materiales"
-                svg="del"
+                type="delete"
                 @click="seleccionarDeposito('del', deposito)"
               />
               <TableButton
-                svg="mod"
+                type="edit"
                 @click="seleccionarDeposito('mod', deposito)"
               />
             </td>
@@ -80,6 +80,7 @@
 <script>
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   data() {
     return {
       pageHeader: {

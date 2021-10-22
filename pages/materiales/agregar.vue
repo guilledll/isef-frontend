@@ -37,6 +37,7 @@ import CategoriasService from '~/services/categorias.service';
 import DepositosService from '@/services/depositos.service';
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   data() {
     return {
       nextformId: 0,
@@ -64,6 +65,7 @@ export default {
   },
   methods: {
     agregarMaterial(data) {
+      console.log(data);
       if (this.verificarNombre(data)) return;
       this.dataMaterial.materiales.push(data);
     },

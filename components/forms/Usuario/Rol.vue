@@ -1,84 +1,87 @@
 <template>
-  <form @submit.prevent="rolUsuario">
+  <form @submit.prevent="updateRol">
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
-        <ModalLeftIcon type="add" />
-        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <h3 class="text-xl leading-6 font-medium text-gray-900 mb-3">
-            Asignar rol
-          </h3>
-          <p class="mb-3">Se asignará un rol al usuario.</p>
-          <p v-if="error" class="text-red-500 font-medium mb-1">
-            {{ error.ci[0] }}
-          </p>
-          <div class="space-y-2">
-            <span class="font-medium text-gray-900">
-              {{ model.nombre }}
-            </span>
-            <div>
-              <select
-                id="rol"
-                v-model.trim="usuario.rol"
-                name="rol"
-                required
-                class="input-text bg-white h-11 text-gray-900"
-                :error="$v.usuario.rol.$anyError"
-                @input="$v.usuario.rol.$reset()"
-                @blur="$v.usuario.rol.$touch()"
-              >
-                <option value="0">Sin asignar</option>
-                <option value="1">Usuario</option>
-                <option value="2">Guardia</option>
-                <option value="3">Administrador</option>
-              </select>
-              <span v-if="$v.usuario.rol.$anyError" class="error">
-                {{ validar($v.usuario.rol) }}
-              </span>
-            </div>
+        <ModalLeftIcon />
+        <div class="modal-form-body">
+          <h3 class="modal-form-heading">Modificar rol</h3>
+          <p class="mb-3">Cambiar permisos del usuario.</p>
+          <div>
+            <FormSelect
+              id="rol"
+              v-model.trim="form.rol"
+              name="rol"
+              required
+              :error="hasError($v.form.rol)"
+              @input="fieldReset($v.form.rol)"
+              @blur="touch($v.form.rol)"
+            >
+              <template #options>
+                <option v-if="originalRol == 0" value="0">Sin asignar</option>
+                <option
+                  v-for="rol in roles"
+                  :key="rol.value"
+                  :value="rol.value"
+                  :selected="usuario.rol == rol.value"
+                >
+                  {{ rol.text }}
+                </option>
+              </template>
+              <template #error>
+                <LazyFormError
+                  v-if="hasError($v.form.rol)"
+                  :text="errorText($v.form.rol)"
+                />
+              </template>
+            </FormSelect>
           </div>
         </div>
       </div>
     </div>
-    <ModalFooter text="Guardar rol" type="add" @close="$emit('close')" />
+    <ModalFooter
+      text="Modificar rol"
+      :disabled="disabled"
+      @close="closeModal"
+    />
   </form>
 </template>
 
 <script>
-import usuarioService from '@/services/users.service';
-import { mensajes } from '@/services/validation.service';
+import FormValidationMixin from '@/mixins/FormValidationMixin';
 import { validationMixin } from 'vuelidate';
-import { validationMessage } from 'vuelidate-messages';
-import { required, integer, maxLength } from 'vuelidate/lib/validators';
-
+import { required, integer } from 'vuelidate/lib/validators';
+import { updatedDiff } from 'deep-object-diff';
 export default {
-  mixins: [validationMixin],
-  props: {
-    model: { type: Object, default: () => {} },
-  },
+  mixins: [validationMixin, FormValidationMixin],
   data() {
     return {
-      usuario: {
+      form: {
         ci: '',
         rol: '',
       },
-      error: null,
+      roles: [
+        { value: 1, text: 'Usuario' },
+        { value: 2, text: 'Guardia' },
+        { value: 3, text: 'Administrador' },
+      ],
+      originalRol: 0,
     };
   },
   computed: {
-    //  disabled() {
-    // return Object.keys(updatedDiff(this.model, this.usuario)).length == 0;
-    //},
+    usuario() {
+      return this.$store.state.users.user;
+    },
+    disabled() {
+      return Object.keys(updatedDiff(this.usuario, this.form)).length == 0;
+    },
   },
   mounted() {
-    this.usuario.ci = this.model.ci;
-    this.usuario.rol = this.model.rol;
+    this.form.ci = this.usuario.ci;
+    this.form.rol = this.usuario.rol;
+    this.originalRol = this.usuario.rol;
   },
   validations: {
-    usuario: {
-      ci: {
-        required,
-        maxLength: maxLength(50),
-      },
+    form: {
       rol: {
         required,
         integer,
@@ -86,20 +89,16 @@ export default {
     },
   },
   methods: {
-    validar: validationMessage(mensajes),
-    updateDeposito() {
+    updateRol() {
       if (this.invalid()) return;
-      usuarioService
-        .updateRol(this.usuario.ci, this.usuario)
-        .then(() => {
-          // IMPLEMENTAR ESTO EN LA STORE
-          // let deposito = this.depositos.find((dep) => dep.id === data.id)
-          // deposito.ci = data.ci
-          this.$emit('close');
-        })
-        .catch((e) => {
-          this.error = e.response.data.errors;
-        });
+      this.$store
+        .dispatch('users/updateRol', this.form)
+        .then(() => this.$emit('close'))
+        .catch((e) => (this.errors = e.response.data.errors));
+    },
+    closeModal() {
+      this.$store.dispatch('users/clear');
+      this.$emit('close');
     },
   },
 };

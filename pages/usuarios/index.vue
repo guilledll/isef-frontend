@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GlobalHeader :title="header.title" :text="header.text" />
+    <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <!-- Listar Usuarios -->
       <div class="w-full gap-3 lg:order-last lg:w-72 lg:block"></div>
@@ -9,41 +9,35 @@
           <TableHead :header="table.header" />
         </template>
         <template #body>
-          <tr v-for="usuario in Usuarios" :key="usuario.id">
+          <tr v-for="user in users" :key="user.id">
             <td class="table-td">
               <router-link
-                :to="`/users/${usuario.ci}`"
+                :to="`/users/${user.ci}`"
                 class="text-black hover:text-blue-600 hover:underline"
-                @click.native="seleccionarUsuario('view', usuario)"
+                @click.native="seleccionarUsuario('view', user)"
               >
-                {{ usuario.nombre }}
+                {{ user.nombre }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/departamentos/${usuario.departamento_id}`"
+                :to="`/departamentos/${user.departamento_id}`"
                 class="hover:text-blue-600 hover:underline"
-                @click.native="verDepartamento(usuario)"
+                @click.native="verDepartamento(user)"
               >
-                {{ usuario.departamento }}
+                {{ user.departamento }}
               </router-link>
             </td>
-            <td class="table-td" :class="`rol-${usuario.rol}`">
-              {{ mostrarRol(usuario.rol) }}
+            <td class="table-td" :class="claseRol(user.rol)">
+              {{ mostrarRol(user.rol) }}
             </td>
             <td class="table-td text-right">
               <TableButton
                 svg="view"
-                @click="$router.push(`/users/${usuario.ci}`)"
+                @click="$router.push(`/users/${user.ci}`)"
               />
-              <TableButton
-                svg="del"
-                @click="seleccionarUsuario('del', usuario)"
-              />
-              <TableButton
-                svg="mod"
-                @click="seleccionarUsuario('mod', usuario)"
-              />
+              <TableButton svg="del" @click="seleccionarUsuario('del', user)" />
+              <TableButton svg="mod" @click="seleccionarUsuario('mod', user)" />
             </td>
           </tr>
         </template>
@@ -52,12 +46,10 @@
     <LazyModal v-if="modal.show">
       <LazyFormUsuarioRol
         v-if="modal.action == 'mod'"
-        :model="selectedUsuario"
         @close="modal.show = !modal.show"
       />
-      <!-- <LazyFormUsuarioCreate
-        v-else-if="modal.action == 'add'"
-        :model="selectedUsuario"
+      <!-- <LazyFormUsuarioDelete
+        v-else-if="modal.action == 'del'"
         @close="modal.show = !modal.show"
       /> -->
     </LazyModal>
@@ -65,16 +57,14 @@
 </template>
 
 <script>
-import usuarioService from '@/services/users.service';
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   data() {
     return {
-      Usuarios: [],
-      selectedUsuario: {},
-      header: {
+      pageHeader: {
         title: 'Usuarios',
-        text: 'En los Usuarios.. etc.',
+        text: 'Usuarios registrados en el sistema.',
       },
       table: {
         header: ['Nombre', 'Departamento', 'Rol'],
@@ -85,30 +75,40 @@ export default {
       },
     };
   },
+  computed: {
+    users() {
+      return this.$store.state.users.users;
+    },
+  },
   mounted() {
-    usuarioService.index().then((res) => {
-      this.Usuarios = res.data;
-    });
+    this.$store.dispatch('users/all');
   },
   methods: {
-    seleccionarUsuario(action, usuario = null) {
-      if (usuario) {
-        this.selectedUsuario = usuario;
+    seleccionarUsuario(action, user = null) {
+      if (user) this.$store.dispatch('users/select', user);
+      if (action != 'view') {
+        this.modal.action = action;
+        this.modal.show = !this.modal.show;
       }
-      this.modal.action = action;
-      this.modal.show = !this.modal.show;
     },
     mostrarRol(rol) {
-      switch (rol) {
+      switch (parseInt(rol)) {
         case 1:
-          return 'Usuario';
+          rol = 'Usuario';
+          break;
         case 2:
-          return 'Guardia';
+          rol = 'Guardia';
+          break;
         case 3:
-          return 'Administrador';
+          rol = 'Administrador';
+          break;
         default:
-          return 'Sin asignar';
+          rol = 'Sin asignar';
       }
+      return rol;
+    },
+    claseRol(rol) {
+      return `rol-${rol}`;
     },
     verDepartamento(dep) {
       this.$store.dispatch('departamentos/select', {

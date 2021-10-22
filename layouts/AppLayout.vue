@@ -10,12 +10,6 @@
 </template>
 <script>
 export default {
-  middleware: 'auth',
-  computed: {
-    showHeader() {
-      let pages = []; // Paginas en las que no se debe mostar la cabecera
-      return pages.indexOf(this.$route.name) == -1;
-    },
-  },
+  middleware: ['auth', 'validado'],
 };
 </script>
