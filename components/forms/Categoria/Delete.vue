@@ -2,7 +2,7 @@
   <form @submit.prevent="deleteCategoria">
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
-        <ModalLeftIcon type="del" />
+        <ModalLeftIcon type="delete" />
         <div class="modal-form-body">
           <h3 class="modal-form-heading">Eliminar categoría</h3>
           <p class="mb-2">

@@ -37,6 +37,7 @@ import CategoriasService from '~/services/categorias.service';
 import DepositosService from '@/services/depositos.service';
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   data() {
     return {
       nextformId: 0,

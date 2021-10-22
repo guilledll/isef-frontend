@@ -15,6 +15,7 @@
 <script>
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   methods: {
     goTo(ruta) {
       this.$router.push(`/${ruta}`);

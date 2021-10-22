@@ -63,12 +63,12 @@
 </template>
 
 <script>
-import InputValidationMixin from '@/mixins/InputValidationMixin';
+import FormValidationMixin from '@/mixins/FormValidationMixin';
 import { departamento } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { required, integer, maxLength } from 'vuelidate/lib/validators';
 export default {
-  mixins: [validationMixin, InputValidationMixin],
+  mixins: [validationMixin, FormValidationMixin],
   data() {
     return {
       form: {

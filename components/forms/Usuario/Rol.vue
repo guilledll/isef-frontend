@@ -38,9 +38,6 @@
         </div>
       </div>
     </div>
-    <!-- <button class="action-btn" type="submit">
-      <GlobalSvg class="h-5 w-5 animate-spin mx-4" svg="spin" />
-    </button> -->
     <ModalFooter
       text="Modificar rol"
       :disabled="disabled"
@@ -50,12 +47,12 @@
 </template>
 
 <script>
-import InputValidationMixin from '@/mixins/InputValidationMixin';
+import FormValidationMixin from '@/mixins/FormValidationMixin';
 import { validationMixin } from 'vuelidate';
 import { required, integer } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
-  mixins: [validationMixin, InputValidationMixin],
+  mixins: [validationMixin, FormValidationMixin],
   data() {
     return {
       form: {

@@ -2,7 +2,7 @@
   <form @submit.prevent="deleteDepartamento">
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
-        <ModalLeftIcon type="del" />
+        <ModalLeftIcon type="delete" />
         <div class="modal-form-body">
           <h3 class="text-xl leading-6 font-medium text-gray-800 mb-3 mt-2">
             Eliminar departamento

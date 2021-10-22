@@ -9,7 +9,7 @@
       @click="$emit('action')"
     >
       <span v-if="!loading">{{ text }}</span>
-      <GlobalSvg v-else class="h-5 w-5 animate-spin mx-4" svg="spin" />
+      <GlobalSvg v-else class="h-5 w-5 animate-spin mx-4" svg="refresh" />
     </button>
     <button type="button" class="cancel-btn" @click="close">Cancelar</button>
   </div>
