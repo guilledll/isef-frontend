@@ -33,11 +33,19 @@
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/users/${user.ci}`)"
               />
-              <TableButton svg="del" @click="seleccionarUsuario('del', user)" />
-              <TableButton svg="mod" @click="seleccionarUsuario('mod', user)" />
+              <TableButton
+                v-if="user.ci != $auth.user.ci"
+                type="delete"
+                @click="seleccionarUsuario('del', user)"
+              />
+              <TableButton
+                v-if="user.ci != $auth.user.ci"
+                type="edit"
+                @click="seleccionarUsuario('mod', user)"
+              />
             </td>
           </tr>
         </template>

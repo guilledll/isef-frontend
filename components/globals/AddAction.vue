@@ -9,11 +9,11 @@
     <button :class="color" @click="$emit('click')">
       <div v-if="svg == 'add'" class="flex items-center">
         <GlobalSvg class="h-6 w-6" svg="clipboard-list" />
-        <GlobalSvg class="h-6 w-6" svg="plus" />
+        <GlobalSvg class="h-5 w-5" svg="plus" />
       </div>
       <div v-if="svg == 'departamento'" class="flex items-center gap-0.5">
         <GlobalSvg class="h-6 w-6" svg="map" />
-        <GlobalSvg class="h-6 w-6" svg="location-marker" />
+        <GlobalSvg class="h-5 w-5" svg="location-marker" />
       </div>
     </button>
   </div>

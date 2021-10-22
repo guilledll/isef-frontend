@@ -2,10 +2,12 @@
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
-      <GlobalAddAction
-        text="Agregar <b>nueva categoría</b> para materiales."
-        @click="seleccionarCategoria('add')"
-      />
+      <div class="table-actions">
+        <GlobalAddAction
+          text="Agregar <b>nueva categoría</b> para materiales."
+          @click="seleccionarCategoria('add')"
+        />
+      </div>
       <Table>
         <template #header>
           <TableHead :header="table.header" />
@@ -26,16 +28,16 @@
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/categorias/${categoria.id}`)"
               />
               <TableButton
                 v-if="!categoria.cantidad_materiales"
-                svg="del"
+                type="delete"
                 @click="seleccionarCategoria('del', categoria)"
               />
               <TableButton
-                svg="mod"
+                type="edit"
                 @click="seleccionarCategoria('mod', categoria)"
               />
             </td>

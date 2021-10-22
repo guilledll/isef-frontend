@@ -43,16 +43,16 @@
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/materiales/${material.id}`)"
               />
               <TableButton
                 v-if="!material.cantidad_materiales"
-                svg="del"
+                type="delete"
                 @click="seleccionarMaterial('del', material)"
               />
               <TableButton
-                svg="mod"
+                type="edit"
                 @click="seleccionarMaterial('mod', material)"
               />
             </td>

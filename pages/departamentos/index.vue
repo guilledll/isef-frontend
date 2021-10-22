@@ -2,10 +2,12 @@
   <div>
     <GlobalHeader :title="header.title" :text="header.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
-      <GlobalAddAction
-        text="Agregar un <b>departamento</b>."
-        @click="seleccionarDepartamento('add')"
-      />
+      <div class="table-actions">
+        <GlobalAddAction
+          text="Agregar un <b>departamento</b>."
+          @click="seleccionarDepartamento('add')"
+        />
+      </div>
       <Table>
         <template #header>
           <TableHead :header="table.header" />
@@ -29,16 +31,16 @@
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/departamentos/${departamento.id}`)"
               />
               <TableButton
                 v-if="!departamento.users_count"
-                svg="del"
+                type="delete"
                 @click="seleccionarDepartamento('del', departamento)"
               />
               <TableButton
-                svg="mod"
+                type="edit"
                 @click="seleccionarDepartamento('mod', departamento)"
               />
             </td>
