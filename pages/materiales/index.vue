@@ -25,7 +25,7 @@
             </td>
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/deposito/${material.deposito}`"
+                :to="`/depositos/${material.deposito_id}`"
                 class="hover:text-blue-600 hover:underline"
                 @click.native="verDeposito(material.deposito)"
               >
@@ -34,7 +34,7 @@
             </td>
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/categoria/${material.categoria}`"
+                :to="`/categorias/${material.categoria_id}`"
                 class="hover:text-blue-600 hover:underline"
                 @click.native="verCategoria(material.categoria)"
               >

@@ -31,6 +31,11 @@ export const actions = {
   select(context, data) {
     context.commit('SELECT_USUARIO', data);
   },
+  get(context, ci) {
+    return UsersService.show(ci).then((res) => {
+      context.dispatch('select', res.data);
+    });
+  },
   all(context) {
     return UsersService.index().then((res) => {
       context.commit('GET_ALL_USERS', res.data);

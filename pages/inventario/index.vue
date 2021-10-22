@@ -17,7 +17,6 @@
                 {{ movimiento.material }}
               </router-link>
             </td>
-
             <td class="table-td text-gray-500">
               {{ movimiento.accion || 0 }}
             </td>
@@ -25,7 +24,7 @@
               {{ movimiento.cantidad || 0 }}
             </td>
             <td class="table-td text-gray-500">
-              {{ movimiento.fecha || formatDate }}
+              {{ movimiento.fecha }}
             </td>
             <td class="table-td text-right"></td>
           </tr>
@@ -72,5 +71,3 @@ export default {
   },
 };
 </script>
-
-<style></style>
