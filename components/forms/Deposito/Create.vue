@@ -74,7 +74,7 @@ export default {
       form: {
         nombre: '',
         departamento_id: 0,
-        departamento: '',
+        //departamento: '',
       },
     };
   },

@@ -24,6 +24,9 @@
             <td class="table-td text-gray-500">
               {{ movimiento.cantidad || 0 }}
             </td>
+            <td class="table-td text-gray-500">
+              {{ movimiento.fecha || formatDate }}
+            </td>
             <td class="table-td text-right"></td>
           </tr>
         </template>
