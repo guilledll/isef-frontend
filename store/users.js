@@ -55,6 +55,7 @@ export const actions = {
   updateRol(context, data) {
     return UsersService.updateRol(data.ci, data).then(() => {
       context.commit('UPDATE_ROL', data);
+      context.dispatch('global/loading', false, { root: true });
     });
   },
   delete(context, ci) {

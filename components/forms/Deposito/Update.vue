@@ -3,8 +3,9 @@
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon />
-        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+        <div class="modal-form-body">
           <h3 class="modal-form-heading">Modificar depósito</h3>
+          <p class="mb-3">Es posible renombrar el depósito.</p>
           <div>
             <FormInput
               id="nombre"
@@ -26,17 +27,21 @@
         </div>
       </div>
     </div>
-    <ModalFooter text="Modificar depósito" @close="closeModal" />
+    <ModalFooter
+      text="Modificar depósito"
+      :disabled="disabled"
+      @close="closeModal"
+    />
   </form>
 </template>
 
 <script>
-import InputValidationMixin from '@/mixins/InputValidationMixin';
+import FormValidationMixin from '@/mixins/FormValidationMixin';
 import { validationMixin } from 'vuelidate';
 import { required, integer, maxLength } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
-  mixins: [validationMixin, InputValidationMixin],
+  mixins: [validationMixin, FormValidationMixin],
   data() {
     return {
       form: {

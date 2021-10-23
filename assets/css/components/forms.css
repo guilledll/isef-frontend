@@ -15,7 +15,10 @@
       @apply h-4 w-4 border-gray-300 rounded;
     }
   }
-  .modal-form-heading {
-    @apply text-lg leading-6 font-medium text-gray-900 mb-3 mt-2;
+  .modal-form-body {
+    @apply mt-3 text-center w-full sm:w-5/6 sm:mt-0 sm:ml-4 sm:text-left;
+    & > .modal-form-heading {
+      @apply text-lg leading-6 font-medium text-gray-900 mb-3 mt-2;
+    }
   }
 }

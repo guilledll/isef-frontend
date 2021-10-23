@@ -3,9 +3,16 @@
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
-        <GlobalAddAction
+        <GlobalCallToAction
           text="Agregar <b>materiales</b>."
+          svg="cube"
           @click="$router.push('/materiales/agregar')"
+        />
+        <GlobalCallToAction
+          text="Ver <b>categorías</b> de materiales."
+          type="view"
+          svg="clipboard-list"
+          @click="$router.push('/categorias')"
         />
       </div>
       <Table>
@@ -27,7 +34,7 @@
               <router-link
                 :to="`/depositos/${material.deposito_id}`"
                 class="hover:text-blue-600 hover:underline"
-                @click.native="verDeposito(material.deposito)"
+                @click.native="verDeposito(material.deposito_id)"
               >
                 {{ material.deposito }}
               </router-link>
@@ -36,26 +43,26 @@
               <router-link
                 :to="`/categorias/${material.categoria_id}`"
                 class="hover:text-blue-600 hover:underline"
-                @click.native="verCategoria(material.categoria)"
+                @click.native="verCategoria(material.categoria_id)"
               >
                 {{ material.categoria }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
-              {{ material.cantidad || 0 }}
+              {{ material.cantidad_materiales || 0 }}
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/materiales/${material.id}`)"
               />
               <TableButton
                 v-if="!material.cantidad_materiales"
-                svg="del"
+                type="delete"
                 @click="seleccionarMaterial('del', material)"
               />
               <TableButton
-                svg="mod"
+                type="edit"
                 @click="seleccionarMaterial('mod', material)"
               />
             </td>
@@ -83,6 +90,7 @@
 <script>
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   data() {
     return {
       pageHeader: {
@@ -116,12 +124,12 @@ export default {
       }
     },
     verDeposito(dep) {
-      this.$store.dispatch('depositos/select', {
+      this.$store.dispatch('depositos/get', {
         id: dep,
       });
     },
     verCategoria(cat) {
-      this.$store.dispatch('categorias/select', {
+      this.$store.dispatch('categorias/get', {
         id: cat,
       });
     },
