@@ -10,6 +10,6 @@
 </template>
 <script>
 export default {
-  middleware: ['auth', 'validado.middleware'],
+  middleware: ['auth', 'validado'],
 };
 </script>

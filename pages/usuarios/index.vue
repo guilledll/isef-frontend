@@ -28,13 +28,23 @@
                 {{ user.departamento }}
               </router-link>
             </td>
-            <td class="table-td" :class="`rol-${user.rol}`">
+            <td class="table-td" :class="claseRol(user.rol)">
               {{ mostrarRol(user.rol) }}
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/users/${user.ci}`)"
+              />
+              <TableButton
+                v-if="user.ci != $auth.user.ci"
+                type="delete"
+                @click="seleccionarUsuario('del', user)"
+              />
+              <TableButton
+                v-if="user.ci != $auth.user.ci"
+                type="edit"
+                @click="seleccionarUsuario('mod', user)"
               />
               <TableButton svg="del" @click="seleccionarUsuario('del', user)" />
               <TableButton svg="mod" @click="seleccionarUsuario('mod', user)" />
@@ -59,6 +69,7 @@
 <script>
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   data() {
     return {
       pageHeader: {
@@ -91,16 +102,23 @@ export default {
       }
     },
     mostrarRol(rol) {
-      switch (rol) {
+      switch (parseInt(rol)) {
         case 1:
-          return 'Usuario';
+          rol = 'Usuario';
+          break;
         case 2:
-          return 'Guardia';
+          rol = 'Guardia';
+          break;
         case 3:
-          return 'Administrador';
+          rol = 'Administrador';
+          break;
         default:
-          return 'Sin asignar';
+          rol = 'Sin asignar';
       }
+      return rol;
+    },
+    claseRol(rol) {
+      return `rol-${rol}`;
     },
     verDepartamento(dep) {
       this.$store.dispatch('departamentos/select', {

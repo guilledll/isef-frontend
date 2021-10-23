@@ -34,7 +34,6 @@
           md:mx-auto
         "
       >
-        <!-- CONTENIDO RENDERIZADO EN <SLOT> -->
         <slot></slot>
       </div>
     </div>

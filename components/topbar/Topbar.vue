@@ -97,11 +97,7 @@
                 />
                 ISEF
               </router-link>
-              <LazyTopbarMenuButton
-                class="-mr-2"
-                icon="x"
-                @clicked="hideMenu"
-              />
+              <LazyTopbarMenuButton class="-mr-2" svg="x" @clicked="hideMenu" />
             </div>
             <div class="px-2 pt-2 pb-3 space-y-1" @click="hideMenu">
               <TopbarMenuLinks :items="filterButtons" />

@@ -3,14 +3,15 @@
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
-        <GlobalAddAction
+        <GlobalCallToAction
           text="Agregar un <b>nuevo depósito</b>."
+          svg="archive"
           @click="seleccionarDeposito('add')"
         />
-        <GlobalAddAction
+        <GlobalCallToAction
           text="Ir a <b>departamentos</b>."
-          color="indigo"
-          svg="departamento"
+          type="view"
+          svg="map"
           @click="$router.push('/departamentos')"
         />
       </div>
@@ -43,16 +44,16 @@
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/depositos/${deposito.id}`)"
               />
               <TableButton
                 v-if="!deposito.cantidad_materiales"
-                svg="del"
+                type="delete"
                 @click="seleccionarDeposito('del', deposito)"
               />
               <TableButton
-                svg="mod"
+                type="edit"
                 @click="seleccionarDeposito('mod', deposito)"
               />
             </td>
@@ -80,6 +81,7 @@
 <script>
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   data() {
     return {
       pageHeader: {

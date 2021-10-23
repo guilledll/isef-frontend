@@ -3,24 +3,37 @@
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon />
-        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+        <div class="modal-form-body">
           <h3 class="modal-form-heading">Modificar rol</h3>
+          <p class="mb-3">Cambiar permisos del usuario.</p>
           <div>
-            <select
+            <FormSelect
               id="rol"
               v-model.trim="form.rol"
               name="rol"
               required
-              class="input-text bg-white h-11 text-gray-900"
-              :error="$v.form.rol.$anyError"
-              @input="$v.form.rol.$reset()"
-              @blur="$v.form.rol.$touch()"
+              :error="hasError($v.form.rol)"
+              @input="fieldReset($v.form.rol)"
+              @blur="touch($v.form.rol)"
             >
-              <option value="0">Sin asignar</option>
-              <option value="1">Usuario</option>
-              <option value="2">Guardia</option>
-              <option value="3">Administrador</option>
-            </select>
+              <template #options>
+                <option v-if="originalRol == 0" value="0">Sin asignar</option>
+                <option
+                  v-for="rol in roles"
+                  :key="rol.value"
+                  :value="rol.value"
+                  :selected="usuario.rol == rol.value"
+                >
+                  {{ rol.text }}
+                </option>
+              </template>
+              <template #error>
+                <LazyFormError
+                  v-if="hasError($v.form.rol)"
+                  :text="errorText($v.form.rol)"
+                />
+              </template>
+            </FormSelect>
           </div>
         </div>
       </div>
@@ -34,18 +47,24 @@
 </template>
 
 <script>
-import InputValidationMixin from '@/mixins/InputValidationMixin';
+import FormValidationMixin from '@/mixins/FormValidationMixin';
 import { validationMixin } from 'vuelidate';
 import { required, integer } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
-  mixins: [validationMixin, InputValidationMixin],
+  mixins: [validationMixin, FormValidationMixin],
   data() {
     return {
       form: {
         ci: '',
         rol: '',
       },
+      roles: [
+        { value: 1, text: 'Usuario' },
+        { value: 2, text: 'Guardia' },
+        { value: 3, text: 'Administrador' },
+      ],
+      originalRol: 0,
     };
   },
   computed: {
@@ -53,15 +72,13 @@ export default {
       return this.$store.state.users.user;
     },
     disabled() {
-      return (
-        Object.keys(updatedDiff(this.usuario, this.form)).length == 0 ||
-        this.form.ci.length == 0
-      );
+      return Object.keys(updatedDiff(this.usuario, this.form)).length == 0;
     },
   },
   mounted() {
     this.form.ci = this.usuario.ci;
     this.form.rol = this.usuario.rol;
+    this.originalRol = this.usuario.rol;
   },
   validations: {
     form: {
