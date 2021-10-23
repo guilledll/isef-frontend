@@ -19,13 +19,13 @@ export const mutations = {
     state.materiales.push(material);
   },
   MOD_MATERIAL(state, materiales) {
-    state.materiales = state.materiales.map((dep) =>
-      dep.id == materiales.id ? { ...dep, nombre: materiales.nombre } : dep
+    state.materiales = state.materiales.map((mat) =>
+      mat.id == materiales.id ? { ...mat, nombre: materiales.nombre } : mat
     );
   },
   DEL_MATERIAL(state, id) {
-    state.materiales.map((dep, index) => {
-      dep.id == id ? state.materiales.splice(index, 1) : dep;
+    state.materiales.map((mat, index) => {
+      mat.id == id ? state.materiales.splice(index, 1) : mat;
     });
   },
 };
@@ -37,28 +37,28 @@ export const actions = {
   clear(context) {
     context.commit('CLEAR_SELECTED');
   },
-  async get(context, id) {
-    return await MaterialesService.show(id).then((res) => {
+  get(context, id) {
+    return MaterialesService.show(id).then((res) => {
       context.dispatch('select', res.data);
     });
   },
-  async all(context) {
-    return await MaterialesService.index().then((res) => {
+  all(context) {
+    return MaterialesService.index().then((res) => {
       context.commit('GET_ALL_MATERIALES', res.data);
     });
   },
-  async create(context, data) {
-    return await MaterialesService.create(data).then((res) => {
+  create(context, data) {
+    return MaterialesService.create(data).then((res) => {
       context.commit('ADD_MATERIAL', res.data);
     });
   },
-  async update(context, data) {
-    return await MaterialesService.update(data.id, data).then(() => {
+  update(context, data) {
+    return MaterialesService.update(data.id, data).then(() => {
       context.commit('MOD_MATERIAL', data);
     });
   },
-  async delete(context, id) {
-    return await MaterialesService.delete(id).then(() => {
+  delete(context, id) {
+    return MaterialesService.delete(id).then(() => {
       context.commit('DEL_MATERIAL', id);
       context.commit('CLEAR_SELECTED');
     });

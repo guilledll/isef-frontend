@@ -3,14 +3,15 @@
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
-        <GlobalAddAction
+        <GlobalCallToAction
           text="Agregar un <b>nuevo depósito</b>."
+          svg="archive"
           @click="seleccionarDeposito('add')"
         />
-        <GlobalAddAction
+        <GlobalCallToAction
           text="Ir a <b>departamentos</b>."
-          color="indigo"
-          svg="departamento"
+          type="view"
+          svg="map"
           @click="$router.push('/departamentos')"
         />
       </div>

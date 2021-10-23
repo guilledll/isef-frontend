@@ -5,6 +5,7 @@
         <ModalLeftIcon type="add" />
         <div class="modal-form-body">
           <h3 class="modal-form-heading">Agregar categoría</h3>
+          <p class="mb-3">Se creará una nueva categoría para los materiales.</p>
           <div>
             <FormInput
               id="nombre"

@@ -5,6 +5,7 @@
         <ModalLeftIcon />
         <div class="modal-form-body">
           <h3 class="modal-form-heading">Modificar departamento</h3>
+          <p class="mb-3">Es posible renombrar el departamento.</p>
           <div>
             <FormInput
               id="nombre"

@@ -3,9 +3,16 @@
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
-        <GlobalAddAction
-          text="Agregar <b>nueva categoría</b> para materiales."
+        <GlobalCallToAction
+          text="<b>Agregar categoría</b> para materiales."
+          svg="clipboard-list"
           @click="seleccionarCategoria('add')"
+        />
+        <GlobalCallToAction
+          text="Ir a <b>materiales</b>."
+          type="view"
+          svg="cube"
+          @click="$router.push('/materiales')"
         />
       </div>
       <Table>

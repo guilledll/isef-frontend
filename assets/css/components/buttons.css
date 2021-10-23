@@ -16,5 +16,8 @@
     &.gray {
       @apply bg-gray-200 hover:bg-gray-300 focus:ring-gray-400 text-gray-800 disabled:bg-gray-100;
     }
+    &.gray {
+      @apply bg-gray-200 hover:bg-gray-300 focus:ring-gray-400 text-gray-800;
+    }
   }
 }

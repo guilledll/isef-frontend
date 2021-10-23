@@ -3,9 +3,16 @@
     <GlobalHeader :title="header.title" :text="header.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
-        <GlobalAddAction
+        <GlobalCallToAction
           text="Agregar un <b>departamento</b>."
+          svg="map"
           @click="seleccionarDepartamento('add')"
+        />
+        <GlobalCallToAction
+          text="Ir a <b>depósitos</b>."
+          type="view"
+          svg="cube"
+          @click="$router.push('/materiales')"
         />
       </div>
       <Table>
@@ -76,7 +83,7 @@ export default {
         text: 'Cualquiera de los 19 departamentos donde ISEF tenga sede, en caso de expandirese a uno nuevo, se debe registrar el departamentos aquí.',
       },
       table: {
-        header: ['Nombre', 'Cantidad Usuarios', 'Cantidad Depósitos'],
+        header: ['Nombre', 'Usuarios', 'Depósitos'],
       },
       modal: {
         show: false,

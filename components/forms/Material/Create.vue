@@ -69,6 +69,7 @@
           </div>
         </div>
       </div>
+      {{ material }}
       <button type="submit" class="btn green">Agregar más materiales</button>
     </div>
   </form>
@@ -115,7 +116,7 @@ export default {
   methods: {
     validar: validationMessage(mensajes),
     createMaterial() {
-      if (this.invalid()) return;
+      // if (this.invalid()) return;
 
       let form = {
         nombre: this.material.nombre,

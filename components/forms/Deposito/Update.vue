@@ -5,6 +5,7 @@
         <ModalLeftIcon />
         <div class="modal-form-body">
           <h3 class="modal-form-heading">Modificar depósito</h3>
+          <p class="mb-3">Es posible renombrar el depósito.</p>
           <div>
             <FormInput
               id="nombre"

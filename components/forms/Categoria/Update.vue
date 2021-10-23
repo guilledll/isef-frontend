@@ -5,6 +5,7 @@
         <ModalLeftIcon />
         <div class="modal-form-body">
           <h3 class="modal-form-heading">Modificar categoría</h3>
+          <p class="mb-3">Es posible renombrar la categoría.</p>
           <div>
             <FormInput
               id="nombre"

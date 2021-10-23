@@ -46,6 +46,8 @@
                 type="edit"
                 @click="seleccionarUsuario('mod', user)"
               />
+              <TableButton svg="del" @click="seleccionarUsuario('del', user)" />
+              <TableButton svg="mod" @click="seleccionarUsuario('mod', user)" />
             </td>
           </tr>
         </template>

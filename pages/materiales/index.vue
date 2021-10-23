@@ -2,9 +2,19 @@
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
-      <!-- AGREGAR MATERIALES -->
-    </div>
-    <div class="flex flex-col gap-3 lg:flex-row">
+      <div class="table-actions">
+        <GlobalCallToAction
+          text="Agregar <b>materiales</b>."
+          svg="cube"
+          @click="$router.push('/materiales/agregar')"
+        />
+        <GlobalCallToAction
+          text="Ver <b>categorías</b> de materiales."
+          type="view"
+          svg="clipboard-list"
+          @click="$router.push('/categorias')"
+        />
+      </div>
       <Table>
         <template #header>
           <TableHead :header="table.header" />
@@ -22,18 +32,18 @@
             </td>
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/deposito/${material.deposito}`"
+                :to="`/depositos/${material.deposito_id}`"
                 class="hover:text-blue-600 hover:underline"
-                @click.native="verDeposito(material.deposito)"
+                @click.native="verDeposito(material.deposito_id)"
               >
                 {{ material.deposito }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/categoria/${material.categoria}`"
+                :to="`/categorias/${material.categoria_id}`"
                 class="hover:text-blue-600 hover:underline"
-                @click.native="verCategoria(material.categoria)"
+                @click.native="verCategoria(material.categoria_id)"
               >
                 {{ material.categoria }}
               </router-link>
@@ -86,7 +96,7 @@ export default {
       pageHeader: {
         materiales: [],
         title: 'Materiales',
-        text: 'En los materiales.. etc.',
+        text: 'Materiales registrados en el sistema. Ejemplo de materiales: Pelotas, Chalecos, Conos, etc.',
       },
       table: {
         header: ['Nombre', 'Deposito', 'Categoría', 'Cantidad'],
@@ -107,7 +117,6 @@ export default {
   },
   methods: {
     seleccionarMaterial(action, material = null) {
-      console.log(material);
       if (material) this.$store.dispatch('materiales/select', material);
       if (action != 'view') {
         this.modal.action = action;

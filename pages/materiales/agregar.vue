@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GlobalHeader :title="header.title" :text="header.text" />
+    <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div>
       <select
         id="deposito_id"
@@ -14,7 +14,7 @@
           :key="i"
           :value="deposito.id"
         >
-          {{ deposito.nombre }}
+          <span>{{ deposito.nombre }}</span>
         </option>
       </select>
     </div>
@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import MaterialesService from '~/services/materiales.service';
 import CategoriasService from '~/services/categorias.service';
 import DepositosService from '@/services/depositos.service';
 export default {
@@ -40,16 +39,15 @@ export default {
   middleware: 'admin',
   data() {
     return {
+      pageHeader: {
+        title: 'Materiales',
+        text: 'Registrar materiales en el sistema. Ejemplo de materiales: Pelotas, Chalecos, Conos, etc.',
+      },
       nextformId: 0,
       dataMaterial: {
         //El material que se envía
         usuario_ci: this.$auth.user.ci,
-        deposito: 1,
         materiales: [],
-      },
-      header: {
-        title: 'Materiales',
-        text: 'Materiales... etc.',
       },
       depositos: [],
       categorias: [],
@@ -73,13 +71,9 @@ export default {
       this.dataMaterial.materiales.splice(index, 1);
     },
     createMateriales() {
-      MaterialesService.create(this.dataMaterial)
-        .then(() => {
-          this.$router.go();
-        })
-        .catch((e) => {
-          this.error = e.response.data.errors;
-        });
+      this.$store
+        .dispatch('materiales/create', this.dataMaterial)
+        .catch((e) => (this.errors = e.response.data.errors));
     },
     verificarNombre(data) {
       return this.dataMaterial.materiales.find((m) => {
