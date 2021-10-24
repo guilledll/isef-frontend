@@ -3,6 +3,8 @@ import DepartamentosService from '@/services/departamentos.service';
 export const state = () => ({
   departamentos: [],
   departamento: null,
+  depositos: [],
+  usuarios: [],
 });
 
 export const mutations = {
@@ -29,6 +31,12 @@ export const mutations = {
     state.departamentos.map((dep, index) => {
       dep.id == id ? state.departamentos.splice(index, 1) : dep;
     });
+  },
+  GET_DEPOSITOS(state, depositos) {
+    state.depositos = depositos;
+  },
+  GET_USUARIOS(state, usuarios) {
+    state.usuarios = usuarios;
   },
 };
 
@@ -63,6 +71,16 @@ export const actions = {
     return DepartamentosService.delete(id).then(() => {
       context.commit('DEL_DEPARTAMENTO', id);
       context.commit('CLEAR_SELECTED');
+    });
+  },
+  depositos(context, id) {
+    return DepartamentosService.depositos(id).then((res) => {
+      context.commit('GET_DEPOSITOS', res.data);
+    });
+  },
+  usuarios(context, id) {
+    return DepartamentosService.usuarios(id).then((res) => {
+      context.commit('GET_USUARIOS', res.data);
     });
   },
 };

@@ -40,4 +40,20 @@ export default {
   delete(id) {
     return api().delete(`/api/v1/departamentos/${id}`);
   },
+
+  /**
+   * Obtiene los depositos del departamento.
+   * @param {int} id
+   */
+  depositos(id) {
+    return api().get(`/api/v1/departamentos/${id}/depositos`);
+  },
+
+  /**
+   * Obtiene los usuarios del departamento.
+   * @param {int} id
+   */
+  usuarios(id) {
+    return api().get(`/api/v1/departamentos/${id}/usuarios`);
+  },
 };
