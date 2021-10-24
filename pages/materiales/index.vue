@@ -49,7 +49,7 @@
               </router-link>
             </td>
             <td class="table-td text-gray-500">
-              {{ material.cantidad_materiales || 0 }}
+              {{ material.cantidad }}
             </td>
             <td class="table-td text-right">
               <TableButton
@@ -57,7 +57,7 @@
                 @click="$router.push(`/materiales/${material.id}`)"
               />
               <TableButton
-                v-if="!material.cantidad_materiales"
+                v-if="!material.cantidad"
                 type="delete"
                 @click="seleccionarMaterial('del', material)"
               />
@@ -136,5 +136,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

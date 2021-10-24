@@ -17,11 +17,17 @@
                 {{ movimiento.material }}
               </router-link>
             </td>
-            <td class="table-td text-gray-500">
-              {{ movimiento.accion || 0 }}
+            <td class="table-td" :class="claseAccion(movimiento.accion)">
+              {{ movimiento.accion }}
             </td>
             <td class="table-td text-gray-500">
               {{ movimiento.cantidad || 0 }}
+            </td>
+            <td class="table-td text-gray-500">
+              {{ movimiento.deposito }}
+            </td>
+            <td class="table-td text-gray-500">
+              {{ movimiento.departamento }}
             </td>
             <td class="table-td text-gray-500">
               {{ movimiento.fecha }}
@@ -44,7 +50,14 @@ export default {
         text: 'Registro de los movimientos de materiales.',
       },
       table: {
-        header: ['Material', 'Acción', 'Cantidad', 'Fecha'],
+        header: [
+          'Material',
+          'Acción',
+          'Cantidad',
+          'deposito',
+          'departamento',
+          'Fecha',
+        ],
       },
       modal: {
         show: false,
@@ -68,6 +81,17 @@ export default {
         this.modal.show = !this.modal.show;
       }
     },
+    claseAccion(accion) {
+      return `accion-${accion}`;
+    },
   },
 };
 </script>
+<style lang="postcss" scoped>
+.accion-Baja {
+  @apply text-red-500;
+}
+.accion-Alta {
+  @apply text-green-500;
+}
+</style>
