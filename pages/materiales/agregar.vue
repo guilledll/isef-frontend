@@ -63,7 +63,6 @@ export default {
   },
   methods: {
     agregarMaterial(data) {
-      console.log(data);
       if (this.verificarNombre(data)) return;
       this.dataMaterial.materiales.push(data);
     },

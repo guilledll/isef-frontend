@@ -63,8 +63,9 @@ export const actions = {
     });
   },
   update(context, data) {
-    return DepartamentosService.update(data.id, data).then(() => {
-      context.commit('MOD_DEPARTAMENTO', data);
+    return DepartamentosService.update(data.id, data).then((res) => {
+      context.commit('MOD_DEPARTAMENTO', res.data);
+      context.dispatch('select', res.data);
     });
   },
   delete(context, id) {

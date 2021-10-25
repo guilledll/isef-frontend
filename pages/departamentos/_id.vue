@@ -3,8 +3,17 @@
     <div class="page-side">
       <button class="btn blue side"></button>
     </div>
-    <div class="page-main">
-      <h3 class="font-1">{{ departamento.nombre }}</h3>
+    <div class="mb-10">
+      <div class="flex justify-between">
+        <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">
+          {{ departamento.nombre }}
+        </h3>
+        <div>
+          <button class="action-btn" @click="edit">
+            <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
+          </button>
+        </div>
+      </div>
       <hr class="mt-3" />
     </div>
     <div class="grid gap-3 lg:grid-cols-2">
@@ -13,6 +22,7 @@
         svg="office-building"
         :table="table.depositos"
         :open="open.depositos"
+        :count="depositos.length"
         @click="showDetails('depositos')"
       >
         <tr v-for="deposito in depositos" :key="deposito.id">
@@ -34,6 +44,7 @@
         svg="user-group"
         :table="table.usuarios"
         :open="open.usuarios"
+        :count="usuarios.length"
         @click="showDetails('usuarios')"
       >
         <tr v-for="usuario in usuarios" :key="usuario.id">
@@ -59,6 +70,9 @@
         </tr>
       </GlobalInfoTable>
     </div>
+    <LazyModal v-if="open.modal">
+      <FormDepartamentoUpdate is-view @close="open.modal = !open.modal" />
+    </LazyModal>
   </div>
 </template>
 
@@ -71,6 +85,7 @@ export default {
       open: {
         depositos: false,
         usuarios: false,
+        modal: false,
       },
       table: {
         depositos: ['Nombre', 'Materiales'],
@@ -105,9 +120,11 @@ export default {
           this.departamento.id
         );
       }
-
       if (data == 'depositos') this.open.depositos = !this.open.depositos;
       else if (data == 'usuarios') this.open.usuarios = !this.open.usuarios;
+    },
+    edit() {
+      this.open.modal = !this.open.modal;
     },
   },
 };
@@ -117,16 +134,7 @@ export default {
 .page-container {
   @appy flex flex-col gap-3 lg:flex-row;
 }
-.page-main {
-  @apply mb-10;
-  & > h3 {
-    @apply text-4xl text-gray-900;
-  }
-}
-
-.page-side {
-  /* & > .side {
-    @apply ;
-  } */
+.action-btn {
+  @apply p-1.5 rounded-full text-gray-800 hover:bg-gray-100 hover:text-blue-500 md:p-2.5;
 }
 </style>

@@ -42,6 +42,9 @@ import { required, integer, maxLength } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
   mixins: [validationMixin, FormValidationMixin],
+  props: {
+    isView: { type: Boolean, default: false },
+  },
   data() {
     return {
       form: {
@@ -82,11 +85,11 @@ export default {
       if (this.invalid()) return;
       this.$store
         .dispatch('departamentos/update', this.form)
-        .then(() => this.$emit('close'))
+        .then(() => this.closeModal())
         .catch((e) => (this.errors = e.response.data.errors));
     },
     closeModal() {
-      this.$store.dispatch('departamentos/clear');
+      if (!this.isView) this.$store.dispatch('departamentos/clear');
       this.$emit('close');
     },
   },

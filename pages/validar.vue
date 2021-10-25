@@ -28,7 +28,7 @@
             al correo cuando sea validada!
           </div>
           <img
-            src="/svg/New_notifications.svg"
+            src="/svg/new_notifications.svg"
             alt="Revisión de perfil"
             class="h-60 my-24 m-auto"
           />

@@ -1,6 +1,7 @@
 /* Archivos base de Tailwind */
 @import 'tailwindcss/base';
 @import './base/text.css';
+@import './base/img.css';
 
 /* Componentes de tailwind y declarados */
 @import 'tailwindcss/components';
