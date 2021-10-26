@@ -129,12 +129,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss" scoped>
-.page-container {
-  @appy flex flex-col gap-3 lg:flex-row;
-}
-.action-btn {
-  @apply p-1.5 rounded-full text-gray-800 hover:bg-gray-100 hover:text-blue-500 md:p-2.5;
-}
-</style>

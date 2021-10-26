@@ -3,17 +3,19 @@
     <GlobalHeader :title="header.title" :text="header.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
-        <GlobalCallToAction
-          text="Agregar un <b>departamento</b>."
-          svg="map"
-          @click="seleccionarDepartamento('add')"
-        />
-        <GlobalCallToAction
-          text="Ir a <b>depósitos</b>."
-          type="view"
-          svg="cube"
-          @click="$router.push('/materiales')"
-        />
+        <div class="space-y-3 lg:sticky lg:top-3">
+          <GlobalCallToAction
+            text="Agregar un <b>departamento</b>."
+            svg="map"
+            @click="seleccionarDepartamento('add')"
+          />
+          <GlobalCallToAction
+            text="Ir a <b>depósitos</b>."
+            type="view"
+            svg="cube"
+            @click="$router.push('/materiales')"
+          />
+        </div>
       </div>
       <Table>
         <template #header>

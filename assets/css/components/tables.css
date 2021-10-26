@@ -3,6 +3,6 @@
     @apply px-3 py-2 text-sm whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[180px] md:px-6 md:py-3 md:text-base;
   }
   .table-actions {
-    @apply w-full space-y-3 lg:order-last lg:w-72 lg:block;
+    @apply w-full lg:order-last lg:w-72 lg:block;
   }
 }

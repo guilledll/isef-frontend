@@ -40,4 +40,12 @@ export default {
   delete(id) {
     return api().delete(`/api/v1/depositos/${id}`);
   },
+
+  /**
+   * Obtiene los materiales del deposito.
+   * @param {int} id
+   */
+  materiales(id) {
+    return api().get(`/api/v1/depositos/${id}/materiales`);
+  },
 };
