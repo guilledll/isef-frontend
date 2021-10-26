@@ -40,4 +40,13 @@ export default {
   delete(id) {
     return api().delete(`/api/v1/material/${id}`);
   },
+
+  /**
+   * Obtiene los movimientos del material.
+   * @param {int} id
+   */
+  movimientos(id) {
+    return api().get(`/api/v1/material/${id}/movimientos`);
+  },
+
 };

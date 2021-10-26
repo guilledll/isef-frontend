@@ -3,6 +3,7 @@ import MaterialesService from '@/services/materiales.service';
 export const state = () => ({
   materiales: [],
   material: null,
+  movimientos: [],
 });
 
 export const mutations = {
@@ -27,6 +28,9 @@ export const mutations = {
     state.materiales.map((mat, index) => {
       mat.id == id ? state.materiales.splice(index, 1) : mat;
     });
+  },
+  GET_MOVIMIENTOS(state, movimientos) {
+    state.movimientos = movimientos;
   },
 };
 
@@ -61,6 +65,11 @@ export const actions = {
     return MaterialesService.delete(id).then(() => {
       context.commit('DEL_MATERIAL', id);
       context.commit('CLEAR_SELECTED');
+    });
+  },
+  movimientos(context, id) {
+    return MaterialesService.movimientos(id).then((res) => {
+      context.commit('GET_MOVIMIENTOS', res.data);
     });
   },
 };
