@@ -3,6 +3,7 @@ import DepositosService from '@/services/depositos.service';
 export const state = () => ({
   depositos: [],
   deposito: null,
+  materiales: [],
 });
 
 export const mutations = {
@@ -27,6 +28,9 @@ export const mutations = {
     state.depositos.map((dep, index) => {
       dep.id == id ? state.depositos.splice(index, 1) : dep;
     });
+  },
+  GET_MATERIALES(state, materiales) {
+    state.materiales = materiales;
   },
 };
 
@@ -54,14 +58,20 @@ export const actions = {
     });
   },
   update(context, data) {
-    return DepositosService.update(data.id, data).then(() => {
-      context.commit('MOD_DEPOSITO', data);
+    return DepositosService.update(data.id, data).then((res) => {
+      context.commit('MOD_DEPOSITO', res.data);
+      context.dispatch('select', res.data);
     });
   },
   delete(context, id) {
     return DepositosService.delete(id).then(() => {
       context.commit('DEL_DEPOSITO', id);
       context.commit('CLEAR_SELECTED');
+    });
+  },
+  materiales(context, id) {
+    return DepositosService.materiales(id).then((res) => {
+      context.commit('GET_MATERIALES', res.data);
     });
   },
 };

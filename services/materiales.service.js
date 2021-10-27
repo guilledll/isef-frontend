@@ -5,7 +5,7 @@ export default {
    * Devuelve todos los materiales.
    */
   index() {
-    return api().get('/api/v1/materiales');
+    return api().get('/api/v1/material');
   },
 
   /**
@@ -13,7 +13,7 @@ export default {
    * @param {int} id
    */
   show(id) {
-    return api().get(`/api/v1/materiales/${id}`);
+    return api().get(`/api/v1/material/${id}`);
   },
 
   /**
@@ -21,7 +21,7 @@ export default {
    * @param {request} data
    */
   create(data) {
-    return api().post('/api/v1/materiales', data);
+    return api().post('/api/v1/material', data);
   },
 
   /**
@@ -30,7 +30,7 @@ export default {
    * @param {request} data
    */
   update(id, data) {
-    return api().put(`/api/v1/materiales/${id}`, data);
+    return api().put(`/api/v1/material/${id}`, data);
   },
 
   /**
@@ -38,6 +38,6 @@ export default {
    * @param {int} id
    */
   delete(id) {
-    return api().delete(`/api/v1/materiales/${id}`);
+    return api().delete(`/api/v1/material/${id}`);
   },
 };

@@ -1,11 +1,10 @@
 <template>
-  <div class="w-full h-screen bg-white">
-    <div class="max-w-6xl mx-auto">
-      <Topbar />
-      <div class="mt-4 mx-auto px-4 sm:px-6 sm:mt-10 lg:px-8">
-        <nuxt />
-      </div>
+  <div class="flex flex-col w-full h-screen bg-white max-w-6xl mx-auto">
+    <Topbar />
+    <div class="my-auto mt-4 px-4 sm:mt-10">
+      <nuxt />
     </div>
+    <GlobalFooter />
   </div>
 </template>
 <script>

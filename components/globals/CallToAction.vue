@@ -25,7 +25,7 @@ export default {
 
 <style lang="postcss" scoped>
 .action {
-  @apply flex items-center justify-between h-auto bg-gray-50 border rounded-md p-2 lg:flex-col lg:top-0 lg:sticky;
+  @apply flex items-center justify-between h-auto bg-gray-50 border rounded-md p-2 lg:flex-col lg:top-0;
   & > button {
     @apply flex items-center justify-center gap-1 rounded-md text-white h-full px-2.5 py-2 sm:py-2.5 lg:gap-0.5 lg:w-full lg:h-auto lg:mt-2;
     &.add {

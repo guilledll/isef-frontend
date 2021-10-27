@@ -2,8 +2,6 @@
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
-      <!-- Listar Usuarios -->
-      <div class="w-full gap-3 lg:order-last lg:w-72 lg:block"></div>
       <Table>
         <template #header>
           <TableHead :header="table.header" />
@@ -28,6 +26,9 @@
                 {{ user.departamento }}
               </router-link>
             </td>
+            <td class="table-td text-gray-500">
+              {{ user.telefono }}
+            </td>
             <td class="table-td" :class="claseRol(user.rol)">
               {{ mostrarRol(user.rol) }}
             </td>
@@ -46,8 +47,6 @@
                 type="edit"
                 @click="seleccionarUsuario('mod', user)"
               />
-              <TableButton svg="del" @click="seleccionarUsuario('del', user)" />
-              <TableButton svg="mod" @click="seleccionarUsuario('mod', user)" />
             </td>
           </tr>
         </template>
@@ -77,7 +76,7 @@ export default {
         text: 'Usuarios registrados en el sistema.',
       },
       table: {
-        header: ['Nombre', 'Departamento', 'Rol'],
+        header: ['Nombre', 'Departamento', 'Teléfono', 'Rol'],
       },
       modal: {
         show: false,

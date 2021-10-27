@@ -32,15 +32,6 @@
             </td>
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/depositos/${material.deposito_id}`"
-                class="hover:text-blue-600 hover:underline"
-                @click.native="verDeposito(material.deposito_id)"
-              >
-                {{ material.deposito }}
-              </router-link>
-            </td>
-            <td class="table-td text-gray-500">
-              <router-link
                 :to="`/categorias/${material.categoria_id}`"
                 class="hover:text-blue-600 hover:underline"
                 @click.native="verCategoria(material.categoria_id)"
@@ -49,7 +40,16 @@
               </router-link>
             </td>
             <td class="table-td text-gray-500">
-              {{ material.cantidad_materiales || 0 }}
+              <router-link
+                :to="`/depositos/${material.deposito_id}`"
+                class="hover:text-blue-600 hover:underline"
+                @click.native="verDeposito(material.deposito_id)"
+              >
+                {{ material.deposito }}
+              </router-link>
+            </td>
+            <td class="table-td text-gray-500">
+              {{ material.cantidad || 0 }}
             </td>
             <td class="table-td text-right">
               <TableButton
@@ -57,7 +57,6 @@
                 @click="$router.push(`/materiales/${material.id}`)"
               />
               <TableButton
-                v-if="!material.cantidad_materiales"
                 type="delete"
                 @click="seleccionarMaterial('del', material)"
               />
@@ -99,7 +98,7 @@ export default {
         text: 'Materiales registrados en el sistema. Ejemplo de materiales: Pelotas, Chalecos, Conos, etc.',
       },
       table: {
-        header: ['Nombre', 'Deposito', 'Categoría', 'Cantidad'],
+        header: ['Nombre', 'Categoría', 'Deposito', 'Cantidad'],
       },
       modal: {
         show: false,
@@ -136,5 +135,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

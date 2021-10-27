@@ -102,7 +102,7 @@ export default {
       return this.$store.state.depositos.depositos;
     },
   },
-  mounted() {
+  created() {
     this.$store.dispatch('depositos/all');
   },
   methods: {

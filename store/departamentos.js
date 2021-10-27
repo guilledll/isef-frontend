@@ -3,6 +3,8 @@ import DepartamentosService from '@/services/departamentos.service';
 export const state = () => ({
   departamentos: [],
   departamento: null,
+  depositos: [],
+  usuarios: [],
 });
 
 export const mutations = {
@@ -30,6 +32,12 @@ export const mutations = {
       dep.id == id ? state.departamentos.splice(index, 1) : dep;
     });
   },
+  GET_DEPOSITOS(state, depositos) {
+    state.depositos = depositos;
+  },
+  GET_USUARIOS(state, usuarios) {
+    state.usuarios = usuarios;
+  },
 };
 
 export const actions = {
@@ -55,14 +63,25 @@ export const actions = {
     });
   },
   update(context, data) {
-    return DepartamentosService.update(data.id, data).then(() => {
-      context.commit('MOD_DEPARTAMENTO', data);
+    return DepartamentosService.update(data.id, data).then((res) => {
+      context.commit('MOD_DEPARTAMENTO', res.data);
+      context.dispatch('select', res.data);
     });
   },
   delete(context, id) {
     return DepartamentosService.delete(id).then(() => {
       context.commit('DEL_DEPARTAMENTO', id);
       context.commit('CLEAR_SELECTED');
+    });
+  },
+  depositos(context, id) {
+    return DepartamentosService.depositos(id).then((res) => {
+      context.commit('GET_DEPOSITOS', res.data);
+    });
+  },
+  usuarios(context, id) {
+    return DepartamentosService.usuarios(id).then((res) => {
+      context.commit('GET_USUARIOS', res.data);
     });
   },
 };

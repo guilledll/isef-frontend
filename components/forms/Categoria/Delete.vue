@@ -7,7 +7,7 @@
           <h3 class="modal-form-heading">Eliminar categoría</h3>
           <p class="mb-2">
             <span class="font-medium text-gray-900 mr-1">Atención:</span>
-            Estas a punto de eliminar un categoría, esta será removido del
+            Estas a punto de eliminar un categoría, esta será removida del
             sistema para siempre.
           </p>
           <p class="font-medium text-red-600">¿Estás seguro de continuar?</p>

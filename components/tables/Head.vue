@@ -20,6 +20,6 @@ export default {
 
 <style lang="postcss" scoped>
 .table-th {
-  @apply p-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6 md:py-3 md:text-base;
+  @apply p-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 uppercase tracking-wider max-w-[180px] overflow-hidden overflow-ellipsis select-none md:px-6 md:py-3 md:text-base;
 }
 </style>
