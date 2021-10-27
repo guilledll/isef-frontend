@@ -3,7 +3,7 @@
     <div class="page-side">
       <button class="btn blue side"></button>
     </div>
-    <div class="mb-10">
+    <div class="mb-4 md:mb-6">
       <div class="flex justify-between">
         <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">
           {{ deposito.nombre }}
@@ -15,6 +15,20 @@
         </div>
       </div>
       <hr class="mt-3" />
+    </div>
+    <div class="grid grid-cols-1 mb-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="flex items-center text-lg md:text-xl">
+        <span class="flex items-center mr-1.5 font-semibold text-gray-800">
+          <GlobalSvg class="h-5 w-5 mr-1 text-blue-600" svg="location-marker" />
+          Departamento:
+        </span>
+        <router-link
+          class="hover:underline hover:text-blue-600"
+          :to="`/departamentos/${deposito.departamento_id}`"
+        >
+          {{ deposito.departamento }}
+        </router-link>
+      </div>
     </div>
     <div class="grid gap-3 lg:grid-cols-2">
       <GlobalInfoTable
