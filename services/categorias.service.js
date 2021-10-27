@@ -40,4 +40,12 @@ export default {
   delete(id) {
     return api().delete(`/api/v1/categorias/${id}`);
   },
+
+  /**
+   * Obtiene los materiales de la categoria.
+   * @param {int} id
+   */
+  materiales(id) {
+    return api().get(`/api/v1/categorias/${id}/materiales`);
+  },
 };
