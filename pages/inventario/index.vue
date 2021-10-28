@@ -11,14 +11,14 @@
             <td class="table-td">
               <router-link
                 :to="`/inventario/${movimiento.id}`"
-                class="text-black hover:text-blue-600 hover:underline"
+                class="text-black hover:text-blue-600 hover:underline" 
                 @click.native="seleccionarMovimiento('view', movimiento)"
               >
                 {{ movimiento.material }}
               </router-link>
             </td>
             <td class="table-td" :class="claseAccion(movimiento.accion)">
-              {{ movimiento.accion }}
+              {{ mostrarAccion(movimiento.accion) }}
             </td>
             <td class="table-td text-gray-500">
               {{ movimiento.cantidad || 0 }}
@@ -59,6 +59,10 @@ export default {
           'Fecha',
         ],
       },
+      acciones: [
+        { value: 1, text: 'Alta' },
+        { value: 0, text: 'Baja' },
+      ],
       modal: {
         show: false,
         action: '',
@@ -84,14 +88,25 @@ export default {
     claseAccion(accion) {
       return `accion-${accion}`;
     },
+    mostrarAccion(accion) {
+      switch (parseInt(accion)) {
+        case 0:
+          accion = 'Baja';
+          break;
+        case 1:
+          accion = 'Alta';
+      }
+      return accion;
+    },
   },
 };
 </script>
+
 <style lang="postcss" scoped>
-.accion-Baja {
+.accion-0 {
   @apply text-red-500;
 }
-.accion-Alta {
+.accion-1 {
   @apply text-green-500;
 }
 </style>
