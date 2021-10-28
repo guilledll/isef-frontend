@@ -27,6 +27,9 @@
               {{ movimiento.deposito }}
             </td>
             <td class="table-td text-gray-500">
+              {{ movimiento.departamento }}
+            </td>
+            <td class="table-td text-gray-500">
               {{ movimiento.fecha }}
             </td>
             <td class="table-td text-right"></td>
@@ -47,7 +50,14 @@ export default {
         text: 'Registro de los movimientos de materiales.',
       },
       table: {
-        header: ['Material', 'Acción', 'Cantidad', 'deposito', 'Fecha'],
+        header: [
+          'Material',
+          'Acción',
+          'Cantidad',
+          'deposito',
+          'departamento',
+          'Fecha',
+        ],
       },
       modal: {
         show: false,
