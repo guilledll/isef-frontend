@@ -11,7 +11,7 @@
             <td class="table-td">
               <router-link
                 :to="`/inventario/${movimiento.id}`"
-                class="text-black hover:text-blue-600 hover:underline" 
+                class="text-black hover:text-blue-600 hover:underline"
                 @click.native="seleccionarMovimiento('view', movimiento)"
               >
                 {{ movimiento.material }}

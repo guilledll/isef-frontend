@@ -10,7 +10,7 @@
           <tr v-for="user in users" :key="user.id">
             <td class="table-td">
               <router-link
-                :to="`/users/${user.ci}`"
+                :to="`/usuarios/${user.ci}`"
                 class="text-black hover:text-blue-600 hover:underline"
                 @click.native="seleccionarUsuario('view', user)"
               >
