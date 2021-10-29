@@ -77,6 +77,9 @@ export default {
       return this.$store.state.materiales.movimientos;
     },
   },
+  beforeDestroy() {
+    this.$store.dispatch('materiales/clear');
+  },
   methods: {
     async showDetails() {
       if (!this.movimientos.length) {

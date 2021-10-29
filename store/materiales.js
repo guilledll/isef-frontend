@@ -12,6 +12,7 @@ export const mutations = {
   },
   CLEAR_SELECTED(state) {
     state.material = null;
+    state.movimientos = [];
   },
   GET_ALL_MATERIALES(state, materiales) {
     state.materiales = materiales;
