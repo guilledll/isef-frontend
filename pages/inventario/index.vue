@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
         <template #header>
-          <TableHead :header="table.header" />
+          <TableHead :header="table.header" :action="false" />
         </template>
         <template #body>
           <tr v-for="movimiento in inventario" :key="movimiento.id">
@@ -18,16 +18,13 @@
               </router-link>
             </td>
             <td class="table-td" :class="claseAccion(movimiento.accion)">
-              {{ movimiento.accion }}
+              {{ mostrarAccion(movimiento.accion) }}
             </td>
             <td class="table-td text-gray-500">
               {{ movimiento.cantidad || 0 }}
             </td>
             <td class="table-td text-gray-500">
               {{ movimiento.deposito }}
-            </td>
-            <td class="table-td text-gray-500">
-              {{ movimiento.departamento }}
             </td>
             <td class="table-td text-gray-500">
               {{ movimiento.fecha }}
@@ -50,15 +47,12 @@ export default {
         text: 'Registro de los movimientos de materiales.',
       },
       table: {
-        header: [
-          'Material',
-          'Acción',
-          'Cantidad',
-          'deposito',
-          'departamento',
-          'Fecha',
-        ],
+        header: ['Material', 'Acción', 'Cantidad', 'deposito', 'Fecha'],
       },
+      acciones: [
+        { value: 1, text: 'Alta' },
+        { value: 0, text: 'Baja' },
+      ],
       modal: {
         show: false,
         action: '',
@@ -84,14 +78,25 @@ export default {
     claseAccion(accion) {
       return `accion-${accion}`;
     },
+    mostrarAccion(accion) {
+      switch (parseInt(accion)) {
+        case 0:
+          accion = 'Baja';
+          break;
+        case 1:
+          accion = 'Alta';
+      }
+      return accion;
+    },
   },
 };
 </script>
+
 <style lang="postcss" scoped>
-.accion-Baja {
+.accion-0 {
   @apply text-red-500;
 }
-.accion-Alta {
+.accion-1 {
   @apply text-green-500;
 }
 </style>
