@@ -1,15 +1,11 @@
 <template>
   <div class="custom-number-input h-10 w-32">
-    <label
-      for="custom-input-number"
-      class="w-full text-gray-700 text-sm font-semibold"
-      >Modificar Cantidad
-    </label>
+    <p class="mb-3">Cambiar cantidad.</p>
     <div
-      class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1"
+      class="flex flex-row h-12 w-full rounded-lg relative bg-transparent mt-1"
     >
-      <button type="button" class="boton" @click="decrement()">
-        <span class="m-auto text-2xl font-thin">−</span>
+      <button type="button" class="boton rounded-l" @click="decrement()">
+        <span style="color: red" class="m-auto text-2xl font-thin">−</span>
       </button>
 
       <input
@@ -19,8 +15,8 @@
         name="custom-input-number"
       />
 
-      <button type="button" class="boton" @click="increment()">
-        <span class="m-auto text-2xl font-thin">+</span>
+      <button type="button" class="boton rounded-r" @click="increment()">
+        <span style="color: green" class="m-auto text-2xl font-thin">+</span>
       </button>
     </div>
   </div>
@@ -69,7 +65,7 @@ input[type='number']::-webkit-outer-spin-button {
   outline: none !important;
 }
 .boton {
-  @apply bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none;
+  @apply bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 cursor-pointer outline-none;
 }
 .input {
   @apply outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold hover:text-black focus:text-black  flex items-center text-gray-700;

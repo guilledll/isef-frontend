@@ -44,7 +44,7 @@
       </GlobalInfoTable>
     </div>
     <LazyModal v-if="open.modal">
-      <FormDepositoUpdate is-view @close="open.modal = !open.modal" />
+      <FormMaterialUpdate is-view @close="open.modal = !open.modal" />
     </LazyModal>
   </div>
 </template>

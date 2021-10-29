@@ -1,13 +1,16 @@
 <template>
   <div class="grid grid-cols-2 gap-2 place-content-center">
-    <div class="button blue" @click="goTo('inicio')">Gestionar usuarios</div>
-    <div class="button green" @click="goTo('inicio')">mostrar informes</div>
-    <div class="button green" @click="goTo('inicio')">mostrar reservas</div>
+    <div class="button blue" @click="goTo('usuarios')">Gestionar usuarios</div>
+    <div class="button green" @click="goTo('inicio')">Mostrar informes</div>
+    <div class="button green" @click="goTo('reservas')">mostrar reservas</div>
     <div class="blue button" @click="goTo('materiales')">
       gestionar materiales
     </div>
     <div class="blue button" @click="goTo('depositos')">
       gestionar depositos
+    </div>
+    <div class="button green" @click="goTo('inventario')">
+      mostrar inventario
     </div>
   </div>
 </template>
