@@ -13,6 +13,8 @@ export const mutations = {
   },
   CLEAR_SELECTED(state) {
     state.departamento = null;
+    state.depositos = [];
+    state.usuarios = [];
   },
   GET_ALL_DEPARTAMENTOS(state, departamentos) {
     state.departamentos = departamentos;
@@ -52,7 +54,7 @@ export const actions = {
       context.dispatch('select', res.data);
     });
   },
-  getAll(context) {
+  all(context) {
     return DepartamentosService.index().then((res) => {
       context.commit('GET_ALL_DEPARTAMENTOS', res.data);
     });

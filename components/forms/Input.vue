@@ -1,6 +1,8 @@
 <template>
   <div>
-    <label :for="id" :class="{ 'sr-only': sr }">{{ label || name }}</label>
+    <label :for="id" class="font-1" :class="{ 'sr-only': sr }">
+      {{ label || name }}
+    </label>
     <input
       :id="id"
       :value="value"
@@ -36,3 +38,9 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss" scoped>
+label {
+  @apply inline-block mb-1.5 text-base md:text-lg;
+}
+</style>

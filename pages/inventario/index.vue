@@ -71,7 +71,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('inventario/getAll');
+    this.$store.dispatch('inventario/all');
   },
   methods: {
     seleccionarMovimiento(action, movimiento = null) {

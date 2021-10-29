@@ -225,7 +225,7 @@ export default {
     departamentos() {
       return this.$store.state.departamentos.departamentos.length
         ? this.$store.state.departamentos.departamentos
-        : this.$store.dispatch('departamentos/getAll');
+        : this.$store.dispatch('departamentos/all');
     },
     loading() {
       return this.$store.state.global.loading;
