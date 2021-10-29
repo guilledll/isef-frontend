@@ -19,15 +19,13 @@ export const mutations = {
     state.inventario.push(movimiento);
   },
   MOD_MOVIMIENTO(state, inventario) {
-    state.inventario = state.inventario.map((dep) =>
-      dep.id == inventario.id
-        ? { ...dep, nombre: inventario.nombre }
-        : dep
+    state.inventario = state.inventario.map((inv) =>
+      inv.id == inventario.id ? { ...inv, nombre: inventario.nombre } : inv
     );
   },
   DEL_MOVIMIENTO(state, id) {
-    state.inventario.map((dep, index) => {
-      dep.id == id ? state.inventario.splice(index, 1) : dep;
+    state.inventario.map((inv, index) => {
+      inv.id == id ? state.inventario.splice(index, 1) : inv;
     });
   },
 };
@@ -44,7 +42,7 @@ export const actions = {
       context.dispatch('select', res.data);
     });
   },
-  getAll(context) {
+  all(context) {
     return inventarioService.index().then((res) => {
       context.commit('GET_ALL_INVENTARIO', res.data);
     });
