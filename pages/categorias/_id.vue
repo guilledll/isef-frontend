@@ -78,6 +78,9 @@ export default {
       return this.$store.state.categorias.materiales;
     },
   },
+  beforeDestroy() {
+    this.$store.dispatch('categorias/clear');
+  },
   methods: {
     async showDetails() {
       if (!this.materiales.length) {

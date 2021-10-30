@@ -1,6 +1,8 @@
 <template>
   <div>
-    <label :for="id" :class="{ 'sr-only': sr }">{{ label || name }}</label>
+    <label :for="id" class="font-1" :class="{ 'sr-only': sr }">
+      {{ label || name }}
+    </label>
     <select
       :id="id"
       :name="name"
@@ -10,7 +12,7 @@
       @input="$emit('input', $event.target.value)"
       @focus="$emit('focus')"
       @blur="$emit('blur')"
-      @change="$emit('change', $event)"
+      @change="change($event)"
     >
       <slot name="options"></slot>
     </select>
@@ -28,5 +30,20 @@ export default {
     error: { type: Boolean, default: false },
     sr: { type: Boolean, default: true },
   },
+  methods: {
+    // Emite el texto del <option>
+    change(event) {
+      this.$emit(
+        'change',
+        event.target[event.target.options.selectedIndex].text
+      );
+    },
+  },
 };
 </script>
+
+<style lang="postcss" scoped>
+label {
+  @apply inline-block mb-1.5 text-base md:text-lg;
+}
+</style>

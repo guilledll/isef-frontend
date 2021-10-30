@@ -11,8 +11,8 @@ export const mensajes = {
   email: () => 'El correo no es válido.',
   sameAsPassword: () => 'Las contraseñas no coinciden.',
   departamento: () => 'Por favor seleccione un departamento.',
+  categoria: () => 'Por favor seleccione una categoría.',
   cedula: () => 'La cédula no es válida.',
-  categoria: () => 'La categoría no es válida.',
   deposito: () => 'El depósito no es válido.',
 };
 
@@ -63,6 +63,20 @@ export function cedula(value) {
 /**
  * Valida que se haya seleccionado un departamento
  *
- * @param {string} dep
+ * @param {string} value
  */
-export const departamento = (dep) => dep != 0;
+export const departamento = (value) => value != 0;
+
+/**
+ * Valida que se haya seleccionado una categoria
+ *
+ * @param {string} value
+ */
+export const categoria = (value) => value != 0;
+
+/**
+ * Valida que se haya seleccionado un deposito
+ *
+ * @param {string} value
+ */
+export const deposito = (value) => value != 0;

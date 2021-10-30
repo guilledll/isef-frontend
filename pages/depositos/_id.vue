@@ -92,6 +92,9 @@ export default {
       return this.$store.state.depositos.materiales;
     },
   },
+  beforeDestroy() {
+    this.$store.dispatch('depositos/clear');
+  },
   methods: {
     async showDetails() {
       if (!this.materiales.length) {

@@ -166,12 +166,11 @@ export default {
     },
   },
   methods: {
-    selectDeposito(e) {
-      console.log(e.target[e.target.options.selectedIndex]);
-      this.form.deposito_id = e.target[e.target.options.selectedIndex].value;
+    selectDeposito(value) {
+      this.form.deposito_id = value;
     },
-    selectCategoria(e) {
-      this.form.categoria_id = e.target[e.target.options.selectedIndex].value;
+    selectCategoria(value) {
+      this.form.categoria_id = value;
     },
     updateCantidad(cantidad) {
       this.form.cantidad = cantidad;

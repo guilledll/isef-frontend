@@ -13,7 +13,7 @@
             text="Ir a <b>depósitos</b>."
             type="view"
             svg="cube"
-            @click="$router.push('/materiales')"
+            @click="$router.push('/depositos')"
           />
         </div>
       </div>
@@ -99,7 +99,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('departamentos/getAll');
+    this.$store.dispatch('departamentos/all');
   },
   methods: {
     seleccionarDepartamento(action, departamento = null) {

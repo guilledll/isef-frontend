@@ -9,6 +9,7 @@ export const state = () => ({
 export const mutations = {
   SELECT_DEPOSITO(state, deposito) {
     state.deposito = deposito;
+    state.materiales = [];
   },
   CLEAR_SELECTED(state) {
     state.deposito = null;

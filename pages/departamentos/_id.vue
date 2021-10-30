@@ -107,6 +107,9 @@ export default {
       return this.$store.state.departamentos.usuarios;
     },
   },
+  beforeDestroy() {
+    this.$store.dispatch('departamentos/clear');
+  },
   methods: {
     async showDetails(data) {
       if (data == 'depositos' && !this.depositos.length) {
