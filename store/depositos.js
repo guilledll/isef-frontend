@@ -75,6 +75,10 @@ export const actions = {
       context.commit('GET_MATERIALES', res.data);
     });
   },
-};
 
-export const getters = {};
+};
+export const getters = {
+  conMateriales(state) {
+    return state.depositos.filter(dep => { return dep.materiales_count > 0 });
+  }
+};

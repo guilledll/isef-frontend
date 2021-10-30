@@ -1,6 +1,43 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+    <div>
+      <FormSelect
+        id="deposito_id"
+        v-model.trim="filtro.id"
+        name="deposito_id"
+        @change="filtrar"
+      >
+        <template #options>
+          <option value="0">Seleccionar deposito</option>
+          <option
+            v-for="contenido in contenidoFiltrado"
+            :key="contenido.id"
+            :value="contenido.id"
+          >
+            {{ contenido.nombre }}
+          </option>
+        </template>
+      </FormSelect>
+      <label for="deposito">Deposito</label>
+      <input
+        id="deposito"
+        v-model="filtro.contenido"
+        name="filtro"
+        type="radio"
+        value="deposito_id"
+        @change="filtrar"
+      />
+      <label for="categoria">Categoria</label>
+      <input
+        id="categoria"
+        v-model="filtro.contenido"
+        name="filtro"
+        type="radio"
+        value="categoria_id"
+        @change="filtrar"
+      />
+    </div>
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
         <GlobalCallToAction
@@ -15,6 +52,7 @@
           @click="$router.push('/categorias')"
         />
       </div>
+
       <Table>
         <template #header>
           <TableHead :header="table.header" />
@@ -104,15 +142,33 @@ export default {
         show: false,
         action: '',
       },
+      materiales: [],
+      contenidoFiltrado: [],
+      filtro: { contenido: '', id: 1 },
     };
   },
   computed: {
-    materiales() {
+    categorias() {
+      return this.$store.getters['categorias/conMateriales'];
+    },
+    materialesAll() {
       return this.$store.state.materiales.materiales;
     },
+    filtrados() {
+      return this.$store.state.materiales.filtrados;
+    },
+    depositos() {
+      return this.$store.getters['categorias/conMateriales'];
+    },
+    depositosMateriales() {
+      return this;
+    },
   },
-  mounted() {
-    this.$store.dispatch('materiales/all');
+  async mounted() {
+    await this.$store.dispatch('materiales/all');
+    this.materiales = this.materialesAll;
+    await this.$store.dispatch('depositos/all');
+    await this.$store.dispatch('categorias/all');
   },
   methods: {
     seleccionarMaterial(action, material = null) {
@@ -131,6 +187,19 @@ export default {
       this.$store.dispatch('categorias/get', {
         id: cat,
       });
+    },
+    filtrar() {
+      console.log(this.filtro);
+      if (this.filtro.contenido === 'deposito_id') {
+        this.contenidoFiltrado = this.depositos;
+      } else {
+        this.contenidoFiltrado = this.categorias;
+      }
+      this.$store.dispatch('materiales/filtar', {
+        contenido: this.filtro.contenido,
+        id: this.filtro.id,
+      });
+      this.materiales = this.filtrados;
     },
   },
 };

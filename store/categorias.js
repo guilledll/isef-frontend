@@ -75,5 +75,9 @@ export const actions = {
     });
   },
 };
-
-export const getters = {};
+export const getters = {
+  conMateriales(state) {
+    return state.categorias.filter(
+      cat => { return cat.cantidad_materiales > 0 });
+  }
+};
