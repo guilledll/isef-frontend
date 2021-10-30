@@ -12,6 +12,7 @@ export const mutations = {
   },
   CLEAR_SELECTED(state) {
     state.material = null;
+    state.movimientos = [];
   },
   GET_ALL_MATERIALES(state, materiales) {
     state.materiales = materiales;
@@ -21,7 +22,7 @@ export const mutations = {
   },
   MOD_MATERIAL(state, materiales) {
     state.materiales = state.materiales.map((mat) =>
-      mat.id == materiales.id ? { ...mat, nombre: materiales.nombre } : mat
+      mat.id == materiales.id ? { ...mat, nombre: materiales.nombre, deposito: materiales.deposito, deposito_id: materiales.deposito_id, cantidad: materiales.cantidad, categoria_id: materiales.categoria_id, categoria: materiales.categoria } : mat
     );
   },
   DEL_MATERIAL(state, id) {
@@ -57,8 +58,8 @@ export const actions = {
     });
   },
   update(context, data) {
-    return MaterialesService.update(data.id, data).then(() => {
-      context.commit('MOD_MATERIAL', data);
+    return MaterialesService.update(data.id, data).then((res) => {
+      context.commit('MOD_MATERIAL', res.data);
     });
   },
   delete(context, id) {

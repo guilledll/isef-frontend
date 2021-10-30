@@ -74,7 +74,6 @@ export default {
       form: {
         nombre: '',
         departamento_id: 0,
-        //departamento: '',
       },
     };
   },
@@ -82,7 +81,7 @@ export default {
     departamentos() {
       return this.$store.state.departamentos.departamentos.length
         ? this.$store.state.departamentos.departamentos
-        : this.$store.dispatch('departamentos/getAll');
+        : this.$store.dispatch('departamentos/all');
     },
   },
   validations: {
@@ -106,8 +105,8 @@ export default {
         .then(() => this.$emit('close'))
         .catch((e) => (this.errors = e.response.data.errors));
     },
-    selectDepartamento(e) {
-      this.form.departamento = e.target[e.target.options.selectedIndex].text;
+    selectDepartamento(value) {
+      this.form.departamento = value;
     },
   },
 };

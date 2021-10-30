@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
         <template #header>
-          <TableHead :header="table.header" />
+          <TableHead :header="table.header" :action="false" />
         </template>
         <template #body>
           <tr v-for="movimiento in inventario" :key="movimiento.id">
@@ -27,9 +27,6 @@
               {{ movimiento.deposito }}
             </td>
             <td class="table-td text-gray-500">
-              {{ movimiento.departamento }}
-            </td>
-            <td class="table-td text-gray-500">
               {{ movimiento.fecha }}
             </td>
             <td class="table-td text-right"></td>
@@ -50,14 +47,7 @@ export default {
         text: 'Registro de los movimientos de materiales.',
       },
       table: {
-        header: [
-          'Material',
-          'Acción',
-          'Cantidad',
-          'deposito',
-          'departamento',
-          'Fecha',
-        ],
+        header: ['Material', 'Acción', 'Cantidad', 'deposito', 'Fecha'],
       },
       acciones: [
         { value: 1, text: 'Alta' },
@@ -75,7 +65,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('inventario/getAll');
+    this.$store.dispatch('inventario/all');
   },
   methods: {
     seleccionarMovimiento(action, movimiento = null) {

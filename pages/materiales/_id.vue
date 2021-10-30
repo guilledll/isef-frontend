@@ -44,7 +44,7 @@
       </GlobalInfoTable>
     </div>
     <LazyModal v-if="open.modal">
-      <FormDepositoUpdate is-view @close="open.modal = !open.modal" />
+      <FormMaterialUpdate is-view @close="open.modal = !open.modal" />
     </LazyModal>
   </div>
 </template>
@@ -76,6 +76,9 @@ export default {
     movimientos() {
       return this.$store.state.materiales.movimientos;
     },
+  },
+  beforeDestroy() {
+    this.$store.dispatch('materiales/clear');
   },
   methods: {
     async showDetails() {
