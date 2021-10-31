@@ -88,4 +88,10 @@ export const actions = {
   },
 };
 
-export const getters = {};
+export const getters = {
+  conDepositos(state) {
+    return state.departamentos.filter((dep) => {
+      return dep.depositos_count > 0;
+    });
+  },
+};
