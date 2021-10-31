@@ -213,9 +213,7 @@
       v-if="list.materiales.length"
       class="flex justify-end bg-gray-50 border rounded-lg px-4 py-3 mt-5"
     >
-      <button class="btn green" type="submit" @click="guardarMateriales">
-        Confirmar
-      </button>
+      <button class="btn green" @click="guardarMateriales">Confirmar</button>
     </div>
   </div>
 </template>
@@ -246,14 +244,13 @@ export default {
         usuario_ci: this.$auth.user.ci,
         materiales: [],
       },
-      departamentos: [],
       table: ['Material', 'Depósito', 'Cantidad'],
       error: false,
     };
   },
   computed: {
-    auxDepartamentos() {
-      return this.$store.state.departamentos.departamentos;
+    departamentos() {
+      return this.$store.getters['departamentos/conDepositos'];
     },
     depositos() {
       return this.$store.state.departamentos.depositos;
@@ -266,10 +263,6 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('departamentos/all');
-    // Array sin departamentos con depositos_count = 0
-    this.departamentos = this.auxDepartamentos.filter((dep) => {
-      return dep.depositos_count > 0;
-    });
   },
   validations: {
     form: {
@@ -326,8 +319,8 @@ export default {
     async guardarMateriales() {
       await this.$store
         .dispatch('materiales/create', this.list)
-        .catch((e) => (this.errors = e.response.data.errors));
-      this.$router.push({ path: '/materiales' });
+        .then(() => this.$router.push({ path: '/materiales' }))
+        .catch((e) => console.log(e));
     },
     eliminarMaterial(index) {
       this.list.materiales.splice(index, 1);

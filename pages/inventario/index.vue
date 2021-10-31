@@ -4,35 +4,35 @@
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
         <template #header>
-          <TableHead :header="table.header" />
+          <TableHead :header="table.header" :action="false" />
         </template>
         <template #body>
           <tr v-for="movimiento in inventario" :key="movimiento.id">
+            <td class="table-td text-gray-500">
+              {{ movimiento.fecha }}
+            </td>
             <td class="table-td">
               <router-link
-                :to="`/inventario/${movimiento.id}`"
+                :to="`/materiales/${movimiento.material_id}`"
                 class="text-black hover:text-blue-600 hover:underline"
-                @click.native="seleccionarMovimiento('view', movimiento)"
               >
                 {{ movimiento.material }}
               </router-link>
-            </td>
-            <td class="table-td" :class="claseAccion(movimiento.accion)">
-              {{ movimiento.accion }}
             </td>
             <td class="table-td text-gray-500">
               {{ movimiento.cantidad || 0 }}
             </td>
             <td class="table-td text-gray-500">
-              {{ movimiento.deposito }}
+              <router-link
+                :to="`/depositos/${movimiento.deposito_id}`"
+                class="hover:text-blue-600 hover:underline"
+              >
+                {{ movimiento.deposito }}
+              </router-link>
             </td>
-            <td class="table-td text-gray-500">
-              {{ movimiento.departamento }}
+            <td class="table-td" :class="claseAccion(movimiento.accion)">
+              {{ mostrarAccion(movimiento.accion) }}
             </td>
-            <td class="table-td text-gray-500">
-              {{ movimiento.fecha }}
-            </td>
-            <td class="table-td text-right"></td>
           </tr>
         </template>
       </Table>
@@ -50,15 +50,12 @@ export default {
         text: 'Registro de los movimientos de materiales.',
       },
       table: {
-        header: [
-          'Material',
-          'Acción',
-          'Cantidad',
-          'deposito',
-          'departamento',
-          'Fecha',
-        ],
+        header: ['Fecha', 'Material', 'Cantidad', 'Deposito', 'Acción'],
       },
+      acciones: [
+        { value: 1, text: 'Alta' },
+        { value: 0, text: 'Baja' },
+      ],
       modal: {
         show: false,
         action: '',
@@ -74,24 +71,28 @@ export default {
     this.$store.dispatch('inventario/all');
   },
   methods: {
-    seleccionarMovimiento(action, movimiento = null) {
-      if (movimiento) this.$store.dispatch('inventario/select', movimiento);
-      if (action != 'view') {
-        this.modal.action = action;
-        this.modal.show = !this.modal.show;
-      }
-    },
     claseAccion(accion) {
       return `accion-${accion}`;
+    },
+    mostrarAccion(accion) {
+      switch (parseInt(accion)) {
+        case 0:
+          accion = 'Baja';
+          break;
+        case 1:
+          accion = 'Alta';
+      }
+      return accion;
     },
   },
 };
 </script>
+
 <style lang="postcss" scoped>
-.accion-Baja {
+.accion-0 {
   @apply text-red-500;
 }
-.accion-Alta {
+.accion-1 {
   @apply text-green-500;
 }
 </style>
