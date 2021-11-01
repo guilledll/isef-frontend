@@ -73,7 +73,7 @@ export default {
     return {
       pageHeader: {
         title: 'Usuarios',
-        text: 'Usuarios registrados en el sistema.',
+        text: 'Listados de usuarios registrados en el sistema, sus datos y respectivos roles.',
       },
       table: {
         header: ['Nombre', 'Departamento', 'Teléfono', 'Rol'],

@@ -27,12 +27,7 @@
       >
         <tr v-for="movimiento in movimientos" :key="movimiento.id">
           <td class="table-td">
-            <router-link
-              :to="`/inventario/${movimiento.id}`"
-              class="text-black hover:text-blue-600 hover:underline"
-            >
-              {{ movimiento.fecha }}
-            </router-link>
+            {{ movimiento.fecha }}
           </td>
           <td class="table-td" :class="claseAccion(movimiento.accion)">
             {{ mostrarAccion(movimiento.accion) }}
