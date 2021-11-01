@@ -148,6 +148,7 @@
             v-model.trim="form.cantidad"
             name="cantidad"
             autocomplete="off"
+            type="number"
             placeholder="Cantidad de materiales"
             label="Cantidad a agregar"
             :sr="false"
@@ -161,6 +162,24 @@
               :val="errorValidation($v.form.cantidad)"
             />
           </FormInput>
+        </div>
+        <div>
+          <FormTextarea
+            id="nota"
+            v-model.trim="form.nota"
+            name="nota"
+            placeholder="Notas (opcional)"
+            label="Notas del movimiento"
+            :sr="false"
+            :error="hasError($v.form.nota, 'nota')"
+            @input="fieldReset($v.form.nota, 'nota')"
+            @blur="touch($v.form.nota)"
+          >
+            <LazyFormError
+              v-if="hasError($v.form.nota, 'nota')"
+              :text="errorText($v.form.nota, 'nota')"
+            />
+          </FormTextarea>
         </div>
         <div v-if="error" class="text-red-500 text-center !-mb-1 font-semibold">
           Este material ya está en la lista.
@@ -188,6 +207,18 @@
               </td>
               <td class="table-td text-gray-500">
                 {{ material.cantidad || 0 }}
+              </td>
+              <td
+                class="table-td text-center text-gray-500"
+                :class="{
+                  'hover:bg-gray-100 hover:text-blue-500': material.nota,
+                }"
+              >
+                <GlobalSvg
+                  v-if="material.nota"
+                  class="h-5 w-5 m-auto"
+                  svg="chat-alt"
+                />
               </td>
               <td class="table-td text-right">
                 <TableButton type="delete" @click="eliminarMaterial(index)" />
@@ -224,6 +255,7 @@ import {
   categoria,
   deposito,
   departamento,
+  cantidad,
 } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import { required, integer, maxLength } from 'vuelidate/lib/validators';
@@ -235,6 +267,7 @@ export default {
         nombre: '',
         categoria: '',
         deposito: '',
+        nota: '',
         departamento_id: 0,
         deposito_id: 0,
         categoria_id: 0,
@@ -244,7 +277,7 @@ export default {
         usuario_ci: this.$auth.user.ci,
         materiales: [],
       },
-      table: ['Material', 'Depósito', 'Cantidad'],
+      table: ['Material', 'Depósito', 'Cantidad', 'Nota'],
       error: false,
     };
   },
@@ -288,6 +321,10 @@ export default {
       cantidad: {
         required,
         integer,
+        cantidad,
+      },
+      nota: {
+        maxLength: maxLength(255),
       },
     },
   },
@@ -306,12 +343,14 @@ export default {
         deposito_id: this.form.deposito_id,
         deposito: this.form.deposito,
         cantidad: this.form.cantidad,
+        nota: this.form.nota,
       };
 
       this.form.nombre = '';
       this.form.categoria_id = 0;
       this.form.categoria = '';
       this.form.cantidad = 1;
+      this.form.nota = '';
 
       this.$v.$reset();
       this.list.materiales.push(data);

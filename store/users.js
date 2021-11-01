@@ -53,8 +53,9 @@ export const actions = {
     context.commit('CLEAR_SELECTED');
   },
   updateRol(context, data) {
-    return UsersService.updateRol(data.ci, data).then(() => {
-      context.commit('UPDATE_ROL', data);
+    return UsersService.updateRol(data.ci, data).then((res) => {
+      context.commit('UPDATE_ROL', res.data);
+      context.dispatch('select', res.data);
       context.dispatch('global/loading', false, { root: true });
     });
   },

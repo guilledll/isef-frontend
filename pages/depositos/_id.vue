@@ -16,14 +16,17 @@
       </div>
       <hr class="mt-3" />
     </div>
-    <div class="grid grid-cols-1 mb-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid grid-cols-1 mb-5 sm:grid-cols-2">
       <div class="flex items-center text-lg md:text-xl">
         <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg class="h-5 w-5 mr-1 text-blue-600" svg="location-marker" />
+          <GlobalSvg
+            class="h-6 w-6 mr-1 text-green-600"
+            svg="location-marker"
+          />
           Departamento:
         </span>
         <router-link
-          class="hover:underline hover:text-blue-600"
+          class="hover:underline hover:text-green-600"
           :to="`/departamentos/${deposito.departamento_id}`"
         >
           {{ deposito.departamento }}
@@ -48,7 +51,7 @@
               {{ material.nombre }}
             </router-link>
           </td>
-          <td class="table-td">
+          <td class="table-td text-gray-500">
             <router-link
               :to="`/categorias/${material.categoria_id}`"
               class="text-black hover:text-blue-600 hover:underline"

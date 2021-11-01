@@ -10,41 +10,49 @@
         </h3>
         <div>
           <button class="action-btn" @click="edit">
-            <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
+            <GlobalSvg class="h-6 w-6 md:h-6 md:w-6" svg="pencil" />
           </button>
         </div>
       </div>
       <hr class="mt-3" />
     </div>
-    <div class="grid grid-cols-1 mb-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div
+      class="grid grid-cols-1 mb-5 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3"
+    >
       <div class="flex items-center text-lg md:text-xl">
         <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg class="h-5 w-5 mr-1 text-blue-600" svg="location-marker" />
+          <GlobalSvg class="h-6 w-6 mr-1 text-indigo-600" svg="user" />
           Ci:
         </span>
         {{ usuario.ci }}
       </div>
       <div class="flex items-center text-lg md:text-xl">
         <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg class="h-5 w-5 mr-1 text-blue-600" svg="location-marker" />
-          rol:
+          <GlobalSvg
+            class="h-6 w-6 mr-1 text-purple-600"
+            svg="clipboard-check"
+          />
+          Rol:
         </span>
         {{ mostrarRol(usuario.rol) }}
       </div>
       <div class="flex items-center text-lg md:text-xl">
         <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg class="h-5 w-5 mr-1 text-blue-600" svg="location-marker" />
-          Telefono:
+          <GlobalSvg class="h-6 w-6 mr-1 text-blue-600" svg="phone" />
+          Teléfono:
         </span>
         {{ usuario.telefono }}
       </div>
       <div class="flex items-center text-lg md:text-xl">
         <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg class="h-5 w-5 mr-1 text-blue-600" svg="location-marker" />
+          <GlobalSvg
+            class="h-6 w-6 mr-1 text-green-600"
+            svg="location-marker"
+          />
           Departamento:
         </span>
         <router-link
-          class="hover:underline hover:text-blue-600"
+          class="hover:underline hover:text-green-600"
           :to="`/departamentos/${usuario.departamento_id}`"
         >
           {{ usuario.departamento }}

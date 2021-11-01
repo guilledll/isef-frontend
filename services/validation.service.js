@@ -14,6 +14,7 @@ export const mensajes = {
   categoria: () => 'Por favor seleccione una categoría.',
   cedula: () => 'La cédula no es válida.',
   deposito: () => 'El depósito no es válido.',
+  cantidad: () => 'La cantidad ingresada no es correcta.',
 };
 
 /**
@@ -80,3 +81,10 @@ export const categoria = (value) => value != 0;
  * @param {string} value
  */
 export const deposito = (value) => value != 0;
+
+/**
+ * Valida que la cantidad sea positiva
+ *
+ * @param {string} value
+ */
+export const cantidad = (value) => value > 0;
