@@ -79,9 +79,7 @@ export const actions = {
     });
   },
   filtar(context, { contenido, id }) {
-
     let filtrado = context.state.materiales.filter(material =>
-      //console.log(material[contenido], contenido, id);
       material[contenido] == id
     );
     context.commit('FILTRAR_MATERIALES', filtrado);

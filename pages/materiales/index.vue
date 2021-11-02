@@ -9,7 +9,7 @@
         @change="filtrar"
       >
         <template #options>
-          <option value="0">Seleccionar deposito</option>
+          <option value="0">Seleccionar</option>
           <option
             v-for="contenido in contenidoFiltrado"
             :key="contenido.id"
@@ -26,7 +26,7 @@
         name="filtro"
         type="radio"
         value="deposito_id"
-        @change="filtrar"
+        @change="cambiarFiltro"
       />
       <label for="categoria">Categoria</label>
       <input
@@ -35,7 +35,7 @@
         name="filtro"
         type="radio"
         value="categoria_id"
-        @change="filtrar"
+        @change="cambiarFiltro"
       />
     </div>
     <div class="flex flex-col gap-3 lg:flex-row">
@@ -158,10 +158,7 @@ export default {
       return this.$store.state.materiales.filtrados;
     },
     depositos() {
-      return this.$store.getters['categorias/conMateriales'];
-    },
-    depositosMateriales() {
-      return this;
+      return this.$store.getters['depositos/conMateriales'];
     },
   },
   async mounted() {
@@ -190,16 +187,21 @@ export default {
     },
     filtrar() {
       console.log(this.filtro);
-      if (this.filtro.contenido === 'deposito_id') {
-        this.contenidoFiltrado = this.depositos;
-      } else {
-        this.contenidoFiltrado = this.categorias;
-      }
+
       this.$store.dispatch('materiales/filtar', {
         contenido: this.filtro.contenido,
         id: this.filtro.id,
       });
       this.materiales = this.filtrados;
+    },
+    cambiarFiltro() {
+      if (this.filtro.contenido === 'deposito_id') {
+        this.contenidoFiltrado = this.depositos;
+      } else {
+        this.contenidoFiltrado = this.categorias;
+      }
+      this.filtro.id = 0; //Limpia select
+      this.materiales = this.materialesAll;
     },
   },
 };

@@ -1,13 +1,51 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+    <div>
+      <FormSelect
+        id="departamento_id"
+        v-model.trim="filtro.id"
+        name="departamento_id"
+        @change="filtrar"
+      >
+        <template #options>
+          <option value="0">Seleccionar</option>
+          <option
+            v-for="(contenido, index) in contenidoFiltrado"
+            :key="index"
+            :value="contenido.id || contenido"
+          >
+            <span v-if="contenido.id"> {{ contenido.nombre }} </span>
+            <span v-else> {{ mostrarRol(contenido) }}</span>
+          </option>
+        </template>
+      </FormSelect>
+      <label for="departamento">Departamento</label>
+      <input
+        id="departamento_id"
+        v-model="filtro.contenido"
+        name="filtro"
+        type="radio"
+        value="departamento_id"
+        @change="cambiarFiltro"
+      />
+      <label for="rol">Rol</label>
+      <input
+        id="rol"
+        v-model="filtro.contenido"
+        name="filtro"
+        type="radio"
+        value="rol"
+        @change="cambiarFiltro"
+      />
+    </div>
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
         <template #header>
           <TableHead :header="table.header" />
         </template>
         <template #body>
-          <tr v-for="user in users" :key="user.id">
+          <tr v-for="user in usuarios" :key="user.ci">
             <td class="table-td">
               <router-link
                 :to="`/usuarios/${user.ci}`"
@@ -82,15 +120,29 @@ export default {
         show: false,
         action: '',
       },
+      usuarios: [],
+      contenidoFiltrado: [],
+      filtro: { contenido: '', id: 1 },
     };
   },
   computed: {
     users() {
       return this.$store.state.users.users;
     },
+    departamentos() {
+      return this.$store.getters['departamentos/conUsuarios'];
+    },
+    filtrados() {
+      return this.$store.state.users.filtrados;
+    },
+    roles() {
+      return this.$store.getters['users/rolesConUsuarios'];
+    },
   },
-  mounted() {
-    this.$store.dispatch('users/all');
+  async mounted() {
+    await this.$store.dispatch('users/all');
+    this.usuarios = this.users;
+    await this.$store.dispatch('departamentos/all');
   },
   methods: {
     seleccionarUsuario(action, user = null) {
@@ -99,6 +151,23 @@ export default {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
       }
+    },
+    filtrar() {
+      console.log(this.filtro);
+      this.$store.dispatch('users/filtar', {
+        contenido: this.filtro.contenido,
+        id: this.filtro.id,
+      });
+      this.usuarios = this.filtrados;
+    },
+    cambiarFiltro() {
+      if (this.filtro.contenido === 'departamento_id') {
+        this.contenidoFiltrado = this.departamentos;
+      } else {
+        this.contenidoFiltrado = this.roles;
+      }
+      this.filtro.id = 0; //Limpia select
+      this.usuarios = this.users;
     },
     mostrarRol(rol) {
       switch (parseInt(rol)) {
