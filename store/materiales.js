@@ -18,12 +18,19 @@ export const mutations = {
   GET_ALL_MATERIALES(state, materiales) {
     state.materiales = materiales;
   },
-  ADD_MATERIAL(state, material) {
-    state.materiales.push(material);
-  },
-  MOD_MATERIAL(state, materiales) {
+  MOD_MATERIAL(state, material) {
     state.materiales = state.materiales.map((mat) =>
-      mat.id == materiales.id ? { ...mat, nombre: materiales.nombre, deposito: materiales.deposito, deposito_id: materiales.deposito_id, cantidad: materiales.cantidad, categoria_id: materiales.categoria_id, categoria: materiales.categoria } : mat
+      mat.id == material.id
+        ? {
+            ...mat,
+            nombre: material.nombre,
+            deposito: material.deposito,
+            deposito_id: material.deposito_id,
+            cantidad: material.cantidad,
+            categoria_id: material.categoria_id,
+            categoria: material.categoria,
+          }
+        : mat
     );
   },
   DEL_MATERIAL(state, id) {
@@ -58,9 +65,7 @@ export const actions = {
     });
   },
   create(context, data) {
-    return MaterialesService.create(data).then((res) => {
-      context.commit('ADD_MATERIAL', res.data);
-    });
+    return MaterialesService.create(data);
   },
   update(context, data) {
     return MaterialesService.update(data.id, data).then((res) => {
