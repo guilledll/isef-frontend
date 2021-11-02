@@ -1,6 +1,25 @@
 <template>
   <div>
     <GlobalHeader :title="header.title" :text="header.text" />
+    <div>
+      <FormSelect
+        id="deposito_id"
+        v-model.trim="filtro.id"
+        name="deposito_id"
+        @change="filtrar"
+      >
+        <template #options>
+          <option value="0">Seleccionar depósito</option>
+          <option
+            v-for="deposito in depositos"
+            :key="deposito.id"
+            :value="deposito.id"
+          >
+            {{ deposito.nombre }}
+          </option>
+        </template>
+      </FormSelect>
+    </div>
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
         <template #header>
@@ -76,15 +95,25 @@ export default {
         ],
       },
       modal: false,
+      movimientos: [],
+      filtro: { id: 1 },
     };
   },
   computed: {
-    movimientos() {
+    movimientosAll() {
       return this.$store.state.inventario.inventario;
+    },
+    filtrados() {
+      return this.$store.state.inventario.filtrados;
+    },
+    depositos() {
+      return this.$store.getters['depositos/conMateriales'];
     },
   },
   async mounted() {
     await this.$store.dispatch('inventario/all');
+    this.movimientos = this.movimientosAll;
+    await this.$store.dispatch('depositos/all');
   },
   methods: {
     claseAccion(accion) {
@@ -103,6 +132,13 @@ export default {
     verMovimiento(inv) {
       this.$store.dispatch('inventario/select', inv);
       this.modal = true;
+    },
+    filtrar() {
+      this.$store.dispatch('inventario/filtar', {
+        id: this.filtro.id,
+      });
+
+      this.movimientos = this.filtrados;
     },
   },
 };

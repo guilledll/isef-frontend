@@ -43,7 +43,6 @@ export const mutations = {
   },
   FILTRAR_MATERIALES(state, filtrados) {
     state.filtrados = filtrados;
-    console.log(filtrados);
   }
 };
 

@@ -149,7 +149,6 @@ export default {
       });
     },
     filtrar() {
-      console.log(this.filtro);
       this.$store.dispatch('depositos/filtar', {
         id: this.filtro.id,
       });

@@ -88,7 +88,6 @@ export const actions = {
     context.commit('FILTRAR_DEPOSITOS', filtrado);
 
   }
-
 };
 export const getters = {
   conMateriales(state) {

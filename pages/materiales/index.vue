@@ -186,8 +186,6 @@ export default {
       });
     },
     filtrar() {
-      console.log(this.filtro);
-
       this.$store.dispatch('materiales/filtar', {
         contenido: this.filtro.contenido,
         id: this.filtro.id,
