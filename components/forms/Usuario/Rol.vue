@@ -53,6 +53,9 @@ import { required, integer } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
   mixins: [validationMixin, FormValidationMixin],
+  props: {
+    isView: { type: Boolean, default: false },
+  },
   data() {
     return {
       form: {
@@ -97,7 +100,7 @@ export default {
         .catch((e) => (this.errors = e.response.data.errors));
     },
     closeModal() {
-      this.$store.dispatch('users/clear');
+      if (!this.isView) this.$store.dispatch('users/clear');
       this.$emit('close');
     },
   },

@@ -7,33 +7,51 @@
           <TableHead :header="table.header" :action="false" />
         </template>
         <template #body>
-          <tr v-for="movimiento in inventario" :key="movimiento.id">
+          <tr v-for="movimiento in movimientos" :key="movimiento.id">
+            <td class="table-td text-gray-500">
+              {{ movimiento.fecha }}
+            </td>
             <td class="table-td">
               <router-link
-                :to="`/inventario/${movimiento.id}`"
+                :to="`/usuarios/${movimiento.user_ci}`"
+                class="hover:text-blue-600 hover:underline"
+              >
+                {{ movimiento.user_ci }}
+              </router-link>
+            </td>
+            <td class="table-td">
+              <router-link
+                :to="`/materiales/${movimiento.material_id}`"
                 class="text-black hover:text-blue-600 hover:underline"
-                @click.native="seleccionarMovimiento('view', movimiento)"
               >
                 {{ movimiento.material }}
               </router-link>
-            </td>
-            <td class="table-td" :class="claseAccion(movimiento.accion)">
-              {{ mostrarAccion(movimiento.accion) }}
             </td>
             <td class="table-td text-gray-500">
               {{ movimiento.cantidad || 0 }}
             </td>
             <td class="table-td text-gray-500">
-              {{ movimiento.deposito }}
+              <router-link
+                :to="`/depositos/${movimiento.deposito_id}`"
+                class="hover:text-blue-600 hover:underline"
+              >
+                {{ movimiento.deposito }}
+              </router-link>
             </td>
-            <td class="table-td text-gray-500">
-              {{ movimiento.fecha }}
+            <td class="table-td" :class="claseAccion(movimiento.accion)">
+              {{ mostrarAccion(movimiento.accion) }}
             </td>
-            <td class="table-td text-right"></td>
+
+            <td class="table-td nota" @click="verMovimiento(movimiento)">
+              <GlobalSvg class="h-5 w-5 m-auto" svg="info-circle" />
+            </td>
           </tr>
         </template>
       </Table>
     </div>
+    <LazyModal v-if="modal">
+      <ModalVerMovimiento @close="modal = !modal" />
+    </LazyModal>
   </div>
 </template>
 
@@ -44,37 +62,31 @@ export default {
     return {
       header: {
         title: 'Inventario',
-        text: 'Registro de los movimientos de materiales.',
+        text: 'Registro de entrada y salida de materiales en todos los depósitos.',
       },
       table: {
-        header: ['Material', 'Acción', 'Cantidad', 'deposito', 'Fecha'],
+        header: [
+          'Fecha',
+          'Encargado',
+          'Material',
+          'Cantidad',
+          'Depósito',
+          'Acción',
+          'Detalles',
+        ],
       },
-      acciones: [
-        { value: 1, text: 'Alta' },
-        { value: 0, text: 'Baja' },
-      ],
-      modal: {
-        show: false,
-        action: '',
-      },
+      modal: false,
     };
   },
   computed: {
-    inventario() {
+    movimientos() {
       return this.$store.state.inventario.inventario;
     },
   },
-  mounted() {
-    this.$store.dispatch('inventario/all');
+  async mounted() {
+    await this.$store.dispatch('inventario/all');
   },
   methods: {
-    seleccionarMovimiento(action, movimiento = null) {
-      if (movimiento) this.$store.dispatch('inventario/select', movimiento);
-      if (action != 'view') {
-        this.modal.action = action;
-        this.modal.show = !this.modal.show;
-      }
-    },
     claseAccion(accion) {
       return `accion-${accion}`;
     },
@@ -88,6 +100,10 @@ export default {
       }
       return accion;
     },
+    verMovimiento(inv) {
+      this.$store.dispatch('inventario/select', inv);
+      this.modal = true;
+    },
   },
 };
 </script>
@@ -98,5 +114,8 @@ export default {
 }
 .accion-1 {
   @apply text-green-500;
+}
+.nota {
+  @apply text-center text-gray-500 cursor-pointer hover:text-blue-500 hover:bg-blue-50;
 }
 </style>
