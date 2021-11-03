@@ -16,6 +16,7 @@
     "deep-object-diff": "^1.1.0",
     "moment": "^2.29.1",
     "nuxt": "^2.13.3",
+    "vue2-datepicker": "^3.10.2",
     "vuelidate": "^0.7.6",
     "vuelidate-messages": "^0.1.2"
   },

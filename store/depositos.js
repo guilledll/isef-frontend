@@ -77,4 +77,10 @@ export const actions = {
   },
 };
 
-export const getters = {};
+export const getters = {
+  deDepartamento: (state) => (id) => {
+    return state.depositos.filter((dep) => {
+      return dep.departamento_id == id;
+    });
+  },
+};
