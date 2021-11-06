@@ -2,6 +2,7 @@ import DepositosService from '@/services/depositos.service';
 
 export const state = () => ({
   depositos: [],
+  filtrados: [],
   deposito: null,
   materiales: [],
 });
@@ -32,6 +33,10 @@ export const mutations = {
   },
   GET_MATERIALES(state, materiales) {
     state.materiales = materiales;
+  },
+  FILTRAR_DEPOSITOS(state, filtrados) {
+    state.filtrados = filtrados;
+    console.log(filtrados);
   },
 };
 
@@ -75,12 +80,23 @@ export const actions = {
       context.commit('GET_MATERIALES', res.data);
     });
   },
+  filtar(context, { id }) {
+    let filtrado = context.state.depositos.filter((deposito) => {
+      return deposito.departamento_id == id;
+    });
+    context.commit('FILTRAR_DEPOSITOS', filtrado);
+  },
 };
 
 export const getters = {
   deDepartamento: (state) => (id) => {
     return state.depositos.filter((dep) => {
       return dep.departamento_id == id;
+    });
+  },
+  conMateriales(state) {
+    return state.depositos.filter((dep) => {
+      return dep.cantidad_materiales > 0;
     });
   },
 };

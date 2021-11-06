@@ -1,6 +1,25 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+    <div>
+      <FormSelect
+        id="departamento_id"
+        v-model.trim="filtro.id"
+        name="departamento_id"
+        @change="filtrar"
+      >
+        <template #options>
+          <option value="0">Seleccionar departamento</option>
+          <option
+            v-for="departamento in departamentos"
+            :key="departamento.id"
+            :value="departamento.id"
+          >
+            {{ departamento.nombre }}
+          </option>
+        </template>
+      </FormSelect>
+    </div>
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
         <GlobalCallToAction
@@ -95,15 +114,25 @@ export default {
         show: false,
         action: '',
       },
+      depositos: [],
+      filtro: { id: 1 },
     };
   },
   computed: {
-    depositos() {
+    departamentos() {
+      return this.$store.getters['departamentos/conDepositos'];
+    },
+    depositosAll() {
       return this.$store.state.depositos.depositos;
     },
+    filtrados() {
+      return this.$store.state.depositos.filtrados;
+    },
   },
-  created() {
-    this.$store.dispatch('depositos/all');
+  async mounted() {
+    await this.$store.dispatch('depositos/all');
+    this.depositos = this.depositosAll;
+    await this.$store.dispatch('departamentos/all');
   },
   methods: {
     seleccionarDeposito(action, deposito = null) {
@@ -118,6 +147,13 @@ export default {
         id: dep.departamento_id,
         nombre: dep.departamento,
       });
+    },
+    filtrar() {
+      console.log(this.filtro);
+      this.$store.dispatch('depositos/filtar', {
+        id: this.filtro.id,
+      });
+      this.depositos = this.filtrados;
     },
   },
 };

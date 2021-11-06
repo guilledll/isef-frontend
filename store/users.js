@@ -2,7 +2,9 @@ import UsersService from '@/services/users.service';
 
 export const state = () => ({
   users: [],
+  filtrados: [],
   user: null,
+  roles: [0, 1, 2, 3],
 });
 
 export const mutations = {
@@ -25,6 +27,10 @@ export const mutations = {
       user.ci == ci ? state.users.splice(index, 1) : user;
     });
   },
+  FILTRAR_USUARIOS(state, filtrados) {
+    state.filtrados = filtrados;
+    console.log(filtrados);
+  }
 };
 
 export const actions = {
@@ -65,4 +71,28 @@ export const actions = {
       context.commit('CLEAR_SELECTED');
     });
   },
+  filtar(context, { contenido, id }) {
+    let filtrado = context.state.users.filter(user =>
+      user[contenido] == id
+    );
+    context.commit('FILTRAR_USUARIOS', filtrado);
+  }
+
+
 };
+
+export const
+  getters = {
+    rolesConUsuarios(state) {
+      let rolesConUsuarios = [];
+      state.roles.forEach((rol) => {
+        if (state.users.some(u => u.rol == rol)) {
+          rolesConUsuarios.push(rol);
+        }
+      });
+      return rolesConUsuarios;
+    },
+    conRol: state => rol => {
+      return state.users.filter(user => { return user.rol == rol });
+    }
+  }

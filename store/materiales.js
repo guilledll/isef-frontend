@@ -2,6 +2,7 @@ import MaterialesService from '@/services/materiales.service';
 
 export const state = () => ({
   materiales: [],
+  filtrados: [],
   material: null,
   movimientos: [],
 });
@@ -40,6 +41,10 @@ export const mutations = {
   GET_MOVIMIENTOS(state, movimientos) {
     state.movimientos = movimientos;
   },
+  FILTRAR_MATERIALES(state, filtrados) {
+    state.filtrados = filtrados;
+    console.log(filtrados);
+  }
 };
 
 export const actions = {
@@ -78,6 +83,12 @@ export const actions = {
       context.commit('GET_MOVIMIENTOS', res.data);
     });
   },
+  filtar(context, { contenido, id }) {
+    let filtrado = context.state.materiales.filter(material =>
+      material[contenido] == id
+    );
+    context.commit('FILTRAR_MATERIALES', filtrado);
+  }
 };
 
 export const getters = {};
