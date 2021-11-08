@@ -42,7 +42,7 @@ export const mutations = {
   },
   FILTRAR_DEPARTAMENTOS(state, filtrados) {
     state.filtrados = filtrados;
-    console.log(filtrados);
+
   }
 };
 

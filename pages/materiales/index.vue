@@ -1,6 +1,7 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+    <!--Filtrar por deposito/categoria-->
     <div>
       <FormSelect
         id="deposito_id"
@@ -51,8 +52,13 @@
           svg="clipboard-list"
           @click="$router.push('/categorias')"
         />
+        <GlobalCallToAction
+          text="Mover <b> materiales</b> de depositos"
+          type="view"
+          svg="clipboard-list"
+          @click="$router.push('/movimientos')"
+        />
       </div>
-
       <Table>
         <template #header>
           <TableHead :header="table.header" />
@@ -110,6 +116,7 @@
     <LazyModal v-if="modal.show">
       <LazyFormMaterialUpdate
         v-if="modal.action == 'mod'"
+        @actualizado="updateFiltrados"
         @close="modal.show = !modal.show"
       />
       <LazyFormMaterialCreate
@@ -199,6 +206,10 @@ export default {
         this.contenidoFiltrado = this.categorias;
       }
       this.filtro.id = 0; //Limpia select
+      this.materiales = this.materialesAll;
+    },
+    updateFiltrados() {
+      this.modal.show = false;
       this.materiales = this.materialesAll;
     },
   },

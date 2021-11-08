@@ -36,7 +36,6 @@ export const mutations = {
   },
   FILTRAR_DEPOSITOS(state, filtrados) {
     state.filtrados = filtrados;
-    console.log(filtrados);
   }
 };
 

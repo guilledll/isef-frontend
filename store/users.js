@@ -29,7 +29,6 @@ export const mutations = {
   },
   FILTRAR_USUARIOS(state, filtrados) {
     state.filtrados = filtrados;
-    console.log(filtrados);
   }
 };
 

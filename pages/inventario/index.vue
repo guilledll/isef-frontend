@@ -126,6 +126,10 @@ export default {
           break;
         case 1:
           accion = 'Alta';
+          break;
+        case 2:
+          accion = 'Movimiento';
+          break;
       }
       return accion;
     },
