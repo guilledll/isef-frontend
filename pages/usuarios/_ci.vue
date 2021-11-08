@@ -58,6 +58,13 @@
           {{ usuario.departamento }}
         </router-link>
       </div>
+      <div class="flex items-center text-lg md:text-xl">
+        <span class="flex items-center mr-1.5 font-semibold text-gray-800">
+          <GlobalSvg class="h-6 w-6 mr-1 text-yellow-600" svg="mail" />
+          Correo:
+        </span>
+        {{ usuario.correo }}
+      </div>
     </div>
     <LazyModal v-if="open.modal">
       <FormUsuarioRol is-view @close="open.modal = !open.modal" />

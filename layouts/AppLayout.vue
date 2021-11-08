@@ -9,6 +9,7 @@
 </template>
 <script>
 export default {
+  name: 'AppLayout',
   middleware: ['auth', 'validado'],
 };
 </script>

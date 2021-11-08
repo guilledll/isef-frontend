@@ -60,7 +60,7 @@
         />
       </div>
       <Table>
-        <template #header>
+        <template #head>
           <TableHead :header="table.header" />
         </template>
         <template #body>

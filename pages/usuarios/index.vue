@@ -41,7 +41,7 @@
     </div>
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
-        <template #header>
+        <template #head>
           <TableHead :header="table.header" />
         </template>
         <template #body>

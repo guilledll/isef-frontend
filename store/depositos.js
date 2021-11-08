@@ -36,7 +36,7 @@ export const mutations = {
   },
   FILTRAR_DEPOSITOS(state, filtrados) {
     state.filtrados = filtrados;
-  }
+  },
 };
 
 export const actions = {
@@ -80,16 +80,27 @@ export const actions = {
     });
   },
   filtar(context, { id }) {
-    let filtrado = context.state.depositos.filter(deposito => {
+    let filtrado = context.state.depositos.filter((deposito) => {
       return deposito.departamento_id == id;
-    }
-    );
+    });
     context.commit('FILTRAR_DEPOSITOS', filtrado);
-
-  }
+  },
 };
+
 export const getters = {
+  deDepartamento: (state) => (id) => {
+    return state.depositos.filter((dep) => {
+      return dep.departamento_id == id;
+    });
+  },
   conMateriales(state) {
-    return state.depositos.filter(dep => { return dep.cantidad_materiales > 0 });
-  }
+    return state.depositos.filter((dep) => {
+      return dep.cantidad_materiales > 0;
+    });
+  },
+  deDepartamentoConMateriales: (state) => (id) => {
+    return state.depositos.filter((dep) => {
+      return dep.departamento_id == id && dep.cantidad_materiales > 0;
+    });
+  },
 };

@@ -101,9 +101,7 @@
               </FormTextarea>
             </div>
             <!--Cantidad -->
-            <div>
-              <FormCounter :cant="form.cantidad" @updateCant="updateCantidad" />
-            </div>
+            <FormCounter :cant="form.cantidad" @cambio="updateCantidad" />
           </div>
         </div>
       </div>

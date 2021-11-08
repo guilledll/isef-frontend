@@ -194,7 +194,7 @@
       </div>
       <div class="side-table">
         <LazyTable v-if="list.materiales.length">
-          <template #header>
+          <template #head>
             <TableHead :header="table" />
           </template>
           <template #body>
@@ -359,7 +359,7 @@ export default {
       await this.$store
         .dispatch('materiales/create', this.list)
         .then(() => this.$router.push({ path: '/materiales' }))
-        .catch((e) => console.log(e));
+        .catch((e) => console.error(e));
     },
     eliminarMaterial(index) {
       this.list.materiales.splice(index, 1);

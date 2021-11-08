@@ -4,7 +4,7 @@
       <div class="align-middle inline-block min-w-full">
         <div class="shadow overflow-hidden border border-gray-200 rounded">
           <table class="min-w-full divide-y divide-gray-200">
-            <slot name="header"></slot>
+            <slot name="head"></slot>
             <tbody class="bg-white divide-y divide-gray-200">
               <slot name="body"></slot>
             </tbody>

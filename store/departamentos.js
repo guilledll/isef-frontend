@@ -42,8 +42,7 @@ export const mutations = {
   },
   FILTRAR_DEPARTAMENTOS(state, filtrados) {
     state.filtrados = filtrados;
-
-  }
+  },
 };
 
 export const actions = {
@@ -93,9 +92,13 @@ export const actions = {
 };
 export const getters = {
   conDepositos(state) {
-    return state.departamentos.filter(dep => { return dep.depositos_count > 0 });
+    return state.departamentos.filter((dep) => {
+      return dep.depositos_count > 0;
+    });
   },
   conUsuarios(state) {
-    return state.departamentos.filter(dep => { return dep.users_count > 0 });
-  }
+    return state.departamentos.filter((dep) => {
+      return dep.users_count > 0;
+    });
+  },
 };

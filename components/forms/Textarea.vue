@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label :for="id" class="font-1" :class="{ 'sr-only': sr }">
+    <label :for="id" class="form-label font-1" :class="{ 'sr-only': sr }">
       {{ label || name }}
     </label>
     <textarea
@@ -32,13 +32,7 @@ export default {
     required: { type: Boolean, default: true },
     error: { type: Boolean, default: false },
     sr: { type: Boolean, default: true },
-    rows: { type: Number, default: 3 },
+    rows: { type: [String, Number], default: 3 },
   },
 };
 </script>
-
-<style lang="postcss" scoped>
-label {
-  @apply inline-block mb-1.5 text-base md:text-lg;
-}
-</style>

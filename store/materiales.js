@@ -43,7 +43,7 @@ export const mutations = {
   },
   FILTRAR_MATERIALES(state, filtrados) {
     state.filtrados = filtrados;
-  }
+  },
 };
 
 export const actions = {
@@ -83,11 +83,11 @@ export const actions = {
     });
   },
   filtar(context, { contenido, id }) {
-    let filtrado = context.state.materiales.filter(material =>
-      material[contenido] == id
+    let filtrado = context.state.materiales.filter(
+      (material) => material[contenido] == id
     );
     context.commit('FILTRAR_MATERIALES', filtrado);
-  }
+  },
 };
 
 export const getters = {};
