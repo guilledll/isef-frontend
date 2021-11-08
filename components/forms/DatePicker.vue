@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label :for="name" class="font-1" :class="{ 'sr-only': sr }">
+    <label :for="name" class="form-label font-1" :class="{ 'sr-only': sr }">
       {{ label || name }}
     </label>
     <DatePicker
@@ -50,9 +50,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss" scoped>
-label {
-  @apply inline-block mb-1.5 text-base md:text-lg;
-}
-</style>

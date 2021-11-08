@@ -105,10 +105,10 @@
             </div>
           </div>
         </div>
-        <div v-if="mas24Horas" class="alert yellow mt-4">
-          Las reservas mayores a 24 horas debene ser verificadas por un
-          administrador. Serás notificado/a cuando sea aprobada o rechazada.
-        </div>
+        <LazyGlobalAlert v-if="mas24Horas" color="yellow">
+          Las reservas con duración mayor a 24hs deberán ser aprobadas por un
+          administrador.
+        </LazyGlobalAlert>
       </div>
     </div>
     <ModalFooter text="Continuar" type="add" @close="$emit('close')" />
@@ -125,12 +125,15 @@ export default {
   data() {
     return {
       form: {
+        user_ci: null,
         departamento: '',
         departamento_id: 0,
         deposito: '',
         deposito_id: 0,
+        validar: false,
         inicio: new Date(),
         fin: this.loadFechaFin(),
+        materiales: [],
       },
     };
   },
@@ -142,7 +145,7 @@ export default {
       return this.$store.getters['departamentos/conDepositos'];
     },
     depositos() {
-      return this.$store.getters['depositos/deDepartamento'](
+      return this.$store.getters['depositos/deDepartamentoConMateriales'](
         this.form.departamento_id
       );
     },
@@ -156,8 +159,11 @@ export default {
     this.cargaInicial();
   },
   methods: {
-    iniciarReserva() {
+    async iniciarReserva() {
       if (this.invalid()) return;
+      if (this.mas24Horas) this.form.validar = true;
+      await this.$store.dispatch('reservas/iniciar', this.form);
+      this.$emit('close');
     },
     selectCampo(value, campo) {
       this.form[campo] = value;
@@ -170,6 +176,7 @@ export default {
     cargaInicial() {
       this.form.departamento_id = this.user.departamento_id;
       this.form.departamento = this.departamentos[0].nombre;
+      this.form.user_ci = this.user.ci;
     },
     loadFechaFin() {
       return new Date(new Date().setHours(new Date().getHours() + 2));

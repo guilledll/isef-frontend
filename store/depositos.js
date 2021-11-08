@@ -36,7 +36,6 @@ export const mutations = {
   },
   FILTRAR_DEPOSITOS(state, filtrados) {
     state.filtrados = filtrados;
-    console.log(filtrados);
   },
 };
 
@@ -97,6 +96,11 @@ export const getters = {
   conMateriales(state) {
     return state.depositos.filter((dep) => {
       return dep.cantidad_materiales > 0;
+    });
+  },
+  deDepartamentoConMateriales: (state) => (id) => {
+    return state.depositos.filter((dep) => {
+      return dep.departamento_id == id && dep.cantidad_materiales > 0;
     });
   },
 };
