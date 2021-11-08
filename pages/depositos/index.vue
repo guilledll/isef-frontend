@@ -35,7 +35,7 @@
         />
       </div>
       <Table>
-        <template #header>
+        <template #head>
           <TableHead :header="table.header" />
         </template>
         <template #body>
@@ -149,7 +149,6 @@ export default {
       });
     },
     filtrar() {
-      console.log(this.filtro);
       this.$store.dispatch('depositos/filtar', {
         id: this.filtro.id,
       });

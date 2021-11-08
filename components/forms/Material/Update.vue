@@ -84,7 +84,7 @@
               </FormSelect>
             </div>
             <!--Cantidad -->
-            <FormCounter :cant="form.cantidad" @updateCant="updateCantidad" />
+            <FormCounter :cant="form.cantidad" @cambio="updateCantidad" />
           </div>
         </div>
       </div>

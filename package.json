@@ -16,6 +16,7 @@
     "deep-object-diff": "^1.1.0",
     "moment": "^2.29.1",
     "nuxt": "^2.13.3",
+    "vue2-datepicker": "^3.10.2",
     "vuelidate": "^0.7.6",
     "vuelidate-messages": "^0.1.2"
   },
@@ -27,9 +28,10 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-vue": "^7.16.0",
-    "postcss": "^8.1.10",
+    "postcss": "^8.3.11",
     "postcss-import": "^13.0.0",
     "postcss-loader": "^4.1.0",
+    "postcss-nested": "^5.0.6",
     "postcss-url": "^10.1.1",
     "prettier": "2.4.0"
   }

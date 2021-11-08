@@ -41,7 +41,7 @@
     </div>
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
-        <template #header>
+        <template #head>
           <TableHead :header="table.header" />
         </template>
         <template #body>
@@ -153,7 +153,6 @@ export default {
       }
     },
     filtrar() {
-      console.log(this.filtro);
       this.$store.dispatch('users/filtar', {
         contenido: this.filtro.contenido,
         id: this.filtro.id,

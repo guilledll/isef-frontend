@@ -29,8 +29,7 @@ export const mutations = {
   },
   FILTRAR_USUARIOS(state, filtrados) {
     state.filtrados = filtrados;
-    console.log(filtrados);
-  }
+  },
 };
 
 export const actions = {
@@ -72,27 +71,24 @@ export const actions = {
     });
   },
   filtar(context, { contenido, id }) {
-    let filtrado = context.state.users.filter(user =>
-      user[contenido] == id
-    );
+    let filtrado = context.state.users.filter((user) => user[contenido] == id);
     context.commit('FILTRAR_USUARIOS', filtrado);
-  }
-
-
+  },
 };
 
-export const
-  getters = {
-    rolesConUsuarios(state) {
-      let rolesConUsuarios = [];
-      state.roles.forEach((rol) => {
-        if (state.users.some(u => u.rol == rol)) {
-          rolesConUsuarios.push(rol);
-        }
-      });
-      return rolesConUsuarios;
-    },
-    conRol: state => rol => {
-      return state.users.filter(user => { return user.rol == rol });
-    }
-  }
+export const getters = {
+  rolesConUsuarios(state) {
+    let rolesConUsuarios = [];
+    state.roles.forEach((rol) => {
+      if (state.users.some((u) => u.rol == rol)) {
+        rolesConUsuarios.push(rol);
+      }
+    });
+    return rolesConUsuarios;
+  },
+  conRol: (state) => (rol) => {
+    return state.users.filter((user) => {
+      return user.rol == rol;
+    });
+  },
+};

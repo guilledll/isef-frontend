@@ -1,22 +1,22 @@
 <template>
-  <div class="custom-number-input h-10 w-32">
-    <p class="mb-3">Cambiar cantidad.</p>
-    <div
-      class="flex flex-row h-12 w-full rounded-lg relative bg-transparent mt-1"
-    >
-      <button type="button" class="boton rounded-l" @click="decrement()">
-        <span style="color: red" class="m-auto text-2xl font-thin">−</span>
+  <div class="body">
+    <label for="cantidad" class="form-label font-1" :class="{ 'sr-only': sr }">
+      {{ label }}
+    </label>
+    <div class="counter">
+      <button type="button" class="boton minus" @click="restar">
+        <GlobalSvg svg="minus" class="h-5 w-5" />
       </button>
-
       <input
+        id="cantidad"
         v-model="cantidad"
+        name="cantidad"
         type="number"
         class="input"
-        name="custom-input-number"
+        disabled
       />
-
-      <button type="button" class="boton rounded-r" @click="increment()">
-        <span style="color: green" class="m-auto text-2xl font-thin">+</span>
+      <button type="button" class="boton plus" @click="sumar">
+        <GlobalSvg svg="plus" class="h-5 w-5" />
       </button>
     </div>
   </div>
@@ -25,7 +25,10 @@
 <script>
 export default {
   props: {
-    cant: { type: Number, default: 0 },
+    cant: { type: Number, default: 1 },
+    maxCant: { type: Number, default: 50 },
+    sr: { type: Boolean, default: true },
+    label: { type: String, default: 'Cantidad' },
   },
   data() {
     return {
@@ -38,14 +41,16 @@ export default {
     });
   },
   methods: {
-    increment() {
-      this.cantidad += 1;
-      this.$emit('updateCant', this.cantidad);
+    sumar() {
+      if (this.cantidad < this.maxCant) {
+        this.cantidad += 1;
+        this.$emit('cambio', this.cantidad);
+      }
     },
-    decrement() {
-      if (this.cantidad > 0) {
+    restar() {
+      if (this.cantidad > 1) {
         this.cantidad -= 1;
-        this.$emit('updateCant', this.cantidad);
+        this.$emit('cambio', this.cantidad);
       }
     },
   },
@@ -56,18 +61,23 @@ export default {
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
-  margin: 0;
 }
-.custom-number-input input:focus {
-  outline: none !important;
-}
-.custom-number-input button:focus {
-  outline: none !important;
-}
-.boton {
-  @apply bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 cursor-pointer outline-none;
-}
-.input {
-  @apply outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold hover:text-black focus:text-black  flex items-center text-gray-700;
+.body {
+  @apply max-w-[140px];
+  .counter {
+    @apply flex items-center justify-center rounded-lg;
+    .boton {
+      @apply h-10 px-3 bg-white cursor-pointer border-t border-b border-gray-300;
+      &.plus {
+        @apply text-green-600 border-r rounded-r-md hover:text-green-700 hover:bg-green-50;
+      }
+      &.minus {
+        @apply text-red-600 border-l rounded-l-md hover:text-red-700 hover:bg-red-50;
+      }
+    }
+    .input {
+      @apply flex items-center w-full h-10 bg-white font-semibold text-center border-t border-b border-gray-300;
+    }
+  }
 }
 </style>

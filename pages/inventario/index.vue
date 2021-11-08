@@ -3,7 +3,7 @@
     <GlobalHeader :title="header.title" :text="header.text" />
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
-        <template #header>
+        <template #head>
           <TableHead :header="table.header" :action="false" />
         </template>
         <template #body>
@@ -50,7 +50,7 @@
       </Table>
     </div>
     <LazyModal v-if="modal">
-      <ModalVerMovimiento @close="modal = !modal" />
+      <InventarioVer @close="modal = !modal" />
     </LazyModal>
   </div>
 </template>

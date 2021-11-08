@@ -1,6 +1,7 @@
 @layer components {
   .form-input-text,
-  .form-select {
+  .form-select,
+  .form-datepicker {
     @apply w-full rounded-md px-3 py-2 border border-gray-300  placeholder-gray-500 text-base text-gray-900 focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10;
     &.error {
       @apply border-red-500 focus:ring-red-400 focus:border-red-400;
@@ -20,5 +21,8 @@
     & > .modal-form-heading {
       @apply text-lg leading-6 font-medium text-gray-900 mb-3 mt-2;
     }
+  }
+  .form-label {
+    @apply inline-block mb-1.5 text-base md:text-lg;
   }
 }

@@ -27,7 +27,7 @@
       Total de <span class="lowercase">{{ title }}</span> {{ count }}
     </p>
     <LazyTable v-if="open && count">
-      <template #header>
+      <template #head>
         <TableHead :header="table" :action="false" />
       </template>
       <template #body>
