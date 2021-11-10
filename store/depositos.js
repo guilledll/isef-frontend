@@ -98,9 +98,15 @@ export const getters = {
       return dep.cantidad_materiales > 0;
     });
   },
+  conReservas(state) {
+    return state.depositos.filter((dep) => {
+      return dep.reservas_count > 0;
+    });
+  },
   deDepartamentoConMateriales: (state) => (id) => {
     return state.depositos.filter((dep) => {
       return dep.departamento_id == id && dep.cantidad_materiales > 0;
     });
   },
+
 };

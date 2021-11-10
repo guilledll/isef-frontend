@@ -204,7 +204,6 @@ export default {
       this.form.cantidad = cantidad;
     },
     updateMaterial() {
-      console.log(this.form);
       if (this.invalid()) return;
       this.$store
         .dispatch('materiales/update', this.form)

@@ -168,7 +168,7 @@
             </FormSelect>
           </div>
         </div>
-        <button class="btn full green" :disabled="!loading">
+        <button class="btn full green" :disabled="loading">
           <span v-if="!loading">Registrarme</span>
           <GlobalSvg v-else class="h-5 w-5 animate-spin" svg="refresh" />
         </button>

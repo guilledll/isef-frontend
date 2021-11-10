@@ -1,6 +1,13 @@
 import api from '@/services/api.service';
 
 export default {
+
+  /**
+ * Devuelve todas las reservas.
+ */
+  index() {
+    return api().get('/api/v1/reservas');
+  },
   /**
    * Devuelve los materiales disponibles.
    * @param {request} data

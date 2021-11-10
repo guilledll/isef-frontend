@@ -2,8 +2,10 @@ import ReservasService from '~/services/reservas.service';
 
 export const state = () => ({
   reservas: [],
+  filtrados: [],
   reserva: null,
   materialesDisponibles: [],
+  estados: [1, 2, 3, 4, 5],
 });
 
 export const mutations = {
@@ -12,6 +14,14 @@ export const mutations = {
   },
   MATERIALES_DISPONIBLES(state, materiales) {
     state.materialesDisponibles = materiales;
+  },
+  GET_ALL_RESERVAS(state, reservas) {
+    state.reservas = reservas;
+  },
+  UPDATE_ESTADO(state, reservas) {
+    state.users = state.reservas.map((user) =>
+      user.ci == reservas.ci ? { ...user, estado: reservas.estado } : user
+    );
   },
   AGREGAR_MATERIAL(state, material) {
     state.reserva.materiales.push({
@@ -37,6 +47,10 @@ export const mutations = {
   CANCELAR_RESERVA(state) {
     state.reserva = null;
   },
+  FILTRAR_RESERVAS(state, filtrados) {
+    state.filtrados = filtrados;
+  },
+
 };
 
 export const actions = {
@@ -47,6 +61,11 @@ export const actions = {
         return mat.cantidad > 0;
       });
       context.commit('MATERIALES_DISPONIBLES', disponibles);
+    });
+  },
+  all(context) {
+    return ReservasService.index().then((res) => {
+      context.commit('GET_ALL_RESERVAS', res.data);
     });
   },
   agregarMaterial(context, material) {
@@ -65,6 +84,19 @@ export const actions = {
   cancelarReserva(context) {
     context.commit('CANCELAR_RESERVA');
   },
+  updateEstado(context, data) {
+    return ReservasService.updateEstado(data.ci, data).then((res) => {
+      context.commit('UPDATE_ESTADO', res.data);
+      context.dispatch('select', res.data);
+      context.dispatch('global/loading', false, { root: true });
+    });
+  },
+  filtar(context, { contenido, id }) {
+    let filtrado = context.state.reservas.filter(
+      (reserva) => reserva[contenido] == id
+    );
+    context.commit('FILTRAR_RESERVAS', filtrado);
+  },
 };
 
 export const getters = {
@@ -73,4 +105,19 @@ export const getters = {
       return mat.id === id;
     });
   },
+  estadosConReserva(state) {
+    let estadosConReserva = [];
+    state.estados.forEach((estado) => {
+      if (state.reservas.some((r) => r.estado == estado)) {
+        estadosConReserva.push(estado);
+      }
+    });
+    return estadosConReserva;
+  },
+  conEstado: (state) => (estado) => {
+    return state.users.filter((user) => {
+      return user.estado == estado;
+    });
+  },
+
 };
