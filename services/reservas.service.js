@@ -22,4 +22,11 @@ export default {
   create(data) {
     return api().post('/api/v1/reservas', data);
   },
+  /**
+ * Muestra la reserva indicada.
+ * @param {int} id
+ */
+  show(id) {
+    return api().get(`/api/v1/reservas/${id}`);
+  },
 };

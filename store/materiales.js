@@ -22,14 +22,14 @@ export const mutations = {
     state.materiales = state.materiales.map((mat) =>
       mat.id == material.id
         ? {
-            ...mat,
-            nombre: material.nombre,
-            deposito: material.deposito,
-            deposito_id: material.deposito_id,
-            cantidad: material.cantidad,
-            categoria_id: material.categoria_id,
-            categoria: material.categoria,
-          }
+          ...mat,
+          nombre: material.nombre,
+          deposito: material.deposito,
+          deposito_id: material.deposito_id,
+          cantidad: material.cantidad,
+          categoria_id: material.categoria_id,
+          categoria: material.categoria,
+        }
         : mat
     );
   },

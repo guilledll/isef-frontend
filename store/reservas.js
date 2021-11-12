@@ -9,6 +9,13 @@ export const state = () => ({
 });
 
 export const mutations = {
+  SELECT_RESERVA(state, reserva) {
+    state.reserva = reserva;
+  },
+  CLEAR_SELECTED(state) {
+    state.material = null;
+    state.movimientos = [];
+  },
   INICIAR_RESERVA(state, reserva) {
     state.reserva = reserva;
   },
@@ -17,6 +24,10 @@ export const mutations = {
   },
   GET_ALL_RESERVAS(state, reservas) {
     state.reservas = reservas;
+  },
+  GET_RESERVA(state, reserva, materiales) {
+    state.reserva = reserva;
+    state.materialesDisponibles = materiales;
   },
   UPDATE_ESTADO(state, reservas) {
     state.users = state.reservas.map((user) =>
@@ -97,6 +108,18 @@ export const actions = {
     );
     context.commit('FILTRAR_RESERVAS', filtrado);
   },
+  select(context, data) {
+    context.commit('SELECT_RESERVA', data);
+  },
+  clear(context) {
+    context.commit('CLEAR_SELECTED');
+  },
+  get(context, id) {
+    return ReservasService.show(id).then((res) => {
+      context.dispatch('select', res.data.reserva);
+      context.commit('MATERIALES_DISPONIBLES', res.data.materiales);
+    });
+  },
 };
 
 export const getters = {
@@ -119,5 +142,4 @@ export const getters = {
       return user.estado == estado;
     });
   },
-
 };

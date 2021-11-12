@@ -94,7 +94,7 @@
               />
               <TableButton
                 type="edit"
-                @click="seleccionarMaterial('mod', material)"
+                @click="seleccionarReserva('mod', reserva)"
               />
             </td>
           </tr>
@@ -102,8 +102,9 @@
       </Table>
     </div>
     <LazyModal v-if="modal.show">
-      <LazyFormEntregarMaterial
+      <LazyFormMaterialEntregar
         v-if="modal.action == 'mod'"
+        :id="reservaSeleccionada"
         @actualizado="updateFiltrados"
         @close="modal.show = !modal.show"
       />
@@ -140,6 +141,7 @@ export default {
       reservas: [],
       contenidoFiltrado: [],
       filtro: { contenido: '', id: 1 },
+      reservaSeleccionada: null,
     };
   },
   computed: {
@@ -163,8 +165,8 @@ export default {
     await this.$store.dispatch('categorias/all');
   },
   methods: {
-    seleccionarMaterial(action, material = null) {
-      if (material) this.$store.dispatch('reservas/select', material);
+    seleccionarReserva(action, reserva = null) {
+      if (reserva) this.reservaSeleccionada = reserva.id;
       if (action != 'view') {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
