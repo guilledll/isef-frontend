@@ -27,6 +27,9 @@
           Hacer reserva
         </button>
       </div>
+      <div class="mt-16 mb-8 md:mt-28">
+        <img class="h-60 w-auto" src="/svg/choose.svg" alt="Reserva" />
+      </div>
     </div>
     <LazyModal v-if="modal.open">
       <LazyFormReservaIniciar v-if="modal.tipo == 1" @close="close" />
