@@ -3,7 +3,7 @@
     <div class="mb-10">
       <div class="flex justify-between">
         <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">
-          {{ usuario.nombre }}
+          {{ usuario.nombre }} {{ usuario.apellido }}
         </h3>
         <div>
           <button class="action-btn" @click="edit">
@@ -23,7 +23,7 @@
         </span>
         {{ usuario.ci }}
       </div>
-      <div class="flex items-center text-lg md:text-xl">
+      <div v-if="usuario.rol != 1" class="flex items-center text-lg md:text-xl">
         <span class="flex items-center mr-1.5 font-semibold text-gray-800">
           <GlobalSvg
             class="h-6 w-6 mr-1 text-purple-600"
@@ -72,7 +72,12 @@
 <script>
 export default {
   layout: 'AppLayout',
-  middleware: 'admin',
+  // Impide ver perfiles de otros usuarios
+  middleware({ route, store, redirect }) {
+    if (store.$auth.user.ci != route.params.ci) {
+      return redirect('/inicio');
+    }
+  },
   data() {
     return {
       open: {
@@ -83,10 +88,7 @@ export default {
   },
   computed: {
     usuario() {
-      return (
-        this.$store.state.users.user ||
-        this.$store.dispatch('users/get', this.$route.params.ci)
-      );
+      return this.$auth.user;
     },
   },
   methods: {
@@ -112,9 +114,6 @@ export default {
           rol = 'Sin asignar';
       }
       return rol;
-    },
-    claseRol(rol) {
-      return `rol-${rol}`;
     },
     async showDetails() {
       if (!this.materiales.length) {
