@@ -91,10 +91,11 @@
 
 <script>
 import FormValidationMixin from '@/mixins/FormValidationMixin';
+import FechaMixin from '@/mixins/FechaMixin';
 import { validationMixin } from 'vuelidate';
 import { required, maxLength, minLength } from 'vuelidate/lib/validators';
 export default {
-  mixins: [validationMixin, FormValidationMixin],
+  mixins: [validationMixin, FormValidationMixin, FechaMixin],
   data() {
     return {
       form: {
@@ -134,15 +135,6 @@ export default {
     reserva() {
       return this.$store.state.reservas.reserva;
     },
-    formatoFecha() {
-      return {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      };
-    },
   },
   methods: {
     confirmarReserva() {
@@ -159,7 +151,7 @@ export default {
     // Devuelve el valor, si es accion la traduce
     datoReserva(key) {
       return key === 'inicio' || key === 'fin'
-        ? this.reserva[key].toLocaleString('es-UY', this.formatoFecha)
+        ? this.formatearFecha(this.reserva[key])
         : this.reserva[key];
     },
   },

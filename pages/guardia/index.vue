@@ -52,7 +52,7 @@
                 :to="`/usuarios/${reserva.user_ci}`"
                 class="text-black hover:text-blue-600 hover:underline"
               >
-                {{ reserva.user_ci }}
+                {{ reserva.user }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
@@ -65,10 +65,10 @@
               </router-link>
             </td>
             <td class="table-td text-gray-500">
-              {{ reserva.inicio }}
+              {{ formatearFecha(reserva.inicio) }}
             </td>
             <td class="table-td text-gray-500">
-              {{ reserva.fin }}
+              {{ formatearFecha(reserva.fin) }}
             </td>
             <td class="table-td" :class="claseEstado(reserva.estado)">
               {{ mostrarEstado(reserva.estado) }}
@@ -110,7 +110,9 @@
 </template>
 
 <script>
+import FechaMixin from '@/mixins/FechaMixin';
 export default {
+  mixins: [FechaMixin],
   layout: 'AppLayout',
   middleware: 'adminOguardia',
   data() {
@@ -150,7 +152,6 @@ export default {
     await this.$store.dispatch('reservas/all');
     this.reservas = this.reservasAll;
     await this.$store.dispatch('depositos/all');
-    await this.$store.dispatch('categorias/all');
   },
   methods: {
     seleccionarReserva(action, reserva = null) {
@@ -196,7 +197,7 @@ export default {
           estado = 'Pendiente';
           break;
         case 2:
-          estado = 'Validada';
+          estado = 'Aprobada';
           break;
         case 3:
           estado = 'Activa';
