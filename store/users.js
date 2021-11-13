@@ -70,7 +70,7 @@ export const actions = {
       context.commit('CLEAR_SELECTED');
     });
   },
-  filtar(context, { contenido, id }) {
+  filtrar(context, { contenido, id }) {
     let filtrado = context.state.users.filter((user) => user[contenido] == id);
     context.commit('FILTRAR_USUARIOS', filtrado);
   },

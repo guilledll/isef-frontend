@@ -15,6 +15,7 @@ export const mutations = {
   CLEAR_SELECTED(state) {
     state.material = null;
     state.movimientos = [];
+    state.materialesDisponibles = [];
   },
   INICIAR_RESERVA(state, reserva) {
     state.reserva = reserva;
@@ -61,7 +62,6 @@ export const mutations = {
   FILTRAR_RESERVAS(state, filtrados) {
     state.filtrados = filtrados;
   },
-
 };
 
 export const actions = {
@@ -102,7 +102,7 @@ export const actions = {
       context.dispatch('global/loading', false, { root: true });
     });
   },
-  filtar(context, { contenido, id }) {
+  filtrar(context, { contenido, id }) {
     let filtrado = context.state.reservas.filter(
       (reserva) => reserva[contenido] == id
     );
@@ -114,9 +114,8 @@ export const actions = {
   clear(context) {
     context.commit('CLEAR_SELECTED');
   },
-  get(context, id) {
+  getMateriales(context, id) {
     return ReservasService.show(id).then((res) => {
-      context.dispatch('select', res.data.reserva);
       context.commit('MATERIALES_DISPONIBLES', res.data.materiales);
     });
   },
