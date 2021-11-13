@@ -162,7 +162,6 @@ export default {
     async iniciarReserva() {
       if (this.invalid()) return;
       if (this.mas24Horas) this.form.validar = true;
-      this.ajustarHoras();
       await this.$store.dispatch('reservas/iniciar', this.form);
       this.$emit('close');
     },
@@ -196,10 +195,6 @@ export default {
     setFechaFin(value) {
       this.form.fin = value;
       this.fieldReset(this.$v.form.fin);
-    },
-    ajustarHoras() {
-      this.form.inicio.setHours(this.form.inicio.getHours() - 3);
-      this.form.fin.setHours(this.form.fin.getHours() - 3);
     },
   },
   validations: {
