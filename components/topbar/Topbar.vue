@@ -161,7 +161,7 @@ export default {
         },
         {
           text: 'Perfil',
-          path: '/perfil',
+          path: `/perfil/${this.user.ci}`,
           selected: this.selected('perfil'),
           show: true,
         },

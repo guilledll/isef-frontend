@@ -2,6 +2,7 @@ import inventarioService from '@/services/inventario.service';
 
 export const state = () => ({
   inventario: [],
+  filtrados: [],
   movimiento: null,
 });
 
@@ -27,6 +28,9 @@ export const mutations = {
     state.inventario.map((inv, index) => {
       inv.id == id ? state.inventario.splice(index, 1) : inv;
     });
+  },
+  FILTRAR_MOVIMIENTOS(state, filtrados) {
+    state.filtrados = filtrados;
   },
 };
 
@@ -62,6 +66,12 @@ export const actions = {
       context.commit('DEL_MOVIMIENTO', id);
       context.commit('CLEAR_SELECTED');
     });
+  },
+  filtrar(context, { id }) {
+    let filtrado = context.state.inventario.filter((movimiento) => {
+      return movimiento.deposito_id == id;
+    });
+    context.commit('FILTRAR_MOVIMIENTOS', filtrado);
   },
 };
 

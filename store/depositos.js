@@ -79,7 +79,7 @@ export const actions = {
       context.commit('GET_MATERIALES', res.data);
     });
   },
-  filtar(context, { id }) {
+  filtrar(context, { id }) {
     let filtrado = context.state.depositos.filter((deposito) => {
       return deposito.departamento_id == id;
     });
@@ -96,6 +96,11 @@ export const getters = {
   conMateriales(state) {
     return state.depositos.filter((dep) => {
       return dep.cantidad_materiales > 0;
+    });
+  },
+  conReservas(state) {
+    return state.depositos.filter((dep) => {
+      return dep.reservas_count > 0;
     });
   },
   deDepartamentoConMateriales: (state) => (id) => {

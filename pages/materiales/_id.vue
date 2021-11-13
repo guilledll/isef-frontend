@@ -1,8 +1,5 @@
 <template>
   <div class="page-container">
-    <div class="page-side">
-      <button class="btn blue side"></button>
-    </div>
     <div class="mb-10">
       <div class="flex justify-between">
         <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">

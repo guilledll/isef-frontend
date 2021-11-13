@@ -1,10 +1,16 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <div>
+    <div class="mb-6">
+      <hr class="my-4" />
+      <label for="filtro" class="font-1">
+        <GlobalSvg class="h-6 w-6 mr-1 inline text-blue-500" svg="search" />
+        Filtrar usuarios
+      </label>
       <FormSelect
         id="departamento_id"
         v-model.trim="filtro.id"
+        class="mt-2 mb-1"
         name="departamento_id"
         @change="filtrar"
       >
@@ -20,24 +26,18 @@
           </option>
         </template>
       </FormSelect>
-      <label for="departamento">Departamento</label>
-      <input
-        id="departamento_id"
-        v-model="filtro.contenido"
-        name="filtro"
-        type="radio"
-        value="departamento_id"
-        @change="cambiarFiltro"
-      />
-      <label for="rol">Rol</label>
-      <input
-        id="rol"
-        v-model="filtro.contenido"
-        name="filtro"
-        type="radio"
-        value="rol"
-        @change="cambiarFiltro"
-      />
+      <div v-for="(f, i) in inputs" :key="`value-${i}`" class="inline mr-2">
+        <input
+          :id="`filtro-${i}`"
+          v-model="filtro.contenido"
+          :name="`filtro-${i}`"
+          type="radio"
+          :checked="f.value == filtro.contenido"
+          :value="f.value"
+          @change="cambiarFiltro"
+        />
+        <label :for="`filtro-${i}`">{{ f.text }}</label>
+      </div>
     </div>
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
@@ -122,7 +122,11 @@ export default {
       },
       usuarios: [],
       contenidoFiltrado: [],
-      filtro: { contenido: '', id: 1 },
+      filtro: { contenido: 'departamento_id', id: 1 },
+      inputs: [
+        { value: 'departamento_id', text: 'Departamento' },
+        { value: 'rol', text: 'Rol' },
+      ],
     };
   },
   computed: {
@@ -141,8 +145,8 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('users/all');
-    this.usuarios = this.users;
     await this.$store.dispatch('departamentos/all');
+    this.cambiarFiltro();
   },
   methods: {
     seleccionarUsuario(action, user = null) {
@@ -153,18 +157,17 @@ export default {
       }
     },
     filtrar() {
-      this.$store.dispatch('users/filtar', {
+      this.$store.dispatch('users/filtrar', {
         contenido: this.filtro.contenido,
         id: this.filtro.id,
       });
       this.usuarios = this.filtrados;
     },
     cambiarFiltro() {
-      if (this.filtro.contenido === 'departamento_id') {
-        this.contenidoFiltrado = this.departamentos;
-      } else {
-        this.contenidoFiltrado = this.roles;
-      }
+      this.contenidoFiltrado =
+        this.filtro.contenido === 'departamento_id'
+          ? this.departamentos
+          : (this.contenidoFiltrado = this.roles);
       this.filtro.id = 0; //Limpia select
       this.usuarios = this.users;
     },

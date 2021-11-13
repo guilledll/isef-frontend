@@ -1,7 +1,7 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <!--Filtrar por deposito/categoria-->
+    <!--Filtrar por deposito/estado-->
     <div>
       <FormSelect
         id="deposito_id"
@@ -12,11 +12,12 @@
         <template #options>
           <option value="0">Seleccionar</option>
           <option
-            v-for="contenido in contenidoFiltrado"
-            :key="contenido.id"
-            :value="contenido.id"
+            v-for="(contenido, index) in contenidoFiltrado"
+            :key="index"
+            :value="contenido.id || contenido"
           >
-            {{ contenido.nombre }}
+            <span v-if="contenido.id"> {{ contenido.nombre }} </span>
+            <span v-else> {{ mostrarEstado(contenido) }}</span>
           </option>
         </template>
       </FormSelect>
@@ -29,84 +30,71 @@
         value="deposito_id"
         @change="cambiarFiltro"
       />
-      <label for="categoria">Categoria</label>
+      <label for="estado">Estado</label>
       <input
-        id="categoria"
+        id="estado"
         v-model="filtro.contenido"
         name="filtro"
         type="radio"
-        value="categoria_id"
+        value="estado"
         @change="cambiarFiltro"
       />
     </div>
     <div class="flex flex-col gap-3 lg:flex-row">
-      <div class="table-actions">
-        <GlobalCallToAction
-          text="Agregar <b>materiales</b>."
-          svg="cube"
-          @click="$router.push('/materiales/agregar')"
-        />
-        <GlobalCallToAction
-          text="Ver <b>categorías</b> de materiales."
-          type="view"
-          svg="clipboard-list"
-          @click="$router.push('/categorias')"
-        />
-        <GlobalCallToAction
-          text="Mover <b> materiales</b> de depositos"
-          type="view"
-          svg="clipboard-list"
-          @click="$router.push('/movimientos')"
-        />
-      </div>
       <Table>
         <template #head>
           <TableHead :header="table.header" />
         </template>
         <template #body>
-          <tr v-for="material in materiales" :key="material.id">
+          <tr v-for="reserva in reservas" :key="reserva.id">
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/materiales/${material.id}`"
+                :to="`/reservas/${reserva.id}`"
                 class="text-black hover:text-blue-600 hover:underline"
-                @click.native="seleccionarMaterial('view', material)"
+                @click.native="seleccionarReserva('view', reserva)"
               >
-                {{ material.nombre }}
+                {{ reserva.user_ci }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/categorias/${material.categoria_id}`"
+                :to="`/categorias/${reserva.categoria_id}`"
                 class="hover:text-blue-600 hover:underline"
-                @click.native="verCategoria(material.categoria_id)"
+                @click.native="verCategoria(reserva.categoria_id)"
               >
-                {{ material.categoria }}
+                {{ reserva.guardia_ci }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/depositos/${material.deposito_id}`"
+                :to="`/depositos/${reserva.deposito_id}`"
                 class="hover:text-blue-600 hover:underline"
-                @click.native="verDeposito(material.deposito_id)"
+                @click.native="verDeposito(reserva.deposito_id)"
               >
-                {{ material.deposito }}
+                {{ reserva.deposito }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
-              {{ material.cantidad || 0 }}
+              {{ reserva.inicio }}
+            </td>
+            <td class="table-td text-gray-500">
+              {{ reserva.fin }}
+            </td>
+            <td class="table-td text-gray-500">
+              {{ mostrarEstado(reserva.estado) }}
             </td>
             <td class="table-td text-right">
               <TableButton
                 type="view"
-                @click="$router.push(`/materiales/${material.id}`)"
+                @click="$router.push(`/reservas/${reserva.id}`)"
               />
               <TableButton
                 type="delete"
-                @click="seleccionarMaterial('del', material)"
+                @click="seleccionarReserva('del', reserva)"
               />
               <TableButton
                 type="edit"
-                @click="seleccionarMaterial('mod', material)"
+                @click="seleccionarReserva('mod', reserva)"
               />
             </td>
           </tr>
@@ -114,8 +102,9 @@
       </Table>
     </div>
     <LazyModal v-if="modal.show">
-      <LazyFormMaterialUpdate
+      <LazyFormMaterialEntregar
         v-if="modal.action == 'mod'"
+        :id="reservaSeleccionada"
         @actualizado="updateFiltrados"
         @close="modal.show = !modal.show"
       />
@@ -138,45 +127,46 @@ export default {
   data() {
     return {
       pageHeader: {
-        materiales: [],
-        title: 'Materiales',
-        text: 'Materiales registrados en el sistema. Ejemplo de materiales: Pelotas, Chalecos, Conos, etc.',
+        reservas: [],
+        title: 'Reservas',
+        text: 'Reservas registradas en el sistema.',
       },
       table: {
-        header: ['Nombre', 'Categoría', 'Deposito', 'Cantidad'],
+        header: ['Ci', 'Guardia', 'Deposito', 'inicio', 'fin', 'estado'],
       },
       modal: {
         show: false,
         action: '',
       },
-      materiales: [],
+      reservas: [],
       contenidoFiltrado: [],
       filtro: { contenido: '', id: 1 },
+      reservaSeleccionada: null,
     };
   },
   computed: {
-    categorias() {
-      return this.$store.getters['categorias/conMateriales'];
-    },
-    materialesAll() {
-      return this.$store.state.materiales.materiales;
+    reservasAll() {
+      return this.$store.state.reservas.reservas;
     },
     filtrados() {
-      return this.$store.state.materiales.filtrados;
+      return this.$store.state.reservas.filtrados;
     },
     depositos() {
-      return this.$store.getters['depositos/conMateriales'];
+      return this.$store.getters['depositos/conReservas'];
+    },
+    estados() {
+      return this.$store.getters['reservas/estadosConReserva'];
     },
   },
   async mounted() {
-    await this.$store.dispatch('materiales/all');
-    this.materiales = this.materialesAll;
+    await this.$store.dispatch('reservas/all');
+    this.reservas = this.reservasAll;
     await this.$store.dispatch('depositos/all');
     await this.$store.dispatch('categorias/all');
   },
   methods: {
-    seleccionarMaterial(action, material = null) {
-      if (material) this.$store.dispatch('materiales/select', material);
+    seleccionarReserva(action, reserva = null) {
+      if (reserva) this.reservaSeleccionada = reserva.id;
       if (action != 'view') {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
@@ -193,24 +183,46 @@ export default {
       });
     },
     filtrar() {
-      this.$store.dispatch('materiales/filtrar', {
+      this.$store.dispatch('reservas/filtrar', {
         contenido: this.filtro.contenido,
         id: this.filtro.id,
       });
-      this.materiales = this.filtrados;
+      this.reservas = this.filtrados;
     },
     cambiarFiltro() {
       if (this.filtro.contenido === 'deposito_id') {
         this.contenidoFiltrado = this.depositos;
       } else {
-        this.contenidoFiltrado = this.categorias;
+        this.contenidoFiltrado = this.estados;
       }
       this.filtro.id = 0; //Limpia select
-      this.materiales = this.materialesAll;
+      this.reservas = this.reservasAll;
     },
     updateFiltrados() {
       this.modal.show = false;
-      this.materiales = this.materialesAll;
+      this.reservas = this.reservasAll;
+    },
+    mostrarEstado(estado) {
+      switch (parseInt(estado)) {
+        case 1:
+          estado = 'Pendiente';
+          break;
+        case 2:
+          estado = 'Validada';
+          break;
+        case 3:
+          estado = 'Activa';
+          break;
+        case 4:
+          estado = 'Finalizada';
+          break;
+        default:
+          estado = 'Cancelada';
+      }
+      return estado;
+    },
+    claseEstado(estado) {
+      return `estado-${estado}`;
     },
   },
 };

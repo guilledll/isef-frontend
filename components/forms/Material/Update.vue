@@ -83,6 +83,23 @@
                 </template>
               </FormSelect>
             </div>
+            <div>
+              <FormTextarea
+                id="nota"
+                v-model.trim="form.nota"
+                name="nota"
+                placeholder="Notas (opcional)"
+                :required="false"
+                :error="hasError($v.form.nota, 'nota')"
+                @input="fieldReset($v.form.nota, 'nota')"
+                @blur="touch($v.form.nota)"
+              >
+                <LazyFormError
+                  v-if="hasError($v.form.nota, 'nota')"
+                  :text="errorText($v.form.nota, 'nota')"
+                />
+              </FormTextarea>
+            </div>
             <!--Cantidad -->
             <FormCounter :cant="form.cantidad" @cambio="updateCantidad" />
           </div>
@@ -116,6 +133,7 @@ export default {
         categoria_id: '',
         cantidad: 0,
         usuario_ci: this.$auth.user.ci,
+        nota: '',
       },
     };
   },
@@ -146,6 +164,7 @@ export default {
     this.form.deposito_id = this.material.deposito_id;
     this.form.categoria_id = this.material.categoria_id;
     this.form.cantidad = this.material.cantidad;
+    this.form.nota = this.material.nota;
   },
   validations: {
     form: {
@@ -158,22 +177,28 @@ export default {
         maxLength: maxLength(50),
       },
       deposito_id: {
+        required,
         integer,
       },
       categoria_id: {
+        required,
         integer,
       },
       cantidad: {
+        required,
         integer,
+      },
+      nota: {
+        maxLength: maxLength(255),
       },
     },
   },
   methods: {
     selectDeposito(value) {
-      this.form.deposito_id = value;
+      this.form.deposito = value;
     },
     selectCategoria(value) {
-      this.form.categoria_id = value;
+      this.form.categoria = value;
     },
     updateCantidad(cantidad) {
       this.form.cantidad = cantidad;
@@ -182,7 +207,13 @@ export default {
       if (this.invalid()) return;
       this.$store
         .dispatch('materiales/update', this.form)
-        .then(() => this.$emit('close'))
+        .then(() => {
+          if (this.isView) {
+            this.$emit('close');
+          } else {
+            this.$emit('actualizado');
+          }
+        })
         .catch((e) => (this.errors = e.response.data.errors));
     },
     closeModal() {
