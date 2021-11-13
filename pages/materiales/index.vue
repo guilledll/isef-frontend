@@ -193,7 +193,7 @@ export default {
       });
     },
     filtrar() {
-      this.$store.dispatch('materiales/filtar', {
+      this.$store.dispatch('materiales/filtrar', {
         contenido: this.filtro.contenido,
         id: this.filtro.id,
       });

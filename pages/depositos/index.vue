@@ -1,25 +1,13 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <div>
-      <FormSelect
-        id="departamento_id"
-        v-model.trim="filtro.id"
-        name="departamento_id"
-        @change="filtrar"
-      >
-        <template #options>
-          <option value="0">Seleccionar departamento</option>
-          <option
-            v-for="departamento in departamentos"
-            :key="departamento.id"
-            :value="departamento.id"
-          >
-            {{ departamento.nombre }}
-          </option>
-        </template>
-      </FormSelect>
-    </div>
+    <GlobalSearch
+      :data="departamentos"
+      title="departamento"
+      store="depositos"
+      @filtrar="filtrar"
+      @limpiar="limpiar"
+    />
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
         <GlobalCallToAction
@@ -115,7 +103,6 @@ export default {
         action: '',
       },
       depositos: [],
-      filtro: { id: 1 },
     };
   },
   computed: {
@@ -149,10 +136,10 @@ export default {
       });
     },
     filtrar() {
-      this.$store.dispatch('depositos/filtar', {
-        id: this.filtro.id,
-      });
       this.depositos = this.filtrados;
+    },
+    limpiar() {
+      this.depositos = this.depositosAll;
     },
   },
 };

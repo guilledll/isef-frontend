@@ -22,14 +22,14 @@ export const mutations = {
     state.materiales = state.materiales.map((mat) =>
       mat.id == material.id
         ? {
-          ...mat,
-          nombre: material.nombre,
-          deposito: material.deposito,
-          deposito_id: material.deposito_id,
-          cantidad: material.cantidad,
-          categoria_id: material.categoria_id,
-          categoria: material.categoria,
-        }
+            ...mat,
+            nombre: material.nombre,
+            deposito: material.deposito,
+            deposito_id: material.deposito_id,
+            cantidad: material.cantidad,
+            categoria_id: material.categoria_id,
+            categoria: material.categoria,
+          }
         : mat
     );
   },
@@ -82,7 +82,7 @@ export const actions = {
       context.commit('GET_MOVIMIENTOS', res.data);
     });
   },
-  filtar(context, { contenido, id }) {
+  filtrar(context, { contenido, id }) {
     let filtrado = context.state.materiales.filter(
       (material) => material[contenido] == id
     );

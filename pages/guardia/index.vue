@@ -49,20 +49,10 @@
           <tr v-for="reserva in reservas" :key="reserva.id">
             <td class="table-td text-gray-500">
               <router-link
-                :to="`/reservas/${reserva.id}`"
+                :to="`/usuarios/${reserva.user_ci}`"
                 class="text-black hover:text-blue-600 hover:underline"
-                @click.native="seleccionarReserva('view', reserva)"
               >
                 {{ reserva.user_ci }}
-              </router-link>
-            </td>
-            <td class="table-td text-gray-500">
-              <router-link
-                :to="`/categorias/${reserva.categoria_id}`"
-                class="hover:text-blue-600 hover:underline"
-                @click.native="verCategoria(reserva.categoria_id)"
-              >
-                {{ reserva.guardia_ci }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
@@ -80,7 +70,7 @@
             <td class="table-td text-gray-500">
               {{ reserva.fin }}
             </td>
-            <td class="table-td text-gray-500">
+            <td class="table-td" :class="claseEstado(reserva.estado)">
               {{ mostrarEstado(reserva.estado) }}
             </td>
             <td class="table-td text-right">
@@ -104,7 +94,6 @@
     <LazyModal v-if="modal.show">
       <LazyFormMaterialEntregar
         v-if="modal.action == 'mod'"
-        :id="reservaSeleccionada"
         @actualizado="updateFiltrados"
         @close="modal.show = !modal.show"
       />
@@ -112,10 +101,10 @@
         v-else-if="modal.action == 'add'"
         @close="modal.show = !modal.show"
       />
-      <LazyFormMaterialDelete
+      <!-- <LazyFormMaterialDelete
         v-else-if="modal.action == 'del'"
         @close="modal.show = !modal.show"
-      />
+      /> -->
     </LazyModal>
   </div>
 </template>
@@ -123,7 +112,7 @@
 <script>
 export default {
   layout: 'AppLayout',
-  middleware: 'admin',
+  middleware: 'adminOguardia',
   data() {
     return {
       pageHeader: {
@@ -132,7 +121,7 @@ export default {
         text: 'Reservas registradas en el sistema.',
       },
       table: {
-        header: ['Ci', 'Guardia', 'Deposito', 'inicio', 'fin', 'estado'],
+        header: ['Usuario', 'Deposito', 'inicio', 'fin', 'estado'],
       },
       modal: {
         show: false,
@@ -141,7 +130,6 @@ export default {
       reservas: [],
       contenidoFiltrado: [],
       filtro: { contenido: '', id: 1 },
-      reservaSeleccionada: null,
     };
   },
   computed: {
@@ -166,7 +154,7 @@ export default {
   },
   methods: {
     seleccionarReserva(action, reserva = null) {
-      if (reserva) this.reservaSeleccionada = reserva.id;
+      if (reserva) this.$store.dispatch('reservas/select', reserva);
       if (action != 'view') {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
@@ -183,7 +171,7 @@ export default {
       });
     },
     filtrar() {
-      this.$store.dispatch('reservas/filtar', {
+      this.$store.dispatch('reservas/filtrar', {
         contenido: this.filtro.contenido,
         id: this.filtro.id,
       });
@@ -227,3 +215,21 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss" scoped>
+.estado-1 {
+  @apply text-yellow-600;
+}
+.estado-2 {
+  @apply text-green-600;
+}
+.estado-3 {
+  @apply text-purple-600;
+}
+.estado-4 {
+  @apply text-gray-600;
+}
+.estado-5 {
+  @apply text-red-600;
+}
+</style>

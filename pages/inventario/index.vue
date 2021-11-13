@@ -138,7 +138,7 @@ export default {
       this.modal = true;
     },
     filtrar() {
-      this.$store.dispatch('inventario/filtar', {
+      this.$store.dispatch('inventario/filtrar', {
         id: this.filtro.id,
       });
 

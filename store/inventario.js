@@ -31,7 +31,7 @@ export const mutations = {
   },
   FILTRAR_MOVIMIENTOS(state, filtrados) {
     state.filtrados = filtrados;
-  }
+  },
 };
 
 export const actions = {
@@ -67,13 +67,12 @@ export const actions = {
       context.commit('CLEAR_SELECTED');
     });
   },
-  filtar(context, { id }) {
-    let filtrado = context.state.inventario.filter(movimiento => {
+  filtrar(context, { id }) {
+    let filtrado = context.state.inventario.filter((movimiento) => {
       return movimiento.deposito_id == id;
-    }
-    );
+    });
     context.commit('FILTRAR_MOVIMIENTOS', filtrado);
-  }
+  },
 };
 
 export const getters = {};

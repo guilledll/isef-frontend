@@ -183,7 +183,7 @@ export default {
       });
     },
     filtrar() {
-      this.$store.dispatch('reservas/filtar', {
+      this.$store.dispatch('reservas/filtrar', {
         contenido: this.filtro.contenido,
         id: this.filtro.id,
       });

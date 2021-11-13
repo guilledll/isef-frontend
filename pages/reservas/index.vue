@@ -41,6 +41,11 @@
 <script>
 export default {
   layout: 'AppLayout',
+  middleware({ store, redirect }) {
+    if (store.$auth.user.rol === 2) {
+      return redirect('/guardia');
+    }
+  },
   data() {
     return {
       pageHeader: {
