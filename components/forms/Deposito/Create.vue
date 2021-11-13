@@ -98,12 +98,15 @@ export default {
     },
   },
   methods: {
-    createInforme() {
+    createDeposito() {
       if (this.invalid()) return;
       this.$store
-        .dispatch('materialesPerdidos/create', this.form)
+        .dispatch('depositos/create', this.form)
         .then(() => this.$emit('close'))
         .catch((e) => (this.errors = e.response.data.errors));
+    },
+    selectDepartamento(value) {
+      this.form.departamento = value;
     },
   },
 };
