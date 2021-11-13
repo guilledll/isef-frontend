@@ -86,16 +86,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('reservas/get', this.id);
-    this.form.id = this.reserva.id;
-    this.form.user = this.reserva.user;
-    this.form.user_ci = this.reserva.user_ci;
-    this.form.guardia_ci = this.reserva.guardia_ci;
-    this.form.deposito = this.reserva.deposito;
-    this.form.inicio = this.reserva.inicio;
-    this.form.fin = this.reserva.fin;
-    this.form.estado = this.reserva.estado;
-    this.form.nota_usuario = this.reserva.nota_usuario;
-    this.form.material = this.reserva.material_id;
+
   },
   validations: {
     form: {
