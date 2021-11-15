@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-8">
+  <div class="mb-6">
     <hr class="my-4" />
     <label for="filtro" class="font-1">
       <GlobalSvg class="h-6 w-6 mr-1 inline text-blue-500" svg="search" />

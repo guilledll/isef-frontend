@@ -1,8 +1,10 @@
 <template>
   <div>
+    <LazyGlobalAlert v-if="entregado.show" color="green" class="my-4">
+      La reserva nro #{{ entregado.id }} se marcó como entregada.
+    </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <!--Filtrar por deposito/estado-->
-    <div>
+    <div class="mb-4">
       <FormSelect
         id="deposito_id"
         v-model.trim="filtro.id"
@@ -40,72 +42,38 @@
         @change="cambiarFiltro"
       />
     </div>
-    <div class="flex flex-col gap-3 lg:flex-row">
-      <Table>
-        <template #head>
-          <TableHead :header="table.header" />
-        </template>
-        <template #body>
-          <tr v-for="reserva in reservas" :key="reserva.id">
-            <td class="table-td text-gray-500">
-              <router-link
-                :to="`/usuarios/${reserva.user_ci}`"
-                class="text-black hover:text-blue-600 hover:underline"
-              >
-                {{ reserva.user }}
-              </router-link>
-            </td>
-            <td class="table-td text-gray-500">
-              <router-link
-                :to="`/depositos/${reserva.deposito_id}`"
-                class="hover:text-blue-600 hover:underline"
-                @click.native="verDeposito(reserva.deposito_id)"
-              >
-                {{ reserva.deposito }}
-              </router-link>
-            </td>
-            <td class="table-td text-gray-500">
-              {{ formatearFecha(reserva.inicio) }}
-            </td>
-            <td class="table-td text-gray-500">
-              {{ formatearFecha(reserva.fin) }}
-            </td>
-            <td class="table-td" :class="claseEstado(reserva.estado)">
-              {{ mostrarEstado(reserva.estado) }}
-            </td>
-            <td class="table-td text-right">
-              <TableButton
-                type="view"
-                @click="$router.push(`/reservas/${reserva.id}`)"
-              />
-              <TableButton
-                type="delete"
-                @click="seleccionarReserva('del', reserva)"
-              />
-              <TableButton
-                type="edit"
-                @click="seleccionarReserva('mod', reserva)"
-              />
-            </td>
-          </tr>
-        </template>
-      </Table>
-    </div>
-    <LazyModal v-if="modal.show">
-      <LazyFormMaterialEntregar
-        v-if="modal.action == 'mod'"
-        @actualizado="updateFiltrados"
-        @close="modal.show = !modal.show"
-      />
-      <LazyFormMaterialCreate
-        v-else-if="modal.action == 'add'"
-        @close="modal.show = !modal.show"
-      />
-      <!-- <LazyFormMaterialDelete
-        v-else-if="modal.action == 'del'"
-        @close="modal.show = !modal.show"
-      /> -->
-    </LazyModal>
+    <Table>
+      <template #head>
+        <TableHead :header="table.header" />
+      </template>
+      <template #body>
+        <tr
+          v-for="reserva in reservas"
+          :key="reserva.id"
+          class="cursor-pointer"
+          @click="$router.push(`/reservas/${reserva.id}`)"
+        >
+          <td class="table-td text-gray-800">
+            {{ reserva.user }}
+          </td>
+          <td class="table-td text-gray-500">
+            {{ reserva.deposito }}
+          </td>
+          <td class="table-td text-gray-500">
+            {{ formatearFecha(reserva.inicio) }}
+          </td>
+          <td class="table-td text-gray-500">
+            {{ formatearFecha(reserva.fin) }}
+          </td>
+          <td class="table-td" :class="`estado-${reserva.estado}`">
+            {{ mostrarEstado(reserva.estado) }}
+          </td>
+          <td class="table-td text-right">
+            <TableButton type="view" />
+          </td>
+        </tr>
+      </template>
+    </Table>
   </div>
 </template>
 
@@ -118,7 +86,6 @@ export default {
   data() {
     return {
       pageHeader: {
-        reservas: [],
         title: 'Reservas',
         text: 'Reservas registradas en el sistema.',
       },
@@ -128,6 +95,10 @@ export default {
       modal: {
         show: false,
         action: '',
+      },
+      entregado: {
+        show: false,
+        id: null,
       },
       reservas: [],
       contenidoFiltrado: [],
@@ -152,6 +123,7 @@ export default {
     await this.$store.dispatch('reservas/all');
     this.reservas = this.reservasAll;
     await this.$store.dispatch('depositos/all');
+    this.verificaEntregado();
   },
   methods: {
     seleccionarReserva(action, reserva = null) {
@@ -159,6 +131,13 @@ export default {
       if (action != 'view') {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
+      }
+    },
+    verificaEntregado() {
+      let ent = this.$route.query.ent;
+      if (ent) {
+        this.entregado.show = true;
+        this.entregado.id = ent;
       }
     },
     verDeposito(dep) {
@@ -184,7 +163,7 @@ export default {
       } else {
         this.contenidoFiltrado = this.estados;
       }
-      this.filtro.id = 0; //Limpia select
+      this.filtro.id = 0;
       this.reservas = this.reservasAll;
     },
     updateFiltrados() {
@@ -194,13 +173,13 @@ export default {
     mostrarEstado(estado) {
       switch (parseInt(estado)) {
         case 1:
-          estado = 'Pendiente';
+          estado = 'Activa';
           break;
         case 2:
           estado = 'Aprobada';
           break;
         case 3:
-          estado = 'Activa';
+          estado = 'Pendiente';
           break;
         case 4:
           estado = 'Finalizada';
@@ -210,27 +189,6 @@ export default {
       }
       return estado;
     },
-    claseEstado(estado) {
-      return `estado-${estado}`;
-    },
   },
 };
 </script>
-
-<style lang="postcss" scoped>
-.estado-1 {
-  @apply text-yellow-600;
-}
-.estado-2 {
-  @apply text-green-600;
-}
-.estado-3 {
-  @apply text-purple-600;
-}
-.estado-4 {
-  @apply text-gray-600;
-}
-.estado-5 {
-  @apply text-red-600;
-}
-</style>
