@@ -18,7 +18,10 @@
     >
       <div class="flex items-center text-lg md:text-xl">
         <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg class="h-6 w-6 mr-1 text-indigo-600" svg="user" />
+          <GlobalSvg
+            class="h-6 w-6 mr-1 text-indigo-600"
+            svg="identification"
+          />
           Ci:
         </span>
         {{ usuario.ci }}

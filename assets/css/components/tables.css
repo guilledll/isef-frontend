@@ -4,6 +4,21 @@
   }
   .table-td {
     @apply px-3 py-2 text-sm whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[180px] md:px-4 md:py-2.5 md:text-base;
+    &.estado-1 {
+      @apply text-purple-600;
+    }
+    &.estado-2 {
+      @apply text-green-600;
+    }
+    &.estado-3 {
+      @apply text-yellow-600;
+    }
+    &.estado-4 {
+      @apply text-gray-600;
+    }
+    &.estado-5 {
+      @apply text-red-600;
+    }
   }
   .table-actions {
     @apply w-full space-y-3 lg:order-last lg:w-72 lg:block;
