@@ -21,9 +21,9 @@ export default {
 
 <style lang="postcss" scoped>
 .input-data {
-  @apply flex items-start gap-2;
+  @apply flex items-start gap-3 sm:gap-2;
   svg {
-    @apply h-6 w-6 flex-shrink-0;
+    @apply h-5 w-5 flex-shrink-0 sm:h-6 sm:w-6;
     &.indigo {
       @apply text-indigo-500;
     }
@@ -52,7 +52,10 @@ export default {
   div {
     @apply space-y-1.5;
     span {
-      @apply font-semibold text-gray-700 pb-[2px] border-b;
+      @apply font-semibold text-gray-700 pb-[2px] border-b mr-1 sm:m-0;
+    }
+    p {
+      @apply inline sm:block;
     }
   }
 }

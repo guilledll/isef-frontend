@@ -5,6 +5,11 @@ export const state = () => ({
   filtrados: [],
   reserva: null,
   materialesDisponibles: [],
+  // 1 - Activa
+  // 2 - Aprobada
+  // 3 - Pendiente
+  // 4 - Finalizada
+  // 5 - Cancelada
   estados: [1, 2, 3, 4, 5],
 });
 
@@ -74,6 +79,12 @@ export const actions = {
       context.commit('MATERIALES_DISPONIBLES', disponibles);
     });
   },
+  get(context, id) {
+    return ReservasService.show(id).then((res) => {
+      context.dispatch('select', res.data.reserva);
+      context.commit('MATERIALES_DISPONIBLES', res.data.materiales);
+    });
+  },
   all(context) {
     return ReservasService.index().then((res) => {
       context.commit('GET_ALL_RESERVAS', res.data);
@@ -95,6 +106,9 @@ export const actions = {
   cancelarReserva(context) {
     context.commit('CANCELAR_RESERVA');
   },
+  entregar(context, { id, data }) {
+    return ReservasService.entregar(id, data);
+  },
   updateEstado(context, data) {
     return ReservasService.updateEstado(data.ci, data).then((res) => {
       context.commit('UPDATE_ESTADO', res.data);
@@ -113,11 +127,6 @@ export const actions = {
   },
   clear(context) {
     context.commit('CLEAR_SELECTED');
-  },
-  getMateriales(context, id) {
-    return ReservasService.show(id).then((res) => {
-      context.commit('MATERIALES_DISPONIBLES', res.data.materiales);
-    });
   },
 };
 

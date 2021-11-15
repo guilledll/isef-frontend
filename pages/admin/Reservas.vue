@@ -1,7 +1,8 @@
 <template>
   <div>
-    <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <!--Filtrar por deposito/estado-->
+    <!-- ESTA PAGINA NO DEBE SER ASI, LOS ADMINS NO PUEDEN ENTREGAR -->
+    <!-- SOLO PUEDEN VER LAS RESERVAS, LO MEJOR SERIA QUE COMPARTAN LA VISTA CON LOS GUARDIAS -->
+    <!-- <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div>
       <FormSelect
         id="deposito_id"
@@ -80,7 +81,7 @@
             <td class="table-td text-gray-500">
               {{ reserva.fin }}
             </td>
-            <td class="table-td text-gray-500">
+            <td class="table-td" :class="`estado-${reserva.estado}`">
               {{ mostrarEstado(reserva.estado) }}
             </td>
             <td class="table-td text-right">
@@ -116,7 +117,7 @@
         v-else-if="modal.action == 'del'"
         @close="modal.show = !modal.show"
       />
-    </LazyModal>
+    </LazyModal> -->
   </div>
 </template>
 
@@ -205,13 +206,13 @@ export default {
     mostrarEstado(estado) {
       switch (parseInt(estado)) {
         case 1:
-          estado = 'Pendiente';
+          estado = 'Activa';
           break;
         case 2:
-          estado = 'Validada';
+          estado = 'Aprobada';
           break;
         case 3:
-          estado = 'Activa';
+          estado = 'Pendiente';
           break;
         case 4:
           estado = 'Finalizada';
@@ -220,9 +221,6 @@ export default {
           estado = 'Cancelada';
       }
       return estado;
-    },
-    claseEstado(estado) {
-      return `estado-${estado}`;
     },
   },
 };

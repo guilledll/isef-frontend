@@ -1,8 +1,12 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <!--Filtrar por deposito/categoria-->
-    <div>
+    <div class="mb-8">
+      <hr class="my-4" />
+      <label for="filtro" class="font-1">
+        <GlobalSvg class="h-6 w-6 mr-1 inline text-blue-500" svg="search" />
+        Filtrar materiales
+      </label>
       <FormSelect
         id="deposito_id"
         v-model.trim="filtro.id"
@@ -20,7 +24,6 @@
           </option>
         </template>
       </FormSelect>
-      <label for="deposito">Deposito</label>
       <input
         id="deposito"
         v-model="filtro.contenido"
@@ -29,7 +32,7 @@
         value="deposito_id"
         @change="cambiarFiltro"
       />
-      <label for="categoria">Categoria</label>
+      <label for="deposito">Deposito</label>
       <input
         id="categoria"
         v-model="filtro.contenido"
@@ -38,6 +41,7 @@
         value="categoria_id"
         @change="cambiarFiltro"
       />
+      <label for="categoria">Categoria</label>
     </div>
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
@@ -51,12 +55,6 @@
           type="view"
           svg="clipboard-list"
           @click="$router.push('/categorias')"
-        />
-        <GlobalCallToAction
-          text="Mover <b> materiales</b> de depositos"
-          type="view"
-          svg="clipboard-list"
-          @click="$router.push('/movimientos')"
         />
       </div>
       <Table>
