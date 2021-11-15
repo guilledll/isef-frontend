@@ -5,6 +5,7 @@ export const state = () => ({
   filtrados: [],
   deposito: null,
   materiales: [],
+  reservas: []
 });
 
 export const mutations = {

@@ -66,7 +66,7 @@ export default {
     createInforme() {
       if (this.invalid()) return;
       this.$store
-        .dispatch('materialesPerdidos/create', this.form)
+        .dispatch('informes/create', this.form)
         .catch((e) => (this.errors = e.response.data.errors));
     },
   },
