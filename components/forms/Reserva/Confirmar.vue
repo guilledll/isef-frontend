@@ -146,7 +146,7 @@ export default {
           this.$emit('close');
           let query = this.form.validar ? 'true' : 'false';
           this.$router.push({
-            path: `/perfil${this.reserva.user_ci}`,
+            path: `/perfil/${this.reserva.user_ci}`,
             query: { res: query },
           });
         })
