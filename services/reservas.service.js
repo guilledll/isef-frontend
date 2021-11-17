@@ -36,11 +36,17 @@ export default {
     return api().post(`/api/v1/reservas/${id}/entregar`, data);
   },
   /**
- * Muestra todas las reservas del usuario que se indique su ci en el parametro.
- * @param {int} data
- */
+   * Recibir materiales de un usuarios siendo guardia.
+   * @param {int} data
+   */
+  recibir(id, data) {
+    return api().post(`/api/v1/reservas/${id}/recibir`, data);
+  },
+  /**
+   * Muestra todas las reservas del usuario que se indique su ci en el parametro.
+   * @param {int} data
+   */
   getAllReservasUsuario(ci) {
     return api().get(`/api/v1/reservas/usuario/${ci}`);
-  }
-
+  },
 };

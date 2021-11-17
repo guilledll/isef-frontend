@@ -117,6 +117,9 @@ export const actions = {
   entregar(context, { id, data }) {
     return ReservasService.entregar(id, data);
   },
+  recibir(context, { id, data }) {
+    return ReservasService.recibir(id, data);
+  },
   updateEstado(context, data) {
     return ReservasService.updateEstado(data.ci, data).then((res) => {
       context.commit('UPDATE_ESTADO', res.data);

@@ -55,19 +55,23 @@
       </button>
       <button
         v-if="guardia && reserva.estado == 1"
-        class="btn indigo"
+        class="btn blue"
         @click="recibir"
       >
         Recibir materiales
       </button>
     </div>
     <LazyModal v-if="modal.open">
-      <LazyReservaEntregar
+      <LazyFormReservaEntregar
         v-if="modal.type == 'out'"
         @close="close"
         @entregado="entregado"
       />
-      <!-- <LazyFormReservaRecibir v-if="modal.type == 'in'" @close="close" /> -->
+      <LazyFormReservaRecibir
+        v-if="modal.type == 'in'"
+        @close="close"
+        @recibido="recibido"
+      />
     </LazyModal>
   </div>
 </template>
@@ -182,6 +186,10 @@ export default {
     entregado(id) {
       this.close();
       this.$router.push({ path: '/guardia', query: { ent: id } });
+    },
+    recibido(id) {
+      this.close();
+      this.$router.push({ path: '/guardia', query: { in: id } });
     },
     close() {
       this.modal.open = !this.modal.open;

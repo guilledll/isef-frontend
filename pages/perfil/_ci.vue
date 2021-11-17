@@ -1,5 +1,8 @@
 <template>
   <div class="page-container">
+    <LazyGlobalAlert v-if="alerta.show" color="green" class="mb-5 !mt-0">
+      La reserva se realizó con exito! {{ alerta.text }}
+    </LazyGlobalAlert>
     <div class="mb-10">
       <div class="flex justify-between">
         <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">
@@ -122,6 +125,10 @@ export default {
         modal: false,
         table: false,
       },
+      alerta: {
+        show: false,
+        text: '',
+      },
       table: ['inicio', 'fin', 'lugar', 'depósito', 'estado'],
     };
   },
@@ -132,6 +139,16 @@ export default {
     reservas() {
       return this.$store.state.reservas.reservas;
     },
+  },
+  mounted() {
+    // Si se realizo una reserva, muestra la alerta
+    let res = this.$route.query.res;
+    if (res) {
+      if (res == 'true') {
+        this.alerta.text = 'Te avisaremos cuando la reserva sea aprobada.';
+      }
+      this.alerta.show = true;
+    }
   },
   methods: {
     seleccionarUsuario(action, user = null) {
