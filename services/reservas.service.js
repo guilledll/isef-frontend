@@ -42,4 +42,11 @@ export default {
   recibir(id, data) {
     return api().post(`/api/v1/reservas/${id}/recibir`, data);
   },
+  /**
+   * Muestra todas las reservas del usuario que se indique su ci en el parametro.
+   * @param {int} data
+   */
+  getAllReservasUsuario(ci) {
+    return api().get(`/api/v1/reservas/usuario/${ci}`);
+  },
 };
