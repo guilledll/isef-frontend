@@ -30,6 +30,9 @@ export const mutations = {
   FILTRAR_USUARIOS(state, filtrados) {
     state.filtrados = filtrados;
   },
+  MOD_USUARIO(state,) {
+
+  }
 };
 
 export const actions = {
@@ -63,6 +66,9 @@ export const actions = {
       context.dispatch('select', res.data);
       context.dispatch('global/loading', false, { root: true });
     });
+  },
+  update(context, data) {
+    return UsersService.update(data.ci, data);
   },
   delete(context, ci) {
     return UsersService.delete(ci).then(() => {

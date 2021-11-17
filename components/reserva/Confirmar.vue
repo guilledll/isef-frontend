@@ -144,7 +144,7 @@ export default {
         .dispatch('reservas/confirmarReserva', this.form)
         .then(() => {
           this.$emit('close');
-          this.$router.push(`/usuarios/${this.reserva.user_ci}`);
+          this.$router.push(`/perfil/${this.reserva.user_ci}`);
         })
         .catch((e) => (this.errors = e.response.data.errorsF));
     },

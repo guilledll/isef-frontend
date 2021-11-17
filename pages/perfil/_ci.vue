@@ -66,14 +66,48 @@
         {{ usuario.correo }}
       </div>
     </div>
+
+    <GlobalInfoTable
+      title="Reservas"
+      svg="cube"
+      :table="table"
+      :open="open.table"
+      :count="reservas.length"
+      @click="showDetails()"
+    >
+      <tr v-for="reserva in reservas" :key="reserva.id">
+        <td class="table-td text-green-500">
+          {{ formatearFecha(reserva.inicio) }}
+        </td>
+        <td class="table-td text-red-500">
+          {{ formatearFecha(reserva.fin) }}
+        </td>
+        <td class="table-td text-gray-500">
+          {{ reserva.lugar }}
+        </td>
+        <td class="table-td text-gray-500">
+          {{ reserva.deposito }}
+        </td>
+        <td class="table-td text-gray-500">
+          {{ mostrarEstado(reserva.estado) }}
+        </td>
+      </tr>
+    </GlobalInfoTable>
+
     <LazyModal v-if="open.modal">
-      <FormUsuarioRol is-view @close="open.modal = !open.modal" />
+      <FormUsuarioUpdate is-view @close="open.modal = !open.modal" />
     </LazyModal>
+
+    <!--<LazyModal v-if="open.modal">
+      <FormUsuarioRol is-view @close="open.modal = !open.modal" />
+    </LazyModal> -->
   </div>
 </template>
 
 <script>
+import FechaMixin from '@/mixins/FechaMixin';
 export default {
+  mixins: [FechaMixin],
   layout: 'AppLayout',
   // Impide ver perfiles de otros usuarios
   middleware({ route, store, redirect }) {
@@ -84,14 +118,19 @@ export default {
   data() {
     return {
       open: {
+        reservas: false,
         modal: false,
         table: false,
       },
+      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado'],
     };
   },
   computed: {
     usuario() {
       return this.$auth.user;
+    },
+    reservas() {
+      return this.$store.state.reservas.reservas;
     },
   },
   methods: {
@@ -101,6 +140,9 @@ export default {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
       }
+    },
+    reservasUsuario(usuario) {
+      return this.$store.dispatch('reservas/getAllReservasUsuario', usuario);
     },
     mostrarRol(rol) {
       switch (parseInt(rol)) {
@@ -119,13 +161,35 @@ export default {
       return rol;
     },
     async showDetails() {
-      if (!this.materiales.length) {
-        await this.$store.dispatch('depositos/materiales', this.deposito.id);
+      if (!this.reservas.length) {
+        await this.$store.dispatch(
+          'reservas/getAllReservasUsuario',
+          this.$route.params.ci
+        );
       }
       this.open.table = !this.open.table;
     },
     edit() {
       this.open.modal = !this.open.modal;
+    },
+    mostrarEstado(estado) {
+      switch (parseInt(estado)) {
+        case 1:
+          estado = 'Activa';
+          break;
+        case 2:
+          estado = 'Aprobada';
+          break;
+        case 3:
+          estado = 'Pendiente';
+          break;
+        case 4:
+          estado = 'Finalizada';
+          break;
+        default:
+          estado = 'Cancelada';
+      }
+      return estado;
     },
   },
 };
