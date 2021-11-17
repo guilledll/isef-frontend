@@ -35,4 +35,11 @@ export default {
   entregar(id, data) {
     return api().post(`/api/v1/reservas/${id}/entregar`, data);
   },
+  /**
+   * Recibir materiales de un usuarios siendo guardia.
+   * @param {int} data
+   */
+  recibir(id, data) {
+    return api().post(`/api/v1/reservas/${id}/recibir`, data);
+  },
 };

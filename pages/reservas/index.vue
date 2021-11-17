@@ -40,7 +40,7 @@
     </div>
     <LazyModal v-if="modal.open">
       <LazyFormReservaIniciar v-if="modal.tipo == 1" @close="close" />
-      <LazyReservaConfirmar v-if="modal.tipo == 2" @close="close" />
+      <LazyFormReservaConfirmar v-if="modal.tipo == 2" @close="close" />
     </LazyModal>
   </div>
 </template>

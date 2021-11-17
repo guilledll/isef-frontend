@@ -8,7 +8,7 @@
         min-h-screen
         p-4
         text-center
-        sm:block sm:p-0
+        sm:block
       "
     >
       <div class="fixed inset-0 bg-gray-500 opacity-75"></div>
