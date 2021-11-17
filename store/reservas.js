@@ -31,6 +31,9 @@ export const mutations = {
   GET_ALL_RESERVAS(state, reservas) {
     state.reservas = reservas;
   },
+  GET_ALL_RESERVAS_USUARIO(state, reservas) {
+    state.reservas = reservas;
+  },
   GET_RESERVA(state, reserva, materiales) {
     state.reserva = reserva;
     state.materialesDisponibles = materiales;
@@ -84,6 +87,11 @@ export const actions = {
       context.dispatch('select', res.data.reserva);
       context.commit('MATERIALES_DISPONIBLES', res.data.materiales);
     });
+  },
+  getAllReservasUsuario(context, id) {
+    return ReservasService.getAllReservasUsuario(id).then((res) => {
+      context.commit('GET_ALL_RESERVAS_USUARIO', res.data);
+    })
   },
   all(context) {
     return ReservasService.index().then((res) => {
