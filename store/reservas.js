@@ -5,6 +5,7 @@ export const state = () => ({
   filtrados: [],
   reserva: null,
   materialesDisponibles: [],
+  perdidos: [],
   // 1 - Activa
   // 2 - Aprobada
   // 3 - Pendiente
@@ -59,6 +60,9 @@ export const mutations = {
     let index = state.reserva.materiales.findIndex((mat) => mat.id == id);
     state.reserva.materiales[index].cantidad = cant;
   },
+  CARGAR_PERDIDOS(state, perdidos) {
+    state.perdidos = perdidos;
+  },
   ACTUALIZAR_RESERVA(state, data) {
     Object.keys(data).forEach((key) => {
       state.reserva[key] = data[key];
@@ -86,12 +90,15 @@ export const actions = {
     return ReservasService.show(id).then((res) => {
       context.dispatch('select', res.data.reserva);
       context.commit('MATERIALES_DISPONIBLES', res.data.materiales);
+      if (res.data.perdidos) {
+        context.commit('CARGAR_PERDIDOS', res.data.perdidos);
+      }
     });
   },
   getAllReservasUsuario(context, id) {
     return ReservasService.getAllReservasUsuario(id).then((res) => {
       context.commit('GET_ALL_RESERVAS_USUARIO', res.data);
-    })
+    });
   },
   all(context) {
     return ReservasService.index().then((res) => {

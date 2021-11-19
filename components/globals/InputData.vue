@@ -55,7 +55,7 @@ export default {
       @apply font-semibold text-gray-700 pb-[2px] border-b mr-1 sm:m-0;
     }
     p {
-      @apply inline sm:block;
+      @apply inline sm:block break-all;
     }
   }
 }

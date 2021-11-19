@@ -4,7 +4,16 @@
       La reserva nro #{{ entregado.id }} se marcó como entregada.
     </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <div class="mb-4">
+    <GlobalSearch
+      store="reservas"
+      :title="searchTitle"
+      :data="filtrado"
+      :inputs="inputs"
+      @filtrar="filtrar"
+      @limpiar="limpiar"
+      @cambiar="cambiarFiltro"
+    />
+    <!-- <div class="mb-4">
       <FormSelect
         id="deposito_id"
         v-model.trim="filtro.id"
@@ -14,7 +23,7 @@
         <template #options>
           <option value="0">Seleccionar</option>
           <option
-            v-for="(contenido, index) in contenidoFiltrado"
+            v-for="(contenido, index) in filtrado"
             :key="index"
             :value="contenido.id || contenido"
           >
@@ -41,10 +50,10 @@
         value="estado"
         @change="cambiarFiltro"
       />
-    </div>
+    </div> -->
     <Table>
       <template #head>
-        <TableHead :header="table.header" />
+        <TableHead :header="table" />
       </template>
       <template #body>
         <tr
@@ -89,9 +98,7 @@ export default {
         title: 'Reservas',
         text: 'Reservas registradas en el sistema.',
       },
-      table: {
-        header: ['Usuario', 'Deposito', 'inicio', 'fin', 'estado'],
-      },
+      table: ['Usuario', 'Deposito', 'inicio', 'fin', 'estado'],
       modal: {
         show: false,
         action: '',
@@ -101,8 +108,12 @@ export default {
         id: null,
       },
       reservas: [],
-      contenidoFiltrado: [],
-      filtro: { contenido: '', id: 1 },
+      filtrado: [],
+      inputs: [
+        { value: 'deposito_id', text: 'Deposito' },
+        { value: 'estado', text: 'Estado' },
+      ],
+      searchTitle: 'depósito',
     };
   },
   computed: {
@@ -121,8 +132,8 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('reservas/all');
-    this.reservas = this.reservasAll;
     await this.$store.dispatch('depositos/all');
+    this.reservas = this.reservasAll;
     this.verificaEntregado();
   },
   methods: {
@@ -151,20 +162,15 @@ export default {
       });
     },
     filtrar() {
-      this.$store.dispatch('reservas/filtrar', {
-        contenido: this.filtro.contenido,
-        id: this.filtro.id,
-      });
       this.reservas = this.filtrados;
     },
-    cambiarFiltro() {
-      if (this.filtro.contenido === 'deposito_id') {
-        this.contenidoFiltrado = this.depositos;
-      } else {
-        this.contenidoFiltrado = this.estados;
-      }
-      this.filtro.id = 0;
+    limpiar() {
       this.reservas = this.reservasAll;
+    },
+    cambiarFiltro(dato) {
+      this.filtrado = dato === 'deposito_id' ? this.depositos : this.estados;
+      this.searchTitle = dato === 'deposito_id' ? 'depósito' : 'categoría';
+      this.limpiar();
     },
     updateFiltrados() {
       this.modal.show = false;

@@ -144,6 +144,7 @@ export default {
         .dispatch('reservas/confirmarReserva', this.form)
         .then(() => {
           this.$emit('close');
+          this.$store.dispatch('reservas/clear');
           let query = this.form.validar ? 'true' : 'false';
           this.$router.push({
             path: `/perfil/${this.reserva.user_ci}`,

@@ -18,22 +18,43 @@
         <GlobalSvg class="h-5 w-5 text-red-500" svg="trash" />
       </div>
     </div>
+    <!-- INPUTS PARA SELECCIONAR -->
+    <div v-if="inputs.length" class="flex gap-3 mt-1">
+      <div v-for="(input, i) in inputs" :key="i">
+        <input
+          :id="`filtro-${i}`"
+          v-model="contenido"
+          :name="`filtro-${i}`"
+          type="radio"
+          :checked="input.value == contenido"
+          :value="input.value"
+          @change="cambiarFiltro"
+        />
+        <label :for="`filtro-${i}`">{{ input.text }}</label>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    input: { type: Array, default: () => [] },
+    inputs: { type: Array, default: () => [] },
     data: { type: Array, default: () => [] },
     store: { type: String, default: '' },
     title: { type: String, default: '' },
   },
   data() {
     return {
-      contenido: '',
+      contenido: null,
       id: 0,
     };
+  },
+  mounted() {
+    // Si hay inputs checkea el primero
+    if (this.inputs.length) {
+      this.contenido = this.inputs[0].value;
+    }
   },
   methods: {
     filtrar() {
@@ -42,12 +63,17 @@ export default {
       } else {
         this.$store.dispatch(`${this.store}/filtrar`, {
           id: this.id,
+          contenido: this.contenido,
         });
         this.$emit('filtrar');
       }
     },
+    cambiarFiltro() {
+      this.id = 0; //Limpia select
+      this.$emit('cambiar', this.contenido);
+    },
     limpiar() {
-      this.id = 0;
+      this.id = 0; //Limpia select
       this.$emit('limpiar');
     },
   },

@@ -1,35 +1,44 @@
 <template>
   <div v-if="reserva">
     <LazyGlobalHeader :title="header(1)" :text="header(0)" />
-    <div class="mb-6">
-      <div
-        class="
-          grid grid-cols-1
-          gap-4
-          text-left
-          sm:gap-5 sm:grid-cols-3
-          md:grid-cols-4
-        "
-      >
-        <GlobalInputData
-          v-for="reg in data"
-          :key="reg.key"
-          :title="reg.title"
-          :value="mostrarDato(reg.key)"
-          :color="reg.color"
-          :svg="reg.svg"
-        />
-      </div>
-      <LazyGlobalInputData
-        v-if="reserva.nota_usuario"
-        class="mt-5"
-        title="Notas de usuario"
-        :value="reserva.nota_usuario"
-        color="pink"
-        svg="chat-alt"
+    <div
+      class="
+        grid grid-cols-1
+        gap-4
+        text-left
+        sm:gap-5 sm:grid-cols-3
+        md:grid-cols-4
+      "
+    >
+      <GlobalInputData
+        v-for="reg in data"
+        :key="reg.key"
+        :title="reg.title"
+        :value="mostrarDato(reg.key)"
+        :color="reg.color"
+        :svg="reg.svg"
       />
     </div>
-    <hr class="border-gray-100 mb-4 w-full" />
+    <div v-if="reserva.nota_usuario || reserva.nota_guardia">
+      <hr class="border-gray-100 my-4 w-full" />
+      <div class="grid gap-4 text-left mt-4 sm:gap-5 sm:mt-5 sm:grid-cols-2">
+        <LazyGlobalInputData
+          v-if="reserva.nota_usuario"
+          title="Notas del usuario"
+          :value="reserva.nota_usuario"
+          color="pink"
+          svg="pencil"
+        />
+        <LazyGlobalInputData
+          v-if="reserva.nota_guardia"
+          title="Notas del guardia"
+          :value="reserva.nota_guardia"
+          color="purple"
+          svg="pencil"
+        />
+      </div>
+    </div>
+    <hr class="border-gray-100 my-4 w-full" />
     <div class="flex mb-3 items-center">
       <GlobalSvg class="h-6 w-6 mr-1 text-blue-500" svg="cube" />
       <h3 class="text-xl font-1">Materiales reservados</h3>
@@ -61,6 +70,22 @@
         Recibir materiales
       </button>
     </div>
+    <LazyGlobalAlert
+      v-if="reserva.estado == 4 && perdidos"
+      color="yellow"
+      svg="clipboard-list"
+      class="cursor-pointer"
+      @click="$router.push(`/materiales-perdidos/${perdidos.id}`)"
+    >
+      Se reportaron materiales perdidos / dañados en esta reserva. Puedes verlos
+      <span class="underline">presionando aquí.</span>
+    </LazyGlobalAlert>
+    <LazyGlobalAlert v-if="reserva.estado == 4" color="gray">
+      Esta reserva se dió por finalizada.
+    </LazyGlobalAlert>
+    <LazyGlobalAlert v-if="reserva.estado == 5" color="red">
+      Esta reserva fue cancelada.
+    </LazyGlobalAlert>
     <LazyModal v-if="modal.open">
       <LazyFormReservaEntregar
         v-if="modal.type == 'out'"
@@ -146,6 +171,9 @@ export default {
     },
     materiales() {
       return this.$store.state.reservas.materialesDisponibles;
+    },
+    perdidos() {
+      return this.$store.state.reservas.perdidos;
     },
     totalMateriales() {
       return this.materiales.reduce((a, b) => {

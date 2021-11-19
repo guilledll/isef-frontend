@@ -73,6 +73,9 @@ export default {
       return this.$store.state.auth.user.rol == 3;
     },
   },
+  beforeCreate() {
+    this.$store.dispatch('reservas/clear');
+  },
   methods: {
     verModal(tipo) {
       this.modal.tipo = tipo;
@@ -102,5 +105,8 @@ export default {
 }
 .reserva-footer {
   @apply flex justify-end gap-3 w-full mt-5;
+  button {
+    @apply w-full sm:w-auto;
+  }
 }
 </style>

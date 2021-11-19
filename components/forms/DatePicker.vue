@@ -50,3 +50,9 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss" scoped>
+.mx-datepicker {
+  @apply !w-full;
+}
+</style>
