@@ -5,14 +5,13 @@
       class="action-btn"
       type="submit"
       :class="type"
-      :disabled="disabled"
+      :disabled="disabled || loading"
       @click="$emit('action')"
     >
-      {{ text }}
+      <span v-if="!loading">{{ text }}</span>
+      <GlobalSvg v-else class="h-5 w-5 animate-spin mx-4" svg="refresh" />
     </button>
-    <button type="button" class="cancel-btn" @click="$emit('close')">
-      Cancelar
-    </button>
+    <button type="button" class="cancel-btn" @click="close">Cancelar</button>
   </div>
 </template>
 
@@ -24,6 +23,20 @@ export default {
     disabled: { type: Boolean, default: false },
     button: { type: Boolean, default: true },
   },
+  computed: {
+    loading() {
+      return this.$store.state.global.loading;
+    },
+  },
+  mounted() {
+    this.$store.dispatch('global/loading', false);
+  },
+  methods: {
+    close() {
+      this.$store.dispatch('global/loading', false);
+      this.$emit('close');
+    },
+  },
 };
 </script>
 
@@ -31,7 +44,7 @@ export default {
 .modal-footer {
   @apply bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse;
   & > button {
-    @apply w-full inline-flex justify-center rounded-md border shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm;
+    @apply w-full inline-flex justify-center rounded-md border shadow-sm px-4 py-2 text-base font-medium select-none focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm;
   }
   & > .action-btn {
     @apply border-transparent text-white disabled:cursor-default;

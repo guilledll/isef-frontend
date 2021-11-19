@@ -3,11 +3,13 @@ import CategoriasService from '~/services/categorias.service';
 export const state = () => ({
   categorias: [],
   categoria: null,
+  materiales: [],
 });
 
 export const mutations = {
   SELECT_CATEGORIA(state, categoria) {
     state.categoria = categoria;
+    state.materiales = [];
   },
   CLEAR_SELECTED(state) {
     state.categoria = null;
@@ -27,6 +29,9 @@ export const mutations = {
     state.categorias.map((cat, index) => {
       cat.id == id ? state.categorias.splice(index, 1) : cat;
     });
+  },
+  GET_MATERIALES(state, materiales) {
+    state.materiales = materiales;
   },
 };
 
@@ -53,8 +58,9 @@ export const actions = {
     });
   },
   update(context, data) {
-    return CategoriasService.update(data.id, data).then(() => {
-      context.commit('MOD_CATEGORIA', data);
+    return CategoriasService.update(data.id, data).then((res) => {
+      context.commit('MOD_CATEGORIA', res.data);
+      context.dispatch('select', res.data);
     });
   },
   delete(context, id) {
@@ -63,6 +69,15 @@ export const actions = {
       context.dispatch('clear');
     });
   },
+  materiales(context, id) {
+    return CategoriasService.materiales(id).then((res) => {
+      context.commit('GET_MATERIALES', res.data);
+    });
+  },
 };
-
-export const getters = {};
+export const getters = {
+  conMateriales(state) {
+    return state.categorias.filter(
+      cat => { return cat.cantidad_materiales > 0 });
+  }
+};

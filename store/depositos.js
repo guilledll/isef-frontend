@@ -2,12 +2,15 @@ import DepositosService from '@/services/depositos.service';
 
 export const state = () => ({
   depositos: [],
+  filtrados: [],
   deposito: null,
+  materiales: [],
 });
 
 export const mutations = {
   SELECT_DEPOSITO(state, deposito) {
     state.deposito = deposito;
+    state.materiales = [];
   },
   CLEAR_SELECTED(state) {
     state.deposito = null;
@@ -27,6 +30,12 @@ export const mutations = {
     state.depositos.map((dep, index) => {
       dep.id == id ? state.depositos.splice(index, 1) : dep;
     });
+  },
+  GET_MATERIALES(state, materiales) {
+    state.materiales = materiales;
+  },
+  FILTRAR_DEPOSITOS(state, filtrados) {
+    state.filtrados = filtrados;
   },
 };
 
@@ -54,8 +63,9 @@ export const actions = {
     });
   },
   update(context, data) {
-    return DepositosService.update(data.id, data).then(() => {
-      context.commit('MOD_DEPOSITO', data);
+    return DepositosService.update(data.id, data).then((res) => {
+      context.commit('MOD_DEPOSITO', res.data);
+      context.dispatch('select', res.data);
     });
   },
   delete(context, id) {
@@ -64,6 +74,38 @@ export const actions = {
       context.commit('CLEAR_SELECTED');
     });
   },
+  materiales(context, id) {
+    return DepositosService.materiales(id).then((res) => {
+      context.commit('GET_MATERIALES', res.data);
+    });
+  },
+  filtrar(context, { id }) {
+    let filtrado = context.state.depositos.filter((deposito) => {
+      return deposito.departamento_id == id;
+    });
+    context.commit('FILTRAR_DEPOSITOS', filtrado);
+  },
 };
 
-export const getters = {};
+export const getters = {
+  deDepartamento: (state) => (id) => {
+    return state.depositos.filter((dep) => {
+      return dep.departamento_id == id;
+    });
+  },
+  conMateriales(state) {
+    return state.depositos.filter((dep) => {
+      return dep.cantidad_materiales > 0;
+    });
+  },
+  conReservas(state) {
+    return state.depositos.filter((dep) => {
+      return dep.reservas_count > 0;
+    });
+  },
+  deDepartamentoConMateriales: (state) => (id) => {
+    return state.depositos.filter((dep) => {
+      return dep.departamento_id == id && dep.cantidad_materiales > 0;
+    });
+  },
+};

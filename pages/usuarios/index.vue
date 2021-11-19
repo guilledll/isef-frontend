@@ -1,18 +1,54 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+    <div class="mb-6">
+      <hr class="my-4" />
+      <label for="filtro" class="font-1">
+        <GlobalSvg class="h-6 w-6 mr-1 inline text-blue-500" svg="search" />
+        Filtrar usuarios
+      </label>
+      <FormSelect
+        id="departamento_id"
+        v-model.trim="filtro.id"
+        class="mt-2 mb-1"
+        name="departamento_id"
+        @change="filtrar"
+      >
+        <template #options>
+          <option value="0">Seleccionar</option>
+          <option
+            v-for="(contenido, index) in contenidoFiltrado"
+            :key="index"
+            :value="contenido.id || contenido"
+          >
+            <span v-if="contenido.id"> {{ contenido.nombre }} </span>
+            <span v-else> {{ mostrarRol(contenido) }}</span>
+          </option>
+        </template>
+      </FormSelect>
+      <div v-for="(f, i) in inputs" :key="`value-${i}`" class="inline mr-2">
+        <input
+          :id="`filtro-${i}`"
+          v-model="filtro.contenido"
+          :name="`filtro-${i}`"
+          type="radio"
+          :checked="f.value == filtro.contenido"
+          :value="f.value"
+          @change="cambiarFiltro"
+        />
+        <label :for="`filtro-${i}`">{{ f.text }}</label>
+      </div>
+    </div>
     <div class="flex flex-col gap-3 lg:flex-row">
-      <!-- Listar Usuarios -->
-      <div class="w-full gap-3 lg:order-last lg:w-72 lg:block"></div>
       <Table>
-        <template #header>
+        <template #head>
           <TableHead :header="table.header" />
         </template>
         <template #body>
-          <tr v-for="user in users" :key="user.id">
+          <tr v-for="user in usuarios" :key="user.ci">
             <td class="table-td">
               <router-link
-                :to="`/users/${user.ci}`"
+                :to="`/usuarios/${user.ci}`"
                 class="text-black hover:text-blue-600 hover:underline"
                 @click.native="seleccionarUsuario('view', user)"
               >
@@ -28,16 +64,27 @@
                 {{ user.departamento }}
               </router-link>
             </td>
-            <td class="table-td" :class="`rol-${user.rol}`">
+            <td class="table-td text-gray-500">
+              {{ user.telefono }}
+            </td>
+            <td class="table-td" :class="claseRol(user.rol)">
               {{ mostrarRol(user.rol) }}
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/users/${user.ci}`)"
               />
-              <TableButton svg="del" @click="seleccionarUsuario('del', user)" />
-              <TableButton svg="mod" @click="seleccionarUsuario('mod', user)" />
+              <TableButton
+                v-if="user.ci != $auth.user.ci"
+                type="delete"
+                @click="seleccionarUsuario('del', user)"
+              />
+              <TableButton
+                v-if="user.ci != $auth.user.ci"
+                type="edit"
+                @click="seleccionarUsuario('mod', user)"
+              />
             </td>
           </tr>
         </template>
@@ -59,28 +106,47 @@
 <script>
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   data() {
     return {
       pageHeader: {
         title: 'Usuarios',
-        text: 'Usuarios registrados en el sistema.',
+        text: 'Listados de usuarios registrados en el sistema, sus datos y respectivos roles.',
       },
       table: {
-        header: ['Nombre', 'Departamento', 'Rol'],
+        header: ['Nombre', 'Departamento', 'Teléfono', 'Rol'],
       },
       modal: {
         show: false,
         action: '',
       },
+      usuarios: [],
+      contenidoFiltrado: [],
+      filtro: { contenido: 'departamento_id', id: 1 },
+      inputs: [
+        { value: 'departamento_id', text: 'Departamento' },
+        { value: 'rol', text: 'Rol' },
+      ],
     };
   },
   computed: {
     users() {
       return this.$store.state.users.users;
     },
+    departamentos() {
+      return this.$store.getters['departamentos/conUsuarios'];
+    },
+    filtrados() {
+      return this.$store.state.users.filtrados;
+    },
+    roles() {
+      return this.$store.getters['users/rolesConUsuarios'];
+    },
   },
-  mounted() {
-    this.$store.dispatch('users/all');
+  async mounted() {
+    await this.$store.dispatch('users/all');
+    await this.$store.dispatch('departamentos/all');
+    this.cambiarFiltro();
   },
   methods: {
     seleccionarUsuario(action, user = null) {
@@ -90,18 +156,39 @@ export default {
         this.modal.show = !this.modal.show;
       }
     },
+    filtrar() {
+      this.$store.dispatch('users/filtrar', {
+        contenido: this.filtro.contenido,
+        id: this.filtro.id,
+      });
+      this.usuarios = this.filtrados;
+    },
+    cambiarFiltro() {
+      this.contenidoFiltrado =
+        this.filtro.contenido === 'departamento_id'
+          ? this.departamentos
+          : (this.contenidoFiltrado = this.roles);
+      this.filtro.id = 0; //Limpia select
+      this.usuarios = this.users;
+    },
     mostrarRol(rol) {
-      console.log(rol);
-      switch (rol) {
+      switch (parseInt(rol)) {
         case 1:
-          return 'Usuario';
+          rol = 'Usuario';
+          break;
         case 2:
-          return 'Guardia';
+          rol = 'Guardia';
+          break;
         case 3:
-          return 'Administrador';
+          rol = 'Administrador';
+          break;
         default:
-          return 'Sin asignar';
+          rol = 'Sin asignar';
       }
+      return rol;
+    },
+    claseRol(rol) {
+      return `rol-${rol}`;
     },
     verDepartamento(dep) {
       this.$store.dispatch('departamentos/select', {

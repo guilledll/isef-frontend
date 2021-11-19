@@ -91,12 +91,12 @@
 </template>
 
 <script>
-import InputValidationMixin from '@/mixins/InputValidationMixin';
+import FormValidationMixin from '@/mixins/FormValidationMixin';
 import { validationMixin } from 'vuelidate';
 import { required, maxLength } from 'vuelidate/lib/validators';
 
 export default {
-  mixins: [validationMixin, InputValidationMixin],
+  mixins: [validationMixin, FormValidationMixin],
   layout: 'OutLayout',
   data() {
     return {
@@ -127,3 +127,4 @@ export default {
   },
 };
 </script>
+

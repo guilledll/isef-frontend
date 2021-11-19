@@ -1,21 +1,29 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+    <GlobalSearch
+      :data="departamentos"
+      title="departamento"
+      store="depositos"
+      @filtrar="filtrar"
+      @limpiar="limpiar"
+    />
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
-        <GlobalAddAction
+        <GlobalCallToAction
           text="Agregar un <b>nuevo depósito</b>."
+          svg="archive"
           @click="seleccionarDeposito('add')"
         />
-        <GlobalAddAction
+        <GlobalCallToAction
           text="Ir a <b>departamentos</b>."
-          color="indigo"
-          svg="departamento"
+          type="view"
+          svg="map"
           @click="$router.push('/departamentos')"
         />
       </div>
       <Table>
-        <template #header>
+        <template #head>
           <TableHead :header="table.header" />
         </template>
         <template #body>
@@ -43,16 +51,16 @@
             </td>
             <td class="table-td text-right">
               <TableButton
-                svg="view"
+                type="view"
                 @click="$router.push(`/depositos/${deposito.id}`)"
               />
               <TableButton
                 v-if="!deposito.cantidad_materiales"
-                svg="del"
+                type="delete"
                 @click="seleccionarDeposito('del', deposito)"
               />
               <TableButton
-                svg="mod"
+                type="edit"
                 @click="seleccionarDeposito('mod', deposito)"
               />
             </td>
@@ -80,6 +88,7 @@
 <script>
 export default {
   layout: 'AppLayout',
+  middleware: 'admin',
   data() {
     return {
       pageHeader: {
@@ -93,15 +102,24 @@ export default {
         show: false,
         action: '',
       },
+      depositos: [],
     };
   },
   computed: {
-    depositos() {
+    departamentos() {
+      return this.$store.getters['departamentos/conDepositos'];
+    },
+    depositosAll() {
       return this.$store.state.depositos.depositos;
     },
+    filtrados() {
+      return this.$store.state.depositos.filtrados;
+    },
   },
-  mounted() {
-    this.$store.dispatch('depositos/all');
+  async mounted() {
+    await this.$store.dispatch('depositos/all');
+    this.depositos = this.depositosAll;
+    await this.$store.dispatch('departamentos/all');
   },
   methods: {
     seleccionarDeposito(action, deposito = null) {
@@ -116,6 +134,12 @@ export default {
         id: dep.departamento_id,
         nombre: dep.departamento,
       });
+    },
+    filtrar() {
+      this.depositos = this.filtrados;
+    },
+    limpiar() {
+      this.depositos = this.depositosAll;
     },
   },
 };

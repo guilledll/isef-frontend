@@ -3,8 +3,9 @@
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon />
-        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+        <div class="modal-form-body">
           <h3 class="modal-form-heading">Modificar categoría</h3>
+          <p class="mb-3">Es posible renombrar la categoría.</p>
           <div>
             <FormInput
               id="nombre"
@@ -29,18 +30,21 @@
     <ModalFooter
       text="Modificar categoría"
       :disabled="disabled"
-      @close="$emit('close')"
+      @close="closeModal"
     />
   </form>
 </template>
 
 <script>
-import InputValidationMixin from '@/mixins/InputValidationMixin';
+import FormValidationMixin from '@/mixins/FormValidationMixin';
 import { validationMixin } from 'vuelidate';
 import { required, numeric, maxLength } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
-  mixins: [validationMixin, InputValidationMixin],
+  mixins: [validationMixin, FormValidationMixin],
+  props: {
+    isView: { type: Boolean, default: false },
+  },
   data() {
     return {
       form: {
@@ -81,8 +85,12 @@ export default {
       if (this.invalid()) return;
       this.$store
         .dispatch('categorias/update', this.form)
-        .then(() => this.$emit('close'))
+        .then(() => this.closeModal())
         .catch((e) => (this.errors = e.response.data.errors));
+    },
+    closeModal() {
+      if (!this.isView) this.$store.dispatch('categorias/clear');
+      this.$emit('close');
     },
   },
 };
