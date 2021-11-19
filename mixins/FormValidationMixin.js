@@ -7,6 +7,14 @@ export default {
       errors: [],
     };
   },
+  watch: {
+    /**
+     * Cuando hay errores, el estado de carga se apaga
+     */
+    errors() {
+      this.$store.dispatch('global/loading', false);
+    },
+  },
   methods: {
     /**
      * Define si en el campo hay cualquier error
@@ -62,7 +70,9 @@ export default {
      */
     invalid() {
       this.$v.$touch();
-      return this.$v.$invalid ? true : false;
+      let invalid = this.$v.$invalid ? true : false;
+      if (!invalid) this.$store.dispatch('global/loading', true);
+      return invalid;
     },
     /**
      * Verifica si el formulario fue tocado o no

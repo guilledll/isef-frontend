@@ -168,7 +168,10 @@
             </FormSelect>
           </div>
         </div>
-        <button class="btn full green">Registrarme</button>
+        <button class="btn full green" :disabled="loading">
+          <span v-if="!loading">Registrarme</span>
+          <GlobalSvg v-else class="h-5 w-5 animate-spin" svg="refresh" />
+        </button>
       </form>
     </div>
     <router-link
@@ -188,7 +191,7 @@
 </template>
 
 <script>
-import InputValidationMixin from '@/mixins/InputValidationMixin';
+import FormValidationMixin from '@/mixins/FormValidationMixin';
 import { departamento, cedula } from '@/services/validation.service';
 import { validationMixin } from 'vuelidate';
 import {
@@ -202,7 +205,7 @@ import {
 } from 'vuelidate/lib/validators';
 
 export default {
-  mixins: [validationMixin, InputValidationMixin],
+  mixins: [validationMixin, FormValidationMixin],
   layout: 'OutLayout',
   data() {
     return {
@@ -222,7 +225,10 @@ export default {
     departamentos() {
       return this.$store.state.departamentos.departamentos.length
         ? this.$store.state.departamentos.departamentos
-        : this.$store.dispatch('departamentos/getAll');
+        : this.$store.dispatch('departamentos/all');
+    },
+    loading() {
+      return this.$store.state.global.loading;
     },
   },
   validations: {
@@ -275,10 +281,11 @@ export default {
       this.$store
         .dispatch('users/register', this.form)
         .then(() => {
-          // this.$auth.loginWith('laravelSanctum', {
-          //   correo: this.form.correo,
-          //   password: this.form.password,
-          // });
+          this.$store.dispatch('global/loading', false);
+          this.$auth.loginWith('laravelSanctum', {
+            correo: this.form.correo,
+            password: this.form.password,
+          });
         })
         .catch((e) => {
           this.errors = e.response.data.errors;

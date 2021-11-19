@@ -3,8 +3,9 @@
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
         <ModalLeftIcon />
-        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+        <div class="modal-form-body">
           <h3 class="modal-form-heading">Modificar departamento</h3>
+          <p class="mb-3">Es posible renombrar el departamento.</p>
           <div>
             <FormInput
               id="nombre"
@@ -35,12 +36,15 @@
 </template>
 
 <script>
-import InputValidationMixin from '@/mixins/InputValidationMixin';
+import FormValidationMixin from '@/mixins/FormValidationMixin';
 import { validationMixin } from 'vuelidate';
 import { required, integer, maxLength } from 'vuelidate/lib/validators';
 import { updatedDiff } from 'deep-object-diff';
 export default {
-  mixins: [validationMixin, InputValidationMixin],
+  mixins: [validationMixin, FormValidationMixin],
+  props: {
+    isView: { type: Boolean, default: false },
+  },
   data() {
     return {
       form: {
@@ -81,11 +85,11 @@ export default {
       if (this.invalid()) return;
       this.$store
         .dispatch('departamentos/update', this.form)
-        .then(() => this.$emit('close'))
+        .then(() => this.closeModal())
         .catch((e) => (this.errors = e.response.data.errors));
     },
     closeModal() {
-      this.$store.dispatch('departamentos/clear');
+      if (!this.isView) this.$store.dispatch('departamentos/clear');
       this.$emit('close');
     },
   },

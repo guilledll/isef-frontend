@@ -1,6 +1,8 @@
 <template>
   <div>
-    <label :for="id" :class="{ 'sr-only': sr }">{{ label || name }}</label>
+    <label :for="id" class="form-label font-1" :class="{ 'sr-only': sr }">
+      {{ label || name }}
+    </label>
     <input
       :id="id"
       :value="value"

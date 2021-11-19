@@ -10,19 +10,19 @@ export default {
 
   /**
    * Muestra el usuario indicado.
-   * @param {int} id
+   * @param {int} ci
    */
-  show(id) {
-    return api().get(`/api/v1/users/${id}`);
+  show(ci) {
+    return api().get(`/api/v1/users/${ci}`);
   },
 
   /**
    * Actualiza el usuario indicado.
-   * @param {int} id
+   * @param {int} ci
    * @param {request} data
    */
-  update(id, data) {
-    return api().put(`/api/v1/users/${id}`, data);
+  update(ci, data) {
+    return api().put(`/api/v1/users/${ci}`, data);
   },
 
   /**
@@ -34,7 +34,7 @@ export default {
   },
   /**
    * Actualiza el rol del usuario indicado.
-   * @param {int} id
+   * @param {int} ci
    * @param {request} data
    */
   updateRol(ci, data) {

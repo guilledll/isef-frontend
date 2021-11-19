@@ -11,6 +11,7 @@
 
 <script>
 export default {
-  middleware: 'guest.middleware',
+  name: 'OutLayout',
+  middleware: 'guest',
 };
 </script>

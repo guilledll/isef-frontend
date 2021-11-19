@@ -3,6 +3,8 @@ import DepartamentosService from '@/services/departamentos.service';
 export const state = () => ({
   departamentos: [],
   departamento: null,
+  depositos: [],
+  usuarios: [],
 });
 
 export const mutations = {
@@ -11,6 +13,8 @@ export const mutations = {
   },
   CLEAR_SELECTED(state) {
     state.departamento = null;
+    state.depositos = [];
+    state.usuarios = [];
   },
   GET_ALL_DEPARTAMENTOS(state, departamentos) {
     state.departamentos = departamentos;
@@ -30,6 +34,15 @@ export const mutations = {
       dep.id == id ? state.departamentos.splice(index, 1) : dep;
     });
   },
+  GET_DEPOSITOS(state, depositos) {
+    state.depositos = depositos;
+  },
+  GET_USUARIOS(state, usuarios) {
+    state.usuarios = usuarios;
+  },
+  FILTRAR_DEPARTAMENTOS(state, filtrados) {
+    state.filtrados = filtrados;
+  },
 };
 
 export const actions = {
@@ -44,7 +57,7 @@ export const actions = {
       context.dispatch('select', res.data);
     });
   },
-  getAll(context) {
+  all(context) {
     return DepartamentosService.index().then((res) => {
       context.commit('GET_ALL_DEPARTAMENTOS', res.data);
     });
@@ -55,8 +68,9 @@ export const actions = {
     });
   },
   update(context, data) {
-    return DepartamentosService.update(data.id, data).then(() => {
-      context.commit('MOD_DEPARTAMENTO', data);
+    return DepartamentosService.update(data.id, data).then((res) => {
+      context.commit('MOD_DEPARTAMENTO', res.data);
+      context.dispatch('select', res.data);
     });
   },
   delete(context, id) {
@@ -65,6 +79,26 @@ export const actions = {
       context.commit('CLEAR_SELECTED');
     });
   },
+  depositos(context, id) {
+    return DepartamentosService.depositos(id).then((res) => {
+      context.commit('GET_DEPOSITOS', res.data);
+    });
+  },
+  usuarios(context, id) {
+    return DepartamentosService.usuarios(id).then((res) => {
+      context.commit('GET_USUARIOS', res.data);
+    });
+  },
 };
-
-export const getters = {};
+export const getters = {
+  conDepositos(state) {
+    return state.departamentos.filter((dep) => {
+      return dep.depositos_count > 0;
+    });
+  },
+  conUsuarios(state) {
+    return state.departamentos.filter((dep) => {
+      return dep.users_count > 0;
+    });
+  },
+};
