@@ -6,6 +6,7 @@
         <div class="modal-form-body">
           <h3 class="modal-form-heading">Actualizar datos personales</h3>
           <p class="mb-3">¡Mantén tu información actualizada!.</p>
+          <!-- NOMBRE -->
           <div>
             <FormInput
               id="nombre"
@@ -24,6 +25,7 @@
               />
             </FormInput>
           </div>
+          <!-- APELLIDO -->
           <div>
             <FormInput
               id="apellido"
@@ -81,6 +83,7 @@
               />
             </FormInput>
           </div>
+          <!-- DEPARTAMENTO -->
           <div>
             <FormSelect
               id="departamento_id"
@@ -110,6 +113,62 @@
               </template>
             </FormSelect>
           </div>
+          <!-- UPDATE PASSWORD -->
+          <p class="font-1 mb-2 text-lg">¿Cambiar contraseña?</p>
+          <div>
+            <div class="checkbox">
+              <input
+                id="cambiar"
+                v-model="form.cambiar"
+                name="cambiar"
+                type="checkbox"
+                class="check"
+                @change="$v.form.$reset()"
+              />
+              <label for="cambiar" class="text"> SI </label>
+            </div>
+          </div>
+          <div v-if="form.cambiar" class="space-y-2 mt-2">
+            <p class="font-1 mb-1 mt-3">Ingrese una nueva contraseña.</p>
+            <!-- CONTRASEÑA -->
+            <div>
+              <FormInput
+                id="password"
+                v-model.trim="form.password"
+                name="password"
+                type="password"
+                placeholder="Contraseña"
+                :error="hasError($v.form.password)"
+                @input="fieldReset($v.form.password)"
+                @blur="touch($v.form.password)"
+              >
+                <LazyFormError
+                  v-if="hasError($v.form.password)"
+                  :text="errorText($v.form.password)"
+                />
+              </FormInput>
+            </div>
+            
+            <!-- REPETIR CONTRASEÑA -->
+            <p class="font-1 mb-1 mt-3">Repetir contraseña.</p>
+            <div>
+              <FormInput
+                id="password_confirmation"
+                v-model.trim="form.password_confirmation"
+                name="password_confirmation"
+                type="password"
+                placeholder="Repetir contraseña"
+                :error="hasError($v.form.password_confirmation)"
+                @input="fieldReset($v.form.password_confirmation)"
+                @blur="touch($v.form.password_confirmation)"
+              >
+                <LazyFormError
+                  v-if="hasError($v.form.password_confirmation)"
+                  :text="errorText($v.form.password_confirmation)"
+                />
+              </FormInput>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -130,6 +189,7 @@ import {
   email,
   maxLength,
   minLength,
+  sameAs,
 } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 import FormValidationMixin from '@/mixins/FormValidationMixin';
@@ -145,6 +205,9 @@ export default {
         correo: '',
         telefono: '',
         departamento: '',
+        password: '',
+        password_confirmation: '',
+        cambiar: false,
       },
     };
   },
@@ -195,6 +258,15 @@ export default {
         integer,
         departamento,
       },
+      password: {
+        required,
+        minLength: minLength(8),
+        maxLength: maxLength(50),
+      },
+      password_confirmation: {
+        required,
+        sameAsPassword: sameAs('password'),
+      },
     },
   },
   mounted() {
@@ -208,6 +280,7 @@ export default {
   },
   methods: {
     async updateUsuario() {
+      console.log(this.form);
       if (this.invalid()) return;
       await this.$store
         .dispatch('users/update', this.form)
