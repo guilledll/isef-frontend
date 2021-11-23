@@ -39,6 +39,8 @@
       </div>
     </div>
     <hr class="border-gray-100 my-4 w-full" />
+
+    <!-- LISTA DE MATERIALES -->
     <div class="flex mb-3 items-center">
       <GlobalSvg class="h-6 w-6 mr-1 text-blue-500" svg="cube" />
       <h3 class="text-xl font-1">Materiales reservados</h3>
@@ -54,6 +56,8 @@
         </tr>
       </template>
     </Table>
+
+    <!-- BOTONES DE GUARDIA -->
     <div class="bottom">
       <button
         v-if="guardia && reserva.estado == 2"
@@ -70,6 +74,8 @@
         Recibir materiales
       </button>
     </div>
+
+    <!-- ALERTAS Y MENSAJES -->
     <LazyGlobalAlert
       v-if="reserva.estado == 4 && perdidos"
       color="yellow"
@@ -80,12 +86,16 @@
       Se reportaron materiales perdidos / dañados en esta reserva. Puedes verlos
       <span class="underline">presionando aquí.</span>
     </LazyGlobalAlert>
+
     <LazyGlobalAlert v-if="reserva.estado == 4" color="gray">
       Esta reserva se dió por finalizada.
     </LazyGlobalAlert>
+
     <LazyGlobalAlert v-if="reserva.estado == 5" color="red">
       Esta reserva fue cancelada.
     </LazyGlobalAlert>
+
+    <!-- MODALS -->
     <LazyModal v-if="modal.open">
       <LazyFormReservaEntregar
         v-if="modal.type == 'out'"
@@ -180,6 +190,9 @@ export default {
         return a + b.cantidad;
       }, 0);
     },
+    materialesPerdidos() {
+      return this.$store.state.materialesPerdidos.materiales;
+    },
     guardia() {
       return this.$auth.user.rol == 2;
     },
@@ -189,6 +202,7 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('reservas/get', this.$route.params.id);
+    await this.$store.dispatch('materialesPerdidos/get', this.$route.params.id);
   },
   methods: {
     entregar() {

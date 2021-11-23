@@ -70,7 +70,7 @@ export default {
       return this.$store.state.reservas.reserva;
     },
     isAdmin() {
-      return this.$store.state.auth.user.rol == 3;
+      return this.$auth.user.rol == 3;
     },
   },
   beforeCreate() {

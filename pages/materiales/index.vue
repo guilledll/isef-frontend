@@ -4,7 +4,7 @@
     <GlobalSearch
       store="materiales"
       :title="searchTitle"
-      :data="filtrado"
+      :data="materialesFiltradas"
       :inputs="inputs"
       @filtrar="filtrar"
       @limpiar="limpiar"
@@ -113,7 +113,7 @@ export default {
         action: '',
       },
       materiales: [],
-      filtrado: [],
+      materialesFiltradas: [],
       inputs: [
         { value: 'deposito_id', text: 'Deposito' },
         { value: 'categoria_id', text: 'Categoría' },
@@ -139,7 +139,6 @@ export default {
     await this.$store.dispatch('materiales/all');
     await this.$store.dispatch('depositos/all');
     await this.$store.dispatch('categorias/all');
-    this.materiales = this.materialesAll;
     this.cambiarFiltro('deposito_id');
   },
   methods: {
@@ -167,7 +166,8 @@ export default {
       this.materiales = this.materialesAll;
     },
     cambiarFiltro(dato) {
-      this.filtrado = dato === 'deposito_id' ? this.depositos : this.categorias;
+      this.materialesFiltradas =
+        dato === 'deposito_id' ? this.depositos : this.categorias;
       this.searchTitle = dato === 'deposito_id' ? 'depósito' : 'categoría';
       this.limpiar();
     },

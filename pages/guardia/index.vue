@@ -7,50 +7,12 @@
     <GlobalSearch
       store="reservas"
       :title="searchTitle"
-      :data="filtrado"
+      :data="reservasFiltradas"
       :inputs="inputs"
       @filtrar="filtrar"
       @limpiar="limpiar"
       @cambiar="cambiarFiltro"
     />
-    <!-- <div class="mb-4">
-      <FormSelect
-        id="deposito_id"
-        v-model.trim="filtro.id"
-        name="deposito_id"
-        @change="filtrar"
-      >
-        <template #options>
-          <option value="0">Seleccionar</option>
-          <option
-            v-for="(contenido, index) in filtrado"
-            :key="index"
-            :value="contenido.id || contenido"
-          >
-            <span v-if="contenido.id"> {{ contenido.nombre }} </span>
-            <span v-else> {{ mostrarEstado(contenido) }}</span>
-          </option>
-        </template>
-      </FormSelect>
-      <label for="deposito">Deposito</label>
-      <input
-        id="deposito"
-        v-model="filtro.contenido"
-        name="filtro"
-        type="radio"
-        value="deposito_id"
-        @change="cambiarFiltro"
-      />
-      <label for="estado">Estado</label>
-      <input
-        id="estado"
-        v-model="filtro.contenido"
-        name="filtro"
-        type="radio"
-        value="estado"
-        @change="cambiarFiltro"
-      />
-    </div> -->
     <Table>
       <template #head>
         <TableHead :header="table" />
@@ -96,7 +58,7 @@ export default {
     return {
       pageHeader: {
         title: 'Reservas',
-        text: 'Reservas registradas en el sistema.',
+        text: 'Reservas realizadas por los usuarios del sistema.',
       },
       table: ['Usuario', 'Deposito', 'inicio', 'fin', 'estado'],
       modal: {
@@ -108,7 +70,7 @@ export default {
         id: null,
       },
       reservas: [],
-      filtrado: [],
+      reservasFiltradas: [],
       inputs: [
         { value: 'deposito_id', text: 'Deposito' },
         { value: 'estado', text: 'Estado' },
@@ -126,14 +88,23 @@ export default {
     depositos() {
       return this.$store.getters['depositos/conReservas'];
     },
+    // Devuelve objectos con formato { id: x, nombre: xxxx}
+    // Son los estados traducidos Ej: { id: 2, nombre: Aprobado}
     estados() {
-      return this.$store.getters['reservas/estadosConReserva'];
+      let estadosTraducidos = [];
+      this.$store.getters['reservas/estadosConReserva'].forEach((estado) => {
+        estadosTraducidos.push({
+          id: estado,
+          nombre: this.mostrarEstado(estado),
+        });
+      });
+      return estadosTraducidos;
     },
   },
   async mounted() {
     await this.$store.dispatch('reservas/all');
     await this.$store.dispatch('depositos/all');
-    this.reservas = this.reservasAll;
+    this.cambiarFiltro('deposito_id');
     this.verificaEntregado();
   },
   methods: {
@@ -168,13 +139,10 @@ export default {
       this.reservas = this.reservasAll;
     },
     cambiarFiltro(dato) {
-      this.filtrado = dato === 'deposito_id' ? this.depositos : this.estados;
-      this.searchTitle = dato === 'deposito_id' ? 'depósito' : 'categoría';
+      this.reservasFiltradas =
+        dato === 'deposito_id' ? this.depositos : this.estados;
+      this.searchTitle = dato === 'deposito_id' ? 'depósito' : 'estado';
       this.limpiar();
-    },
-    updateFiltrados() {
-      this.modal.show = false;
-      this.reservas = this.reservasAll;
     },
     mostrarEstado(estado) {
       switch (parseInt(estado)) {
