@@ -15,7 +15,7 @@
           @click="$router.push('/materiales')"
         />
       </div>
-      <Table>
+      <Table v-if="categorias">
         <template #head>
           <TableHead :header="table.header" />
         </template>
@@ -51,6 +51,13 @@
           </tr>
         </template>
       </Table>
+      <div v-else class="flex flex-col lg:flex-grow">
+        <img
+          src="/svg/empty.svg"
+          alt="No hay categorias"
+          class="h-40 my-8 m-auto md:h-52 md:my-16"
+        />
+      </div>
     </div>
     <LazyModal v-if="modal.show">
       <LazyFormCategoriaUpdate

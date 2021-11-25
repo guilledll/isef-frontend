@@ -123,7 +123,7 @@
                 name="cambiar"
                 type="checkbox"
                 class="check"
-                @change="$v.form.$reset()"
+                @change="cambiarPass"
               />
               <label for="cambiar" class="text"> SI </label>
             </div>
@@ -134,37 +134,36 @@
             <div>
               <FormInput
                 id="password"
-                v-model.trim="form.password"
+                v-model.trim="password"
                 name="password"
                 type="password"
                 placeholder="Contraseña"
-                :error="hasError($v.form.password)"
-                @input="fieldReset($v.form.password)"
-                @blur="touch($v.form.password)"
+                :error="hasError($v.password)"
+                @input="fieldReset($v.password)"
+                @blur="touch($v.password)"
               >
                 <LazyFormError
-                  v-if="hasError($v.form.password)"
-                  :text="errorText($v.form.password)"
+                  v-if="hasError($v.password)"
+                  :text="errorText($v.password)"
                 />
               </FormInput>
             </div>
-            
             <!-- REPETIR CONTRASEÑA -->
             <p class="font-1 mb-1 mt-3">Repetir contraseña.</p>
             <div>
               <FormInput
                 id="password_confirmation"
-                v-model.trim="form.password_confirmation"
+                v-model.trim="password_confirmation"
                 name="password_confirmation"
                 type="password"
                 placeholder="Repetir contraseña"
-                :error="hasError($v.form.password_confirmation)"
-                @input="fieldReset($v.form.password_confirmation)"
-                @blur="touch($v.form.password_confirmation)"
+                :error="hasError($v.password_confirmation)"
+                @input="fieldReset($v.password_confirmation)"
+                @blur="touch($v.password_confirmation)"
               >
                 <LazyFormError
-                  v-if="hasError($v.form.password_confirmation)"
-                  :text="errorText($v.form.password_confirmation)"
+                  v-if="hasError($v.password_confirmation)"
+                  :text="errorText($v.password_confirmation)"
                 />
               </FormInput>
             </div>
@@ -185,6 +184,7 @@ import { updatedDiff } from 'deep-object-diff';
 import {
   required,
   integer,
+  requiredIf,
   numeric,
   email,
   maxLength,
@@ -205,10 +205,10 @@ export default {
         correo: '',
         telefono: '',
         departamento: '',
-        password: '',
-        password_confirmation: '',
-        cambiar: false,
       },
+      password: '',
+      password_confirmation: '',
+      cambiar: false,
     };
   },
   computed: {
@@ -223,8 +223,17 @@ export default {
     disabled() {
       return (
         Object.keys(updatedDiff(this.usuario, this.form)).length == 0 ||
-        this.form.nombre.length == 0 ||
-        this.form.apellido.length == 0
+        this.$v.form.$invalid ||
+        this.$v.password.$invalid ||
+        this.$v.password_confirmation.$invalid
+      );
+    },
+    upPass() {
+      return (
+        !this.$v.form.$invalid &&
+        !this.$v.password.$invalid &&
+        !this.$v.password_confirmation.$invalid &&
+        Object.keys(updatedDiff(this.usuario, this.form)).length != 0
       );
     },
   },
@@ -258,15 +267,19 @@ export default {
         integer,
         departamento,
       },
-      password: {
-        required,
-        minLength: minLength(8),
-        maxLength: maxLength(50),
-      },
-      password_confirmation: {
-        required,
-        sameAsPassword: sameAs('password'),
-      },
+    },
+    password: {
+      required: requiredIf((cambiar) => {
+        return cambiar;
+      }),
+      minLength: minLength(8),
+      maxLength: maxLength(50),
+    },
+    password_confirmation: {
+      required: requiredIf((cambiar) => {
+        return cambiar;
+      }),
+      sameAsPassword: sameAs('password'),
     },
   },
   mounted() {
@@ -280,7 +293,6 @@ export default {
   },
   methods: {
     async updateUsuario() {
-      console.log(this.form);
       if (this.invalid()) return;
       await this.$store
         .dispatch('users/update', this.form)
@@ -289,6 +301,14 @@ export default {
           this.$emit('close');
         })
         .catch((e) => (this.errors = e.response.data.errors));
+    },
+    cambiarPass() {
+      //Resetea los input de la contraseña
+      this.$v.form.$reset();
+      if (!this.cambiar) {
+        this.password = '';
+        this.password_confirmation = '';
+      }
     },
     selectDepartamento(value) {
       this.form.departamento = value;

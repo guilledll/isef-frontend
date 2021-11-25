@@ -21,7 +21,7 @@
       </FormSelect>
     </div>
     <div class="flex flex-col gap-3 lg:flex-row">
-      <Table>
+      <Table v-if="movimientos.length">
         <template #head>
           <TableHead :header="table.header" :action="false" />
         </template>
@@ -67,6 +67,13 @@
           </tr>
         </template>
       </Table>
+      <div v-else class="flex flex-col lg:flex-grow">
+        <img
+          src="/svg/empty.svg"
+          alt="No hay categorias"
+          class="h-40 my-8 m-auto md:h-52 md:my-16"
+        />
+      </div>
     </div>
     <LazyModal v-if="modal">
       <InventarioVer @close="modal = !modal" />
