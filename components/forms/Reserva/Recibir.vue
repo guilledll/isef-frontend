@@ -161,7 +161,7 @@ export default {
       this.form.guardia_ci = this.guardia.ci;
       this.$store
         .dispatch('reservas/recibir', { id: this.reserva.id, data: this.form })
-        .then(() => this.$emit('close'))
+        .then(() => this.$emit('recibido', this.reserva.id))
         .catch((e) => (this.errors = e.response.data.errors));
     },
     hayPerdidos() {
@@ -188,17 +188,15 @@ export default {
           return mat.id == key;
         });
 
-        // Agrega de a uno los materiales al tring
-        this.form.materiales_perdidos +=
-          mat.id +
-          '#Material: ' +
-          mat.nombre +
-          '#Cantidad: ' +
-          this.materialesPerdidos[key];
+        // Agrega de a uno los materiales al string si tienen cantidad > 0
+        if (this.materialesPerdidos[key]) {
+          this.form.materiales_perdidos +=
+            mat.id + '^' + mat.nombre + '^' + this.materialesPerdidos[key];
+        }
 
         // Si no es el ultimo, le agrega division
         if (index != keys.length - 1) {
-          this.form.materiales_perdidos += '//';
+          this.form.materiales_perdidos += '/@/';
         }
       });
     },

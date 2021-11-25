@@ -1,5 +1,8 @@
 <template>
   <div v-if="reserva">
+    <LazyGlobalAlert v-if="alerta" color="green" svg="check" class="mb-6 !mt-0">
+      Las acciones se guardaron correctamente.
+    </LazyGlobalAlert>
     <LazyGlobalHeader :title="header(1)" :text="header(0)" />
     <div
       class="
@@ -81,7 +84,7 @@
       color="yellow"
       svg="clipboard-list"
       class="cursor-pointer"
-      @click="$router.push(`/materiales-perdidos/${perdidos.id}`)"
+      @click="verPerdidos()"
     >
       Se reportaron materiales perdidos / dañados en esta reserva. Puedes verlos
       <span class="underline">presionando aquí.</span>
@@ -107,6 +110,7 @@
         @close="close"
         @recibido="recibido"
       />
+      <LazyFormMaterialPerdidosVer v-if="modal.type == 'mat'" @close="close" />
     </LazyModal>
   </div>
 </template>
@@ -173,6 +177,7 @@ export default {
           svg: 'clipboard-list',
         },
       ],
+      alerta: false,
     };
   },
   computed: {
@@ -182,16 +187,16 @@ export default {
     materiales() {
       return this.$store.state.reservas.materialesDisponibles;
     },
-    perdidos() {
+    tieneMaterialesPerdidos() {
       return this.$store.state.reservas.perdidos;
+    },
+    perdidos() {
+      return this.$store.state.materialesPerdidos.materiales;
     },
     totalMateriales() {
       return this.materiales.reduce((a, b) => {
         return a + b.cantidad;
       }, 0);
-    },
-    materialesPerdidos() {
-      return this.$store.state.materialesPerdidos.materiales;
     },
     guardia() {
       return this.$auth.user.rol == 2;
@@ -200,9 +205,28 @@ export default {
       return this.$auth.user.rol == 3;
     },
   },
+  watch: {
+    $route(to) {
+      // Si se realizo una reserva, muestra la alerta
+      let acc = to.query.accion;
+      if (acc) {
+        this.alerta = true;
+      }
+    },
+  },
   async mounted() {
     await this.$store.dispatch('reservas/get', this.$route.params.id);
-    await this.$store.dispatch('materialesPerdidos/get', this.$route.params.id);
+    if (this.tieneMaterialesPerdidos) {
+      await this.$store.dispatch(
+        'materialesPerdidos/get',
+        this.tieneMaterialesPerdidos.id
+      );
+    }
+    // Si se realizo una reserva, muestra la alerta
+    let acc = this.$route.query.accion;
+    if (acc) {
+      this.alerta = true;
+    }
   },
   methods: {
     entregar() {
@@ -212,6 +236,11 @@ export default {
     recibir() {
       this.close();
       this.modal.type = 'in';
+    },
+    async verPerdidos() {
+      this.modal.type = 'mat';
+      this.close();
+      await this.$store.dispatch('materialesPerdidos/get', this.perdidos.id);
     },
     mostrarDato(key) {
       return key === 'inicio' || key === 'fin'
@@ -231,7 +260,7 @@ export default {
     },
     recibido(id) {
       this.close();
-      this.$router.push({ path: '/guardia', query: { in: id } });
+      this.$router.push({ path: '/guardia', query: { res: id } });
     },
     close() {
       this.modal.open = !this.modal.open;

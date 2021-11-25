@@ -46,11 +46,11 @@
                 type="view"
                 @click="$router.push(`/users/${user.ci}`)"
               />
-              <TableButton
+              <!-- <TableButton
                 v-if="user.ci != $auth.user.ci"
                 type="delete"
                 @click="seleccionarUsuario('del', user)"
-              />
+              /> -->
               <TableButton
                 v-if="user.ci != $auth.user.ci"
                 type="edit"

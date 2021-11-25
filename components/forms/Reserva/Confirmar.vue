@@ -153,7 +153,7 @@ export default {
         })
         .catch((e) => (this.errors = e.response.data.errorsF));
     },
-    // Devuelve el valor, si es accion la traduce
+    // Devuelve el valor, si es fecha la traduce
     datoReserva(key) {
       return key === 'inicio' || key === 'fin'
         ? this.formatearFecha(this.reserva[key])

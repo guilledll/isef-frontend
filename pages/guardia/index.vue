@@ -1,7 +1,7 @@
 <template>
   <div>
-    <LazyGlobalAlert v-if="entregado.show" color="green" class="my-4">
-      La reserva nro #{{ entregado.id }} se marcó como entregada.
+    <LazyGlobalAlert v-if="entregado.show" color="green" class="!mt-0 mb-4">
+      La reserva nro #{{ entregado.id }} se marcó como {{ entregado.text }}.
     </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <GlobalSearch
@@ -40,6 +40,7 @@
             {{ mostrarEstado(reserva.estado) }}
           </td>
           <td class="table-td text-right">
+            <LazyTableButton v-if="reserva.perdidos" type="list" />
             <TableButton type="view" />
           </td>
         </tr>
@@ -68,6 +69,7 @@ export default {
       entregado: {
         show: false,
         id: null,
+        text: 'entregada',
       },
       reservas: [],
       reservasFiltradas: [],
@@ -120,6 +122,15 @@ export default {
       if (ent) {
         this.entregado.show = true;
         this.entregado.id = ent;
+        this.entregado.text = 'entregada';
+        return;
+      }
+      let res = this.$route.query.res;
+      if (res) {
+        this.entregado.show = true;
+        this.entregado.id = res;
+        this.entregado.text = 'recibida';
+        return;
       }
     },
     verDeposito(dep) {
