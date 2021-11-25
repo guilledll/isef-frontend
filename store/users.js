@@ -4,6 +4,10 @@ export const state = () => ({
   users: [],
   filtrados: [],
   user: null,
+  // 0 - Sin asignar
+  // 1 - Usuario
+  // 2 - Guardia
+  // 3 - Administrador
   roles: [0, 1, 2, 3],
 });
 
@@ -30,9 +34,6 @@ export const mutations = {
   FILTRAR_USUARIOS(state, filtrados) {
     state.filtrados = filtrados;
   },
-  MOD_USUARIO(state,) {
-
-  }
 };
 
 export const actions = {

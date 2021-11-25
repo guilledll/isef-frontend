@@ -1,5 +1,5 @@
 <template>
-  <div class="alert" :class="color">
+  <div class="alert" :class="color" @click="$emit('click')">
     <GlobalSvg class="h-5 w-5 inline mr-0.5 mb-0.5" :svg="svg" />
     <span>
       <slot></slot>
@@ -32,7 +32,7 @@ export default {
     @apply bg-red-200 text-red-800;
   }
   &.gray {
-    @apply bg-gray-200 text-gray-800;
+    @apply bg-gray-200 text-gray-700;
   }
   &.yellow {
     @apply bg-yellow-200 text-yellow-800;

@@ -1,48 +1,15 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <div class="mb-8">
-      <hr class="my-4" />
-      <label for="filtro" class="font-1">
-        <GlobalSvg class="h-6 w-6 mr-1 inline text-blue-500" svg="search" />
-        Filtrar materiales
-      </label>
-      <FormSelect
-        id="deposito_id"
-        v-model.trim="filtro.id"
-        name="deposito_id"
-        @change="filtrar"
-      >
-        <template #options>
-          <option value="0">Seleccionar</option>
-          <option
-            v-for="contenido in contenidoFiltrado"
-            :key="contenido.id"
-            :value="contenido.id"
-          >
-            {{ contenido.nombre }}
-          </option>
-        </template>
-      </FormSelect>
-      <input
-        id="deposito"
-        v-model="filtro.contenido"
-        name="filtro"
-        type="radio"
-        value="deposito_id"
-        @change="cambiarFiltro"
-      />
-      <label for="deposito">Deposito</label>
-      <input
-        id="categoria"
-        v-model="filtro.contenido"
-        name="filtro"
-        type="radio"
-        value="categoria_id"
-        @change="cambiarFiltro"
-      />
-      <label for="categoria">Categoria</label>
-    </div>
+    <GlobalSearch
+      store="materiales"
+      :title="searchTitle"
+      :data="materialesFiltradas"
+      :inputs="inputs"
+      @filtrar="filtrar"
+      @limpiar="limpiar"
+      @cambiar="cambiarFiltro"
+    />
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
         <GlobalCallToAction
@@ -59,7 +26,7 @@
       </div>
       <Table>
         <template #head>
-          <TableHead :header="table.header" />
+          <TableHead :header="table" />
         </template>
         <template #body>
           <tr v-for="material in materiales" :key="material.id">
@@ -140,16 +107,18 @@ export default {
         title: 'Materiales',
         text: 'Materiales registrados en el sistema. Ejemplo de materiales: Pelotas, Chalecos, Conos, etc.',
       },
-      table: {
-        header: ['Nombre', 'Categoría', 'Deposito', 'Cantidad'],
-      },
+      table: ['Nombre', 'Categoría', 'Deposito', 'Cantidad'],
       modal: {
         show: false,
         action: '',
       },
       materiales: [],
-      contenidoFiltrado: [],
-      filtro: { contenido: '', id: 1 },
+      materialesFiltradas: [],
+      inputs: [
+        { value: 'deposito_id', text: 'Deposito' },
+        { value: 'categoria_id', text: 'Categoría' },
+      ],
+      searchTitle: 'depósito',
     };
   },
   computed: {
@@ -168,9 +137,9 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('materiales/all');
-    this.materiales = this.materialesAll;
     await this.$store.dispatch('depositos/all');
     await this.$store.dispatch('categorias/all');
+    this.cambiarFiltro('deposito_id');
   },
   methods: {
     seleccionarMaterial(action, material = null) {
@@ -191,20 +160,16 @@ export default {
       });
     },
     filtrar() {
-      this.$store.dispatch('materiales/filtrar', {
-        contenido: this.filtro.contenido,
-        id: this.filtro.id,
-      });
       this.materiales = this.filtrados;
     },
-    cambiarFiltro() {
-      if (this.filtro.contenido === 'deposito_id') {
-        this.contenidoFiltrado = this.depositos;
-      } else {
-        this.contenidoFiltrado = this.categorias;
-      }
-      this.filtro.id = 0; //Limpia select
+    limpiar() {
       this.materiales = this.materialesAll;
+    },
+    cambiarFiltro(dato) {
+      this.materialesFiltradas =
+        dato === 'deposito_id' ? this.depositos : this.categorias;
+      this.searchTitle = dato === 'deposito_id' ? 'depósito' : 'categoría';
+      this.limpiar();
     },
     updateFiltrados() {
       this.modal.show = false;

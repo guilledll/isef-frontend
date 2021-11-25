@@ -86,12 +86,17 @@ export const actions = {
     return ReservasService.show(id).then((res) => {
       context.dispatch('select', res.data.reserva);
       context.commit('MATERIALES_DISPONIBLES', res.data.materiales);
+      if (res.data.perdidos) {
+        context.dispatch('materialesPerdidos/get', res.data.perdidos.id, {
+          root: true,
+        });
+      }
     });
   },
   getAllReservasUsuario(context, id) {
     return ReservasService.getAllReservasUsuario(id).then((res) => {
       context.commit('GET_ALL_RESERVAS_USUARIO', res.data);
-    })
+    });
   },
   all(context) {
     return ReservasService.index().then((res) => {
