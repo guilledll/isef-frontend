@@ -13,7 +13,7 @@
       @limpiar="limpiar"
       @cambiar="cambiarFiltro"
     />
-    <Table>
+    <Table v-if="reservas.length">
       <template #head>
         <TableHead :header="table" />
       </template>

@@ -94,11 +94,18 @@
         <td class="table-td" :class="`estado-${reserva.estado}`">
           {{ mostrarEstado(reserva.estado) }}
         </td>
+        <td class="table-td text-right">
+          <TableButton type="delete" @click="cancelarReserva('del', reserva)" />
+        </td>
       </tr>
     </GlobalInfoTable>
 
     <LazyModal v-if="open.modal">
       <FormUsuarioUpdate is-view @close="open.modal = !open.modal" />
+      <LazyFormReservaCancelar
+        v-if="modal.action == 'del'"
+        @close="modal.show = !modal.show"
+      />
     </LazyModal>
   </div>
 </template>
@@ -125,7 +132,7 @@ export default {
         show: false,
         text: '',
       },
-      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado'],
+      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado', 'accion'],
     };
   },
   computed: {
