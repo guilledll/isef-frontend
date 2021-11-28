@@ -64,9 +64,6 @@ export const mutations = {
       state.reserva[key] = data[key];
     });
   },
-  CANCELAR_RESERVA(state) {
-    state.reserva = null;
-  },
   FILTRAR_RESERVAS(state, filtrados) {
     state.filtrados = filtrados;
   },
@@ -116,11 +113,12 @@ export const actions = {
     context.commit('ACTUALIZAR_RESERVA', data);
     return ReservasService.create(context.state.reserva);
   },
-  cancelarReserva(context) {
-    context.commit('CANCELAR_RESERVA');
-  },
+
   entregar(context, { id, data }) {
     return ReservasService.entregar(id, data);
+  },
+  cancelar(context, { id, data }) {
+    return ReservasService.cancelar(id, data);
   },
   recibir(context, { id, data }) {
     return ReservasService.recibir(id, data);

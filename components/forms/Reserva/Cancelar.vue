@@ -7,8 +7,7 @@
           <h3 class="modal-form-heading">Cancelar reserva</h3>
           <p class="mb-2">
             <span class="font-medium text-gray-900 mr-1">Atención:</span>
-            Estás a punto de eliminar el material, este será removido del
-            sistema para siempre.
+            Estás a punto de cancelar tu reserva.
           </p>
           <p class="font-medium text-red-600">¿Estás seguro de continuar?</p>
         </div>

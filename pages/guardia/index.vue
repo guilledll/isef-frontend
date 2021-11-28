@@ -4,44 +4,15 @@
       La reserva nro #{{ entregado.id }} se marcó como {{ entregado.text }}.
     </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <div class="mb-4">
-      <FormSelect
-        id="deposito_id"
-        v-model.trim="filtro.id"
-        name="deposito_id"
-        @change="filtrar"
-      >
-        <template #options>
-          <option value="0">Seleccionar</option>
-          <option
-            v-for="(contenido, index) in contenidoFiltrado"
-            :key="index"
-            :value="contenido.id || contenido"
-          >
-            <span v-if="contenido.id"> {{ contenido.nombre }} </span>
-            <span v-else> {{ mostrarEstado(contenido) }}</span>
-          </option>
-        </template>
-      </FormSelect>
-      <label for="deposito">Deposito</label>
-      <input
-        id="deposito"
-        v-model="filtro.contenido"
-        name="filtro"
-        type="radio"
-        value="deposito_id"
-        @change="cambiarFiltro"
-      />
-      <label for="estado">Estado</label>
-      <input
-        id="estado"
-        v-model="filtro.contenido"
-        name="filtro"
-        type="radio"
-        value="estado"
-        @change="cambiarFiltro"
-      />
-    </div>
+    <GlobalSearch
+      store="reservas"
+      :title="searchTitle"
+      :data="reservasFiltradas"
+      :inputs="inputs"
+      @filtrar="filtrar"
+      @limpiar="limpiar"
+      @cambiar="cambiarFiltro"
+    />
     <Table v-if="reservas.length">
       <template #head>
         <TableHead :header="table" />

@@ -95,13 +95,27 @@
           {{ mostrarEstado(reserva.estado) }}
         </td>
         <td class="table-td text-right">
-          <TableButton type="delete" @click="cancelarReserva('del', reserva)" />
+          <TableButton
+            type="delete"
+            @click="seleccionarReserva('del', reserva)"
+          />
         </td>
       </tr>
     </GlobalInfoTable>
-
-    <LazyModal v-if="open.modal">
+    <!--
+        <LazyModal v-if="open.modal">
       <FormUsuarioUpdate is-view @close="open.modal = !open.modal" />
+      <LazyFormReservaCancelar
+        v-if="modal.action == 'del'"
+        @close="modal.show = !modal.show"
+      />
+    </LazyModal>
+    -->
+    <LazyModal v-if="modal.show">
+      <FormUsuarioUpdate
+        v-if="modal.action == 'mod'"
+        @close="modal.show = !modal.show"
+      />
       <LazyFormReservaCancelar
         v-if="modal.action == 'del'"
         @close="modal.show = !modal.show"
@@ -123,10 +137,14 @@ export default {
   },
   data() {
     return {
+      modal: {
+        show: false,
+        action: '',
+      },
       open: {
-        reservas: false,
         modal: false,
         table: false,
+        reservas: false,
       },
       alerta: {
         show: false,
@@ -160,6 +178,11 @@ export default {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
       }
+    },
+    seleccionarReserva(action, reserva = null) {
+      if (reserva) this.$store.dispatch('reservas/select', reserva);
+      this.modal.action = action;
+      this.modal.show = !this.modal.show;
     },
     reservasUsuario(usuario) {
       return this.$store.dispatch('reservas/getAllReservasUsuario', usuario);
