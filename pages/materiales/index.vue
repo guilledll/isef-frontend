@@ -1,5 +1,8 @@
 <template>
   <div>
+    <LazyGlobalAlert v-if="alerta" color="green" svg="check" class="mb-6 !mt-0">
+      Los materiales se guardaron correctamente.
+    </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <GlobalSearch
       store="materiales"
@@ -65,10 +68,10 @@
                 type="view"
                 @click="$router.push(`/materiales/${material.id}`)"
               />
-              <TableButton
+              <!-- <TableButton
                 type="delete"
                 @click="seleccionarMaterial('del', material)"
-              />
+              /> -->
               <TableButton
                 type="edit"
                 @click="seleccionarMaterial('mod', material)"
@@ -126,6 +129,7 @@ export default {
         { value: 'categoria_id', text: 'Categoría' },
       ],
       searchTitle: 'depósito',
+      alerta: false,
     };
   },
   computed: {
@@ -147,6 +151,11 @@ export default {
     await this.$store.dispatch('depositos/all');
     await this.$store.dispatch('categorias/all');
     this.cambiarFiltro('deposito_id');
+    // Si se agrego algun material, muestra la alerta
+    let add = this.$route.query.add;
+    if (add) {
+      this.alerta = true;
+    }
   },
   methods: {
     seleccionarMaterial(action, material = null) {

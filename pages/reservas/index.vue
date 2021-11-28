@@ -22,15 +22,11 @@
     </div>
     <div v-else class="hacer-reserva-container">
       <h4 class="text-2xl font-1 md:text-5xl">Reserva de materiales</h4>
-      <div class="flex flex-col items-center justify-center">
+      <div class="flex flex-row gap-5 items-center justify-center">
         <button class="btn green reservar-btn" @click="verModal(1)">
           Hacer reserva
         </button>
-        <router-link
-          v-if="isAdmin"
-          to="/guardia"
-          class="btn indigo reservar-btn !mt-5"
-        >
+        <router-link :to="toRoute()" class="btn indigo reservar-btn">
           Ver reservas
         </router-link>
       </div>
@@ -69,8 +65,8 @@ export default {
     reserva() {
       return this.$store.state.reservas.reserva;
     },
-    isAdmin() {
-      return this.$auth.user.rol == 3;
+    user() {
+      return this.$auth.user;
     },
   },
   beforeCreate() {
@@ -91,6 +87,9 @@ export default {
     close() {
       this.modal.tipo = null;
       this.modal.open = false;
+    },
+    toRoute() {
+      return this.user.rol == 1 ? `/perfil/${this.user.ci}` : '/guardia';
     },
   },
 };

@@ -1,92 +1,96 @@
 <template>
   <div>
-    <div
-      class="
-        flex flex-col
-        justify-between
-        gap-2
-        bg-gray-50
-        border
-        rounded-lg
-        px-4
-        py-3
-        lg:flex-row
-      "
-    >
-      <!-- Departamento -->
-      <div class="w-full">
-        <FormSelect
-          id="departamento_id"
-          v-model.trim="form.departamento_id"
-          name="departamento_id"
-          label="Departamento"
-          :sr="false"
-          :error="hasError($v.form.departamento_id)"
-          @input="fieldReset($v.form.departamento_id)"
-          @blur="touch($v.form.departamento_id)"
-          @change="seleccionarDepartamento"
-        >
-          <template #options>
-            <option value="0">Seleccionar un departamento</option>
-            <option
-              v-for="departamento in departamentos"
-              :key="departamento.id"
-              :value="departamento.id"
-              :selected="form.departamento_id == departamento.id"
-            >
-              {{ departamento.nombre }}
-            </option>
-          </template>
-          <template #error>
-            <LazyFormError
-              v-if="hasError($v.form.departamento_id)"
-              :text="errorText($v.form.departamento_id)"
-            />
-          </template>
-        </FormSelect>
-      </div>
-      <!-- Deposito -->
-      <div v-if="form.departamento_id != 0" class="w-full">
-        <FormSelect
-          id="deposito_id"
-          v-model.trim="form.deposito_id"
-          name="deposito_id"
-          label="Depósito"
-          :sr="false"
-          :error="hasError($v.form.deposito_id)"
-          @input="fieldReset($v.form.deposito_id)"
-          @blur="touch($v.form.deposito_id)"
-          @change="seleccionarDeposito"
-        >
-          <template #options>
-            <option value="0">Seleccionar un depósito</option>
-            <option
-              v-for="deposito in depositos"
-              :key="deposito.id"
-              :value="deposito.id"
-              :selected="form.deposito_id == deposito.id"
-            >
-              {{ deposito.nombre }}
-            </option>
-          </template>
-          <template #error>
-            <LazyFormError
-              v-if="hasError($v.form.deposito_id)"
-              :text="errorText($v.form.deposito_id)"
-            />
-          </template>
-        </FormSelect>
-      </div>
-    </div>
-    <hr class="w-full my-5" />
-    <div class="flex flex-col justify-between gap-3 lg:flex-row">
-      <div class="flex-grow space-y-2 form-data">
+    <GlobalAlert color="gray">
+      Registre todos los materiales que desea agregar al sistema.
+    </GlobalAlert>
+    <div class="flex flex-col justify-between gap-4 mt-4 lg:flex-row">
+      <div class="flex-grow space-y-2">
         <div>
-          <h3 class="text-2xl font-1 mt-1">Registrar material</h3>
+          <h3 class="flex justify-between items-center text-2xl font-1">
+            Registrar material
+            <GlobalSvg class="text-indigo-500 h-6 w-6" svg="cube" />
+          </h3>
           <hr class="w-full mb-4 mt-2" />
         </div>
-        <!-- Nombre -->
-        <div>
+        <div class="space-y-3">
+          <!-- Departamento -->
+          <FormSelect
+            id="departamento_id"
+            v-model.number="form.departamento_id"
+            name="departamento_id"
+            label="Departamento"
+            :sr="false"
+            :error="hasError($v.form.departamento_id)"
+            @input="fieldReset($v.form.departamento_id)"
+            @blur="touch($v.form.departamento_id)"
+            @change="seleccionarDepartamento"
+          >
+            <template #options>
+              <option value="0">Seleccionar un departamento</option>
+              <option
+                v-for="departamento in departamentos"
+                :key="departamento.id"
+                :value="departamento.id"
+                :selected="form.departamento_id == departamento.id"
+              >
+                {{ departamento.nombre }}
+              </option>
+            </template>
+            <template #error>
+              <LazyFormError
+                v-if="hasError($v.form.departamento_id)"
+                :text="errorText($v.form.departamento_id)"
+              />
+            </template>
+          </FormSelect>
+          <!-- Deposito -->
+          <LazyFormSelect
+            v-if="form.departamento_id != 0"
+            id="deposito_id"
+            v-model.number="form.deposito_id"
+            name="deposito_id"
+            label="Depósito"
+            :sr="false"
+            :error="hasError($v.form.deposito_id)"
+            @input="fieldReset($v.form.deposito_id)"
+            @blur="touch($v.form.deposito_id)"
+            @change="seleccionarDeposito"
+          >
+            <template #options>
+              <option value="0">Seleccionar un depósito</option>
+              <option
+                v-for="deposito in depositos"
+                :key="deposito.id"
+                :value="deposito.id"
+                :selected="form.deposito_id == deposito.id"
+              >
+                {{ deposito.nombre }}
+              </option>
+            </template>
+            <template #error>
+              <LazyFormError
+                v-if="hasError($v.form.deposito_id)"
+                :text="errorText($v.form.deposito_id)"
+              />
+            </template>
+          </LazyFormSelect>
+          <!-- Alerta de dep y deposito -->
+        </div>
+        <LazyGlobalAlert
+          v-if="!form.departamento_id || !form.deposito_id"
+          class="!mt-3"
+          color="gray"
+          svg="location-marker"
+        >
+          Indique el departamento y el depósito donde agregará los materiales.
+        </LazyGlobalAlert>
+        <div v-else class="space-y-3">
+          <GlobalAlert color="gray">
+            Nombre los materiales respetando el formato
+            <b>"Nombre Categoría"</b>. Ejemplos: <b>Pelota fútbol</b>,
+            <b>5K pesa</b>, <b>Red tennis</b>.
+          </GlobalAlert>
+          <!-- Materiales -->
           <FormInput
             id="nombre"
             v-model.trim="form.nombre"
@@ -105,12 +109,10 @@
               :val="errorValidation($v.form.nombre)"
             />
           </FormInput>
-        </div>
-        <!-- Categoria -->
-        <div>
+          <!-- Categoria -->
           <FormSelect
             id="categoria_id"
-            v-model.trim="form.categoria_id"
+            v-model.number="form.categoria_id"
             name="categoria_id"
             label="Categoría"
             required
@@ -140,12 +142,15 @@
               />
             </template>
           </FormSelect>
-        </div>
-        <!-- Cantidad -->
-        <div>
+          <!-- Alerta material + categoria -->
+          <LazyGlobalAlert v-if="form.nombre" color="indigo" svg="cube">
+            El material será:
+            <b>{{ nombreConFormato() }} {{ form.categoria }}</b>
+          </LazyGlobalAlert>
+          <!-- Cantidad -->
           <FormInput
             id="cantidad"
-            v-model.trim="form.cantidad"
+            v-model.number="form.cantidad"
             name="cantidad"
             autocomplete="off"
             type="number"
@@ -162,8 +167,7 @@
               :val="errorValidation($v.form.cantidad)"
             />
           </FormInput>
-        </div>
-        <div>
+          <!-- Nota -->
           <FormTextarea
             id="nota"
             v-model.trim="form.nota"
@@ -186,46 +190,67 @@
         </div>
         <button
           type="button"
-          class="btn green w-full !mt-5"
+          class="btn indigo w-full !mt-3"
+          :disabled="disabled"
           @click="agregarMaterial"
         >
-          Agregar más materiales
+          Agregar material a la lista
         </button>
       </div>
       <div class="side-table">
-        <LazyTable v-if="list.materiales.length">
-          <template #head>
-            <TableHead :header="table" />
-          </template>
-          <template #body>
-            <tr v-for="(material, index) in list.materiales" :key="material.id">
-              <td class="table-td">
-                {{ material.nombre }} {{ material.categoria }}
-              </td>
-              <td class="table-td text-gray-500">
-                {{ material.deposito }}
-              </td>
-              <td class="table-td text-gray-500">
-                {{ material.cantidad || 0 }}
-              </td>
-              <td
-                class="table-td text-center text-gray-500"
-                :class="{
-                  'hover:bg-gray-100 hover:text-blue-500': material.nota,
-                }"
+        <div v-if="list.materiales.length" class="space-y-4">
+          <div>
+            <h3 class="flex justify-between items-center text-2xl font-1">
+              Lista materiales agregados
+              <GlobalSvg class="text-green-500 h-6 w-6" svg="clipboard-check" />
+            </h3>
+            <hr class="w-full mb-4 mt-2" />
+          </div>
+          <LazyTable>
+            <template #head>
+              <TableHead :header="table" />
+            </template>
+            <template #body>
+              <tr
+                v-for="(material, index) in list.materiales"
+                :key="material.id"
               >
-                <GlobalSvg
-                  v-if="material.nota"
-                  class="h-5 w-5 m-auto"
-                  svg="chat-alt"
-                />
-              </td>
-              <td class="table-td text-right">
-                <TableButton type="delete" @click="eliminarMaterial(index)" />
-              </td>
-            </tr>
-          </template>
-        </LazyTable>
+                <td class="table-td">
+                  {{ material.nombre }} {{ material.categoria }}
+                </td>
+                <td class="table-td text-gray-500">
+                  {{ material.deposito }}
+                </td>
+                <td class="table-td text-gray-500">
+                  {{ material.cantidad || 0 }}
+                </td>
+                <td
+                  class="table-td text-center text-gray-500"
+                  :class="{
+                    'hover:bg-gray-100 hover:text-blue-500': material.nota,
+                  }"
+                >
+                  <GlobalSvg
+                    v-if="material.nota"
+                    class="h-5 w-5 m-auto"
+                    svg="chat-alt"
+                  />
+                </td>
+                <td class="table-td text-right">
+                  <TableButton type="delete" @click="eliminarMaterial(index)" />
+                </td>
+              </tr>
+            </template>
+          </LazyTable>
+          <div class="confirm">
+            <p class="font-1 text-sm text-gray-800 sm:text-lg">
+              Cuando todo esté listo, presione confirmar.
+            </p>
+            <button class="btn green" @click="guardarMateriales">
+              Confirmar
+            </button>
+          </div>
+        </div>
         <div v-else class="flex items-center flex-col">
           <img
             src="/svg/list_add.svg"
@@ -239,12 +264,6 @@
           </h4>
         </div>
       </div>
-    </div>
-    <div
-      v-if="list.materiales.length"
-      class="flex justify-end bg-gray-50 border rounded-lg px-4 py-3 mt-5"
-    >
-      <button class="btn green" @click="guardarMateriales">Confirmar</button>
     </div>
   </div>
 </template>
@@ -293,9 +312,80 @@ export default {
         ? this.$store.state.categorias.categorias
         : this.$store.dispatch('categorias/all');
     },
+    disabled() {
+      return (
+        !this.form.nombre ||
+        !this.form.departamento_id ||
+        !this.form.deposito_id ||
+        !this.form.categoria_id ||
+        !this.form.cantidad
+      );
+    },
   },
   async mounted() {
     await this.$store.dispatch('departamentos/all');
+  },
+  methods: {
+    agregarMaterial() {
+      if (this.invalid()) return;
+      if (this.verificarNombre(this.form)) {
+        this.error = true;
+        return;
+      } else this.error = false;
+
+      let data = {
+        nombre: this.nombreConFormato(),
+        categoria_id: this.form.categoria_id,
+        categoria: this.form.categoria,
+        deposito_id: this.form.deposito_id,
+        deposito: this.form.deposito,
+        cantidad: this.form.cantidad,
+        nota: this.form.nota,
+      };
+
+      this.form.nombre = '';
+      this.form.categoria_id = 0;
+      this.form.categoria = '';
+      this.form.cantidad = 1;
+      this.form.nota = '';
+
+      this.$v.$reset();
+      this.list.materiales.push(data);
+    },
+    async guardarMateriales() {
+      await this.$store
+        .dispatch('materiales/create', this.list)
+        .then(() =>
+          this.$router.push({ path: '/materiales', query: { add: true } })
+        )
+        .catch((e) => console.error(e));
+    },
+    eliminarMaterial(index) {
+      this.list.materiales.splice(index, 1);
+    },
+    verificarNombre(data) {
+      return this.list.materiales.find((m) => {
+        return m.nombre === data.nombre && m.categoria_id === data.categoria_id;
+      });
+    },
+    seleccionarDepartamento() {
+      this.$store.dispatch(
+        'departamentos/depositos',
+        this.form.departamento_id
+      );
+      this.form.deposito_id = 0;
+      this.form.deposito = '';
+    },
+    seleccionarDeposito(value) {
+      this.form.deposito = value;
+    },
+    seleccionarCategoria(value) {
+      this.form.categoria = value;
+    },
+    nombreConFormato() {
+      let nom = this.form.nombre.toLowerCase();
+      return nom[0].toUpperCase() + nom.substring(1);
+    },
   },
   validations: {
     form: {
@@ -328,65 +418,6 @@ export default {
       },
     },
   },
-  methods: {
-    agregarMaterial() {
-      if (this.invalid()) return;
-      if (this.verificarNombre(this.form)) {
-        this.error = true;
-        return;
-      } else this.error = false;
-
-      let data = {
-        nombre: this.form.nombre,
-        categoria_id: this.form.categoria_id,
-        categoria: this.form.categoria,
-        deposito_id: this.form.deposito_id,
-        deposito: this.form.deposito,
-        cantidad: this.form.cantidad,
-        nota: this.form.nota,
-      };
-
-      this.form.nombre = '';
-      this.form.categoria_id = 0;
-      this.form.categoria = '';
-      this.form.cantidad = 1;
-      this.form.nota = '';
-
-      this.$v.$reset();
-      this.list.materiales.push(data);
-    },
-    async guardarMateriales() {
-      await this.$store
-        .dispatch('materiales/create', this.list)
-        .then(() => this.$router.push({ path: '/materiales' }))
-        .catch((e) => console.error(e));
-    },
-    eliminarMaterial(index) {
-      this.list.materiales.splice(index, 1);
-    },
-    verificarNombre(data) {
-      return this.list.materiales.find((m) => {
-        return m.nombre === data.nombre && m.categoria_id === data.categoria_id;
-      });
-    },
-    seleccionarDepartamento() {
-      if (this.form.departamento_id != 0)
-        this.$store.dispatch(
-          'departamentos/depositos',
-          this.form.departamento_id
-        );
-      else {
-        this.form.deposito_id = 0;
-        this.form.deposito = '';
-      }
-    },
-    seleccionarDeposito(value) {
-      this.form.deposito = value;
-    },
-    seleccionarCategoria(value) {
-      this.form.categoria = value;
-    },
-  },
 };
 </script>
 
@@ -396,5 +427,8 @@ export default {
 }
 .side-table {
   @apply w-full mt-5 sm:mt-0 lg:max-w-2xl;
+}
+.confirm {
+  @apply flex justify-between items-center bg-gray-50 border-l-4 border-green-600 px-4 py-2;
 }
 </style>
