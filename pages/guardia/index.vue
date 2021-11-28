@@ -33,7 +33,7 @@
         @change="cambiarFiltro"
       />
       <label for="estado">Estado</label>
-      <input
+      <input  
         id="estado"
         v-model="filtro.contenido"
         name="filtro"
