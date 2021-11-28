@@ -3,6 +3,7 @@
     <GlobalSvg v-if="type == 'view'" class="view" :svg="svg()" />
     <GlobalSvg v-if="type == 'edit'" class="edit" :svg="svg()" />
     <GlobalSvg v-if="type == 'delete'" class="delete" :svg="svg()" />
+    <GlobalSvg v-if="type == 'list'" class="list" :svg="svg()" />
   </button>
 </template>
 
@@ -23,6 +24,9 @@ export default {
           break;
         case 'delete':
           svg = 'trash';
+          break;
+        case 'list':
+          svg = 'clipboard-list';
           break;
       }
       return svg;
@@ -45,6 +49,9 @@ svg {
   }
   &.edit {
     @apply group-hover:text-blue-700;
+  }
+  &.list {
+    @apply group-hover:text-yellow-700;
   }
 }
 </style>

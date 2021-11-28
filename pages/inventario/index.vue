@@ -1,29 +1,17 @@
 <template>
   <div>
     <GlobalHeader :title="header.title" :text="header.text" />
-    <div>
-      <FormSelect
-        id="deposito_id"
-        v-model.trim="filtro.id"
-        name="deposito_id"
-        @change="filtrar"
-      >
-        <template #options>
-          <option value="0">Seleccionar depósito</option>
-          <option
-            v-for="deposito in depositos"
-            :key="deposito.id"
-            :value="deposito.id"
-          >
-            {{ deposito.nombre }}
-          </option>
-        </template>
-      </FormSelect>
-    </div>
+    <GlobalSearch
+      :data="depositos"
+      title="depósito"
+      store="inventario"
+      @filtrar="filtrar"
+      @limpiar="limpiar"
+    />
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
         <template #head>
-          <TableHead :header="table.header" :action="false" />
+          <TableHead :header="table" :action="false" />
         </template>
         <template #body>
           <tr v-for="movimiento in movimientos" :key="movimiento.id">
@@ -57,10 +45,9 @@
                 {{ movimiento.deposito }}
               </router-link>
             </td>
-            <td class="table-td" :class="claseAccion(movimiento.accion)">
+            <td class="table-td" :class="`accion-${movimiento.accion}`">
               {{ mostrarAccion(movimiento.accion) }}
             </td>
-
             <td class="table-td nota" @click="verMovimiento(movimiento)">
               <GlobalSvg class="h-5 w-5 m-auto" svg="info-circle" />
             </td>
@@ -83,20 +70,17 @@ export default {
         title: 'Inventario',
         text: 'Registro de entrada y salida de materiales en todos los depósitos.',
       },
-      table: {
-        header: [
-          'Fecha',
-          'Encargado',
-          'Material',
-          'Cantidad',
-          'Depósito',
-          'Acción',
-          'Detalles',
-        ],
-      },
+      table: [
+        'Fecha',
+        'Encargado',
+        'Material',
+        'Cantidad',
+        'Depósito',
+        'Acción',
+        'Detalles',
+      ],
       modal: false,
       movimientos: [],
-      filtro: { id: 1 },
     };
   },
   computed: {
@@ -116,9 +100,6 @@ export default {
     await this.$store.dispatch('depositos/all');
   },
   methods: {
-    claseAccion(accion) {
-      return `accion-${accion}`;
-    },
     mostrarAccion(accion) {
       switch (parseInt(accion)) {
         case 0:
@@ -138,11 +119,10 @@ export default {
       this.modal = true;
     },
     filtrar() {
-      this.$store.dispatch('inventario/filtrar', {
-        id: this.filtro.id,
-      });
-
       this.movimientos = this.filtrados;
+    },
+    limpiar() {
+      this.movimientos = this.movimientosAll;
     },
   },
 };

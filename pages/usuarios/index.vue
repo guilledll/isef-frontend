@@ -1,44 +1,15 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <div class="mb-6">
-      <hr class="my-4" />
-      <label for="filtro" class="font-1">
-        <GlobalSvg class="h-6 w-6 mr-1 inline text-blue-500" svg="search" />
-        Filtrar usuarios
-      </label>
-      <FormSelect
-        id="departamento_id"
-        v-model.trim="filtro.id"
-        class="mt-2 mb-1"
-        name="departamento_id"
-        @change="filtrar"
-      >
-        <template #options>
-          <option value="0">Seleccionar</option>
-          <option
-            v-for="(contenido, index) in contenidoFiltrado"
-            :key="index"
-            :value="contenido.id || contenido"
-          >
-            <span v-if="contenido.id"> {{ contenido.nombre }} </span>
-            <span v-else> {{ mostrarRol(contenido) }}</span>
-          </option>
-        </template>
-      </FormSelect>
-      <div v-for="(f, i) in inputs" :key="`value-${i}`" class="inline mr-2">
-        <input
-          :id="`filtro-${i}`"
-          v-model="filtro.contenido"
-          :name="`filtro-${i}`"
-          type="radio"
-          :checked="f.value == filtro.contenido"
-          :value="f.value"
-          @change="cambiarFiltro"
-        />
-        <label :for="`filtro-${i}`">{{ f.text }}</label>
-      </div>
-    </div>
+    <GlobalSearch
+      store="users"
+      :title="searchTitle"
+      :data="usuariosFiltrados"
+      :inputs="inputs"
+      @filtrar="filtrar"
+      @limpiar="limpiar"
+      @cambiar="cambiarFiltro"
+    />
     <div class="flex flex-col gap-3 lg:flex-row">
       <Table>
         <template #head>
@@ -67,7 +38,7 @@
             <td class="table-td text-gray-500">
               {{ user.telefono }}
             </td>
-            <td class="table-td" :class="claseRol(user.rol)">
+            <td class="table-td" :class="`rol-${user.rol}`">
               {{ mostrarRol(user.rol) }}
             </td>
             <td class="table-td text-right">
@@ -75,11 +46,11 @@
                 type="view"
                 @click="$router.push(`/users/${user.ci}`)"
               />
-              <TableButton
+              <!-- <TableButton
                 v-if="user.ci != $auth.user.ci"
                 type="delete"
                 @click="seleccionarUsuario('del', user)"
-              />
+              /> -->
               <TableButton
                 v-if="user.ci != $auth.user.ci"
                 type="edit"
@@ -121,16 +92,16 @@ export default {
         action: '',
       },
       usuarios: [],
-      contenidoFiltrado: [],
-      filtro: { contenido: 'departamento_id', id: 1 },
+      usuariosFiltrados: [],
       inputs: [
         { value: 'departamento_id', text: 'Departamento' },
         { value: 'rol', text: 'Rol' },
       ],
+      searchTitle: 'depósito',
     };
   },
   computed: {
-    users() {
+    usuariosAll() {
       return this.$store.state.users.users;
     },
     departamentos() {
@@ -139,14 +110,23 @@ export default {
     filtrados() {
       return this.$store.state.users.filtrados;
     },
+    // Devuelve objectos con formato { id: x, nombre: xxxx}
+    // Son los roles traducidos Ej: { id: 2, nombre: Guardia}
     roles() {
-      return this.$store.getters['users/rolesConUsuarios'];
+      let rolesTraducidos = [];
+      this.$store.getters['users/rolesConUsuarios'].forEach((rol) => {
+        rolesTraducidos.push({
+          id: rol,
+          nombre: this.mostrarRol(rol),
+        });
+      });
+      return rolesTraducidos;
     },
   },
   async mounted() {
     await this.$store.dispatch('users/all');
     await this.$store.dispatch('departamentos/all');
-    this.cambiarFiltro();
+    this.cambiarFiltro('departamento_id');
   },
   methods: {
     seleccionarUsuario(action, user = null) {
@@ -156,20 +136,17 @@ export default {
         this.modal.show = !this.modal.show;
       }
     },
+    limpiar() {
+      this.usuarios = this.usuariosAll;
+    },
     filtrar() {
-      this.$store.dispatch('users/filtrar', {
-        contenido: this.filtro.contenido,
-        id: this.filtro.id,
-      });
       this.usuarios = this.filtrados;
     },
-    cambiarFiltro() {
-      this.contenidoFiltrado =
-        this.filtro.contenido === 'departamento_id'
-          ? this.departamentos
-          : (this.contenidoFiltrado = this.roles);
-      this.filtro.id = 0; //Limpia select
-      this.usuarios = this.users;
+    cambiarFiltro(dato) {
+      this.usuariosFiltrados =
+        dato === 'departamento_id' ? this.departamentos : this.roles;
+      this.searchTitle = dato === 'departamento_id' ? 'departamento' : 'rol';
+      this.limpiar();
     },
     mostrarRol(rol) {
       switch (parseInt(rol)) {
@@ -186,9 +163,6 @@ export default {
           rol = 'Sin asignar';
       }
       return rol;
-    },
-    claseRol(rol) {
-      return `rol-${rol}`;
     },
     verDepartamento(dep) {
       this.$store.dispatch('departamentos/select', {
