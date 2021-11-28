@@ -68,7 +68,9 @@ export default {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
-        url: process.env.API_BASE_URL,
+        url: `${process.env.API_BASE_URL}${
+          process.env.NODE_ENV == 'production' ? '/api' : ''
+        }`,
         endpoints: {
           csrf: {
             url: '/sanctum/csrf-cookie',
