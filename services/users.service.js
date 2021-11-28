@@ -5,7 +5,7 @@ export default {
    * Devuelve todos los usuarios.
    */
   index() {
-    return api().get('/api/v1/users');
+    return api().get('/api/users');
   },
 
   /**
@@ -13,7 +13,7 @@ export default {
    * @param {int} ci
    */
   show(ci) {
-    return api().get(`/api/v1/users/${ci}`);
+    return api().get(`/api/users/${ci}`);
   },
 
   /**
@@ -22,7 +22,7 @@ export default {
    * @param {request} data
    */
   update(ci, data) {
-    return api().put(`/api/v1/users/${ci}`, data);
+    return api().put(`/api/users/${ci}`, data);
   },
 
   /**
@@ -30,7 +30,7 @@ export default {
    * @param {int} ci
    */
   delete(ci) {
-    return api().delete(`/api/v1/users/${ci}`);
+    return api().delete(`/api/users/${ci}`);
   },
   /**
    * Actualiza el rol del usuario indicado.
@@ -38,7 +38,7 @@ export default {
    * @param {request} data
    */
   updateRol(ci, data) {
-    return api().put(`/api/v1/users/${ci}/rol`, data);
+    return api().put(`/api/users/${ci}/rol`, data);
   },
 
   /**
