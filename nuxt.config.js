@@ -13,7 +13,10 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
+
+  // Permite la generacion estatica del sitio
   target: 'static',
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
@@ -69,21 +72,25 @@ export default {
       laravelSanctum: {
         provider: 'laravel/sanctum',
         // api/api porque en produccion el back esta bajo la URL /api
-        url: `${process.env.API_BASE_URL}${
-          process.env.NODE_ENV == 'production' ? '/api/api' : ''
-        }`,
+        url: process.env.API_BASE_URL,
         endpoints: {
           csrf: {
-            url: '/sanctum/csrf-cookie',
+            url: `${
+              process.env.NODE_ENV == 'production' ? '/api/api' : ''
+            }/sanctum/csrf-cookie`,
           },
           login: {
-            url: '/login',
+            url: `${
+              process.env.NODE_ENV == 'production' ? '/api/api' : ''
+            }/login`,
           },
           user: {
-            url: '/user',
+            url: `${process.env.NODE_ENV == 'production' ? '/api' : ''}/user`,
           },
           logout: {
-            url: '/logout',
+            url: `${
+              process.env.NODE_ENV == 'production' ? '/api/api' : ''
+            }/logout`,
           },
         },
         cookie: {
