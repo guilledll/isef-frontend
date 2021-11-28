@@ -5,7 +5,7 @@ export default {
    * Devuelve todos las categorías.
    */
   index() {
-    return api().get('/api/categorias');
+    return api().get('/categorias');
   },
 
   /**
@@ -13,7 +13,7 @@ export default {
    * @param {int} id
    */
   show(id) {
-    return api().get(`/api/categorias/${id}`);
+    return api().get(`/categorias/${id}`);
   },
 
   /**
@@ -21,7 +21,7 @@ export default {
    * @param {request} data
    */
   create(data) {
-    return api().post('/api/categorias', data);
+    return api().post('/categorias', data);
   },
 
   /**
@@ -30,7 +30,7 @@ export default {
    * @param {request} data
    */
   update(id, data) {
-    return api().put(`/api/categorias/${id}`, data);
+    return api().put(`/categorias/${id}`, data);
   },
 
   /**
@@ -38,7 +38,7 @@ export default {
    * @param {int} id
    */
   delete(id) {
-    return api().delete(`/api/categorias/${id}`);
+    return api().delete(`/categorias/${id}`);
   },
 
   /**
@@ -46,6 +46,6 @@ export default {
    * @param {int} id
    */
   materiales(id) {
-    return api().get(`/api/categorias/${id}/materiales`);
+    return api().get(`/categorias/${id}/materiales`);
   },
 };

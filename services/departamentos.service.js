@@ -5,7 +5,7 @@ export default {
    * Obtiene todos los departamentos
    */
   index() {
-    return api().get('/api/departamentos');
+    return api().get('/departamentos');
   },
 
   /**
@@ -13,7 +13,7 @@ export default {
    * @param {request} data
    */
   create(data) {
-    return api().post('/api/departamentos', data);
+    return api().post('/departamentos', data);
   },
 
   /**
@@ -22,7 +22,7 @@ export default {
    * @param {request} data
    */
   update(id, data) {
-    return api().put(`/api/departamentos/${id}`, data);
+    return api().put(`/departamentos/${id}`, data);
   },
 
   /**
@@ -30,7 +30,7 @@ export default {
    * @param {int} id
    */
   show(id) {
-    return api().get(`/api/departamentos/${id}`);
+    return api().get(`/departamentos/${id}`);
   },
 
   /**
@@ -38,7 +38,7 @@ export default {
    * @param {int} id
    */
   delete(id) {
-    return api().delete(`/api/departamentos/${id}`);
+    return api().delete(`/departamentos/${id}`);
   },
 
   /**
@@ -46,7 +46,7 @@ export default {
    * @param {int} id
    */
   depositos(id) {
-    return api().get(`/api/departamentos/${id}/depositos`);
+    return api().get(`/departamentos/${id}/depositos`);
   },
 
   /**
@@ -54,6 +54,6 @@ export default {
    * @param {int} id
    */
   usuarios(id) {
-    return api().get(`/api/departamentos/${id}/usuarios`);
+    return api().get(`/departamentos/${id}/usuarios`);
   },
 };

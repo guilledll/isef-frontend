@@ -5,7 +5,7 @@ export default {
    * Obtiene todos los inventario
    */
   index() {
-    return api().get('/api/inventario');
+    return api().get('/inventario');
   },
 
   /**
@@ -13,7 +13,7 @@ export default {
    * @param {request} data
    */
   create(data) {
-    return api().post('/api/inventario', data);
+    return api().post('/inventario', data);
   },
 
   /**
@@ -22,7 +22,7 @@ export default {
    * @param {request} data
    */
   update(id, data) {
-    return api().put(`/api/inventario/${id}`, data);
+    return api().put(`/inventario/${id}`, data);
   },
 
   /**
@@ -30,7 +30,7 @@ export default {
    * @param {int} id
    */
   show(id) {
-    return api().get(`/api/inventario/${id}`);
+    return api().get(`/inventario/${id}`);
   },
 
   /**
@@ -38,6 +38,6 @@ export default {
    * @param {int} id
    */
   delete(id) {
-    return api().delete(`/api/inventario/${id}`);
+    return api().delete(`/inventario/${id}`);
   },
 };
