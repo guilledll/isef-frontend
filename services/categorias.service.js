@@ -48,12 +48,4 @@ export default {
   materiales(id) {
     return api().get(`/categorias/${id}/materiales`);
   },
-
-  /**
-   * Obtiene los materiales de la categoria.
-   * @param {int} id
-   */
-  materiales(id) {
-    return api().get(`/api/v1/categorias/${id}/materiales`);
-  },
 };

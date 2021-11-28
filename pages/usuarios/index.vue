@@ -44,7 +44,7 @@
             <td class="table-td text-right">
               <TableButton
                 type="view"
-                @click="$router.push(`/users/${user.ci}`)"
+                @click="$router.push(`/usuarios/${user.ci}`)"
               />
               <!-- <TableButton
                 v-if="user.ci != $auth.user.ci"

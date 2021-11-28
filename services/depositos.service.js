@@ -48,12 +48,4 @@ export default {
   materiales(id) {
     return api().get(`/depositos/${id}/materiales`);
   },
-
-  /**
-   * Obtiene los materiales del deposito.
-   * @param {int} id
-   */
-  materiales(id) {
-    return api().get(`/api/v1/depositos/${id}/materiales`);
-  },
 };

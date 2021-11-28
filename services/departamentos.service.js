@@ -56,20 +56,4 @@ export default {
   usuarios(id) {
     return api().get(`/departamentos/${id}/usuarios`);
   },
-
-  /**
-   * Obtiene los depositos del departamento.
-   * @param {int} id
-   */
-  depositos(id) {
-    return api().get(`/api/v1/departamentos/${id}/depositos`);
-  },
-
-  /**
-   * Obtiene los usuarios del departamento.
-   * @param {int} id
-   */
-  usuarios(id) {
-    return api().get(`/api/v1/departamentos/${id}/usuarios`);
-  },
 };
