@@ -132,7 +132,7 @@ export default {
         show: false,
         text: '',
       },
-      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado', 'accion'],
+      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado', 'acción'],
     };
   },
   computed: {
