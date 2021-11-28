@@ -45,7 +45,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: `${process.env.API_BASE_URL}/api/v1/`,
+    baseURL: `${process.env.API_BASE_URL}/api/`,
     credentials: true,
   },
 
@@ -71,16 +71,16 @@ export default {
         url: process.env.API_BASE_URL,
         endpoints: {
           csrf: {
-            url: '/sanctum/csrf-cookie',
+            url: '/api/sanctum/csrf-cookie',
           },
           login: {
-            url: '/login',
+            url: '/api/login',
           },
           user: {
-            url: '/api/v1/user',
+            url: '/api/user',
           },
           logout: {
-            url: '/logout',
+            url: '/api/logout',
           },
         },
         cookie: {
