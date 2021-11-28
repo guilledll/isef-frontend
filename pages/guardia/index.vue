@@ -3,6 +3,14 @@
     <LazyGlobalAlert v-if="entregado.show" color="green" class="!mt-0 mb-4">
       La reserva nro #{{ entregado.id }} se marcó como {{ entregado.text }}.
     </LazyGlobalAlert>
+    <LazyGlobalAlert
+      v-if="aprobada"
+      color="green"
+      svg="check"
+      class="!mt-0 mb-4"
+    >
+      La reserva fue aprobada con éxito.
+    </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <GlobalSearch
       store="reservas"
@@ -71,6 +79,7 @@ export default {
         id: null,
         text: 'entregada',
       },
+      aprobada: false,
       reservas: [],
       reservasFiltradas: [],
       inputs: [
@@ -130,6 +139,10 @@ export default {
         this.entregado.show = true;
         this.entregado.id = res;
         this.entregado.text = 'recibida';
+        return;
+      }
+      if (this.$route.query.aprobada) {
+        this.aprobada = true;
         return;
       }
     },

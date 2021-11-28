@@ -76,6 +76,13 @@
       >
         Recibir materiales
       </button>
+      <button
+        v-if="admin && reserva.estado == 3"
+        class="btn indigo"
+        @click="verAdmin"
+      >
+        Ver reserva
+      </button>
     </div>
 
     <!-- ALERTAS Y MENSAJES -->
@@ -109,6 +116,11 @@
         v-if="modal.type == 'in'"
         @close="close"
         @recibido="recibido"
+      />
+      <LazyFormReservaRecibir
+        v-if="modal.type == 'verAdmin'"
+        @close="close"
+        @accion="accionSobreReserva"
       />
       <LazyFormMaterialPerdidosVer v-if="modal.type == 'mat'" @close="close" />
     </LazyModal>
@@ -264,6 +276,18 @@ export default {
     },
     close() {
       this.modal.open = !this.modal.open;
+    },
+    verAdmin() {
+      this.close();
+      this.modal.type = 'verAdmin';
+    },
+    accionSobreReserva(data) {
+      this.$store.dispatch('reservas/cambiarEstado', data).then(() => {
+        this.$router.push({
+          path: '/guardia',
+          query: { aprobada: data.accion },
+        });
+      });
     },
   },
 };

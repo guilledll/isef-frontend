@@ -38,11 +38,6 @@ export const mutations = {
     state.reserva = reserva;
     state.materialesDisponibles = materiales;
   },
-  UPDATE_ESTADO(state, reservas) {
-    state.users = state.reservas.map((user) =>
-      user.ci == reservas.ci ? { ...user, estado: reservas.estado } : user
-    );
-  },
   AGREGAR_MATERIAL(state, material) {
     state.reserva.materiales.push({
       id: material.id,
@@ -125,10 +120,8 @@ export const actions = {
   recibir(context, { id, data }) {
     return ReservasService.recibir(id, data);
   },
-  updateEstado(context, data) {
-    return ReservasService.updateEstado(data.ci, data).then((res) => {
-      context.commit('UPDATE_ESTADO', res.data);
-      context.dispatch('select', res.data);
+  cambiarEstado(context, data) {
+    return ReservasService.cambiarEstado(data.ci, data).then(() => {
       context.dispatch('global/loading', false, { root: true });
     });
   },
