@@ -5,7 +5,7 @@ export default {
    * Devuelve todos los depósitos.
    */
   index() {
-    return api().get('/api/v1/depositos');
+    return api().get('/depositos');
   },
 
   /**
@@ -13,7 +13,7 @@ export default {
    * @param {int} id
    */
   show(id) {
-    return api().get(`/api/v1/depositos/${id}`);
+    return api().get(`/depositos/${id}`);
   },
 
   /**
@@ -21,7 +21,7 @@ export default {
    * @param {request} data
    */
   create(data) {
-    return api().post('/api/v1/depositos', data);
+    return api().post('/depositos', data);
   },
 
   /**
@@ -30,7 +30,7 @@ export default {
    * @param {request} data
    */
   update(id, data) {
-    return api().put(`/api/v1/depositos/${id}`, data);
+    return api().put(`/depositos/${id}`, data);
   },
 
   /**
@@ -38,7 +38,7 @@ export default {
    * @param {int} id
    */
   delete(id) {
-    return api().delete(`/api/v1/depositos/${id}`);
+    return api().delete(`/depositos/${id}`);
   },
 
   /**
@@ -46,6 +46,6 @@ export default {
    * @param {int} id
    */
   materiales(id) {
-    return api().get(`/api/v1/depositos/${id}/materiales`);
+    return api().get(`/depositos/${id}/materiales`);
   },
 };

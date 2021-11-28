@@ -47,7 +47,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: `${process.env.API_BASE_URL}/api/v1/`,
+    baseURL: process.env.API_BASE_URL,
     credentials: true,
   },
 
@@ -70,7 +70,10 @@ export default {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
-        url: process.env.API_BASE_URL,
+        // api/api porque en produccion el back esta bajo la URL /api
+        url: `${process.env.API_BASE_URL}${
+          process.env.NODE_ENV == 'production' ? '/api/api' : ''
+        }`,
         endpoints: {
           csrf: {
             url: '/sanctum/csrf-cookie',
@@ -79,7 +82,7 @@ export default {
             url: '/login',
           },
           user: {
-            url: '/api/v1/user',
+            url: '/user',
           },
           logout: {
             url: '/logout',

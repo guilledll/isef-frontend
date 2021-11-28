@@ -43,6 +43,7 @@ export const actions = {
     context.commit('CLEAR_SELECTED');
   },
   get(context, id) {
+    console.log(id);
     return CategoriasService.show(id).then((res) => {
       context.dispatch('select', res.data);
     });
@@ -77,7 +78,8 @@ export const actions = {
 };
 export const getters = {
   conMateriales(state) {
-    return state.categorias.filter(
-      cat => { return cat.cantidad_materiales > 0 });
-  }
+    return state.categorias.filter((cat) => {
+      return cat.cantidad_materiales > 0;
+    });
+  },
 };

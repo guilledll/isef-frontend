@@ -151,22 +151,18 @@ export default {
     }
   },
   methods: {
-    seleccionarMaterial(action, material = null) {
-      if (material) this.$store.dispatch('materiales/select', material);
+    async seleccionarMaterial(action, material = null) {
+      if (material) await this.$store.dispatch('materiales/select', material);
       if (action != 'view') {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
       }
     },
-    verDeposito(dep) {
-      this.$store.dispatch('depositos/get', {
-        id: dep,
-      });
+    async verDeposito(dep) {
+      await this.$store.dispatch('depositos/get', dep);
     },
-    verCategoria(cat) {
-      this.$store.dispatch('categorias/get', {
-        id: cat,
-      });
+    async verCategoria(cat) {
+      await this.$store.dispatch('categorias/get', cat);
     },
     filtrar() {
       this.materiales = this.filtrados;
