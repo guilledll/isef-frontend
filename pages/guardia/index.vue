@@ -1,7 +1,7 @@
 <template>
   <div>
-    <LazyGlobalAlert v-if="entregado.show" color="green" class="my-4">
-      La reserva nro #{{ entregado.id }} se marcó como entregada.
+    <LazyGlobalAlert v-if="entregado.show" color="green" class="!mt-0 mb-4">
+      La reserva nro #{{ entregado.id }} se marcó como {{ entregado.text }}.
     </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
     <div class="mb-4">
@@ -33,7 +33,7 @@
         @change="cambiarFiltro"
       />
       <label for="estado">Estado</label>
-      <input  
+      <input
         id="estado"
         v-model="filtro.contenido"
         name="filtro"
@@ -44,7 +44,7 @@
     </div>
     <Table v-if="reservas.length">
       <template #head>
-        <TableHead :header="table.header" />
+        <TableHead :header="table" />
       </template>
       <template #body>
         <tr
@@ -69,6 +69,7 @@
             {{ mostrarEstado(reserva.estado) }}
           </td>
           <td class="table-td text-right">
+            <LazyTableButton v-if="reserva.perdidos" type="list" />
             <TableButton type="view" />
           </td>
         </tr>
@@ -94,11 +95,9 @@ export default {
     return {
       pageHeader: {
         title: 'Reservas',
-        text: 'Reservas registradas en el sistema.',
+        text: 'Reservas realizadas por los usuarios del sistema.',
       },
-      table: {
-        header: ['Usuario', 'Deposito', 'inicio', 'fin', 'estado'],
-      },
+      table: ['Usuario', 'Deposito', 'inicio', 'fin', 'estado'],
       modal: {
         show: false,
         action: '',
@@ -106,10 +105,15 @@ export default {
       entregado: {
         show: false,
         id: null,
+        text: 'entregada',
       },
       reservas: [],
-      contenidoFiltrado: [],
-      filtro: { contenido: '', id: 1 },
+      reservasFiltradas: [],
+      inputs: [
+        { value: 'deposito_id', text: 'Deposito' },
+        { value: 'estado', text: 'Estado' },
+      ],
+      searchTitle: 'depósito',
     };
   },
   computed: {
@@ -122,14 +126,23 @@ export default {
     depositos() {
       return this.$store.getters['depositos/conReservas'];
     },
+    // Devuelve objectos con formato { id: x, nombre: xxxx}
+    // Son los estados traducidos Ej: { id: 2, nombre: Aprobado}
     estados() {
-      return this.$store.getters['reservas/estadosConReserva'];
+      let estadosTraducidos = [];
+      this.$store.getters['reservas/estadosConReserva'].forEach((estado) => {
+        estadosTraducidos.push({
+          id: estado,
+          nombre: this.mostrarEstado(estado),
+        });
+      });
+      return estadosTraducidos;
     },
   },
   async mounted() {
     await this.$store.dispatch('reservas/all');
-    this.reservas = this.reservasAll;
     await this.$store.dispatch('depositos/all');
+    this.cambiarFiltro('deposito_id');
     this.verificaEntregado();
   },
   methods: {
@@ -145,6 +158,15 @@ export default {
       if (ent) {
         this.entregado.show = true;
         this.entregado.id = ent;
+        this.entregado.text = 'entregada';
+        return;
+      }
+      let res = this.$route.query.res;
+      if (res) {
+        this.entregado.show = true;
+        this.entregado.id = res;
+        this.entregado.text = 'recibida';
+        return;
       }
     },
     verDeposito(dep) {
@@ -158,24 +180,16 @@ export default {
       });
     },
     filtrar() {
-      this.$store.dispatch('reservas/filtrar', {
-        contenido: this.filtro.contenido,
-        id: this.filtro.id,
-      });
       this.reservas = this.filtrados;
     },
-    cambiarFiltro() {
-      if (this.filtro.contenido === 'deposito_id') {
-        this.contenidoFiltrado = this.depositos;
-      } else {
-        this.contenidoFiltrado = this.estados;
-      }
-      this.filtro.id = 0;
+    limpiar() {
       this.reservas = this.reservasAll;
     },
-    updateFiltrados() {
-      this.modal.show = false;
-      this.reservas = this.reservasAll;
+    cambiarFiltro(dato) {
+      this.reservasFiltradas =
+        dato === 'deposito_id' ? this.depositos : this.estados;
+      this.searchTitle = dato === 'deposito_id' ? 'depósito' : 'estado';
+      this.limpiar();
     },
     mostrarEstado(estado) {
       switch (parseInt(estado)) {

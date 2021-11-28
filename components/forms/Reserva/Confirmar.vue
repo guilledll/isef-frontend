@@ -144,6 +144,7 @@ export default {
         .dispatch('reservas/confirmarReserva', this.form)
         .then(() => {
           this.$emit('close');
+          this.$store.dispatch('reservas/clear');
           let query = this.form.validar ? 'true' : 'false';
           this.$router.push({
             path: `/perfil/${this.reserva.user_ci}`,
@@ -152,7 +153,7 @@ export default {
         })
         .catch((e) => (this.errors = e.response.data.errorsF));
     },
-    // Devuelve el valor, si es accion la traduce
+    // Devuelve el valor, si es fecha la traduce
     datoReserva(key) {
       return key === 'inicio' || key === 'fin'
         ? this.formatearFecha(this.reserva[key])

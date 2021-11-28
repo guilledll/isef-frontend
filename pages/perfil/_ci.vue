@@ -1,9 +1,9 @@
 <template>
   <div class="page-container">
-    <LazyGlobalAlert v-if="alerta.show" color="green" class="mb-5 !mt-0">
+    <LazyGlobalAlert v-if="alerta.show" color="green" class="mb-6 !mt-0">
       La reserva se realizó con exito! {{ alerta.text }}
     </LazyGlobalAlert>
-    <div class="mb-10">
+    <div class="mb-5 md:mb-10">
       <div class="flex justify-between">
         <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">
           {{ usuario.nombre }} {{ usuario.apellido }}
@@ -19,6 +19,7 @@
     <div
       class="grid grid-cols-1 mb-5 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3"
     >
+      <!-- HACER ESTO ITERATIVO -->
       <div class="flex items-center text-lg md:text-xl">
         <span class="flex items-center mr-1.5 font-semibold text-gray-800">
           <GlobalSvg
@@ -69,7 +70,6 @@
         {{ usuario.correo }}
       </div>
     </div>
-
     <GlobalInfoTable
       title="Reservas"
       svg="cube"
@@ -79,10 +79,10 @@
       @click="showDetails()"
     >
       <tr v-for="reserva in reservas" :key="reserva.id">
-        <td class="table-td text-green-500">
+        <td class="table-td text-gray-500">
           {{ formatearFecha(reserva.inicio) }}
         </td>
-        <td class="table-td text-red-500">
+        <td class="table-td text-gray-500">
           {{ formatearFecha(reserva.fin) }}
         </td>
         <td class="table-td text-gray-500">
@@ -91,19 +91,22 @@
         <td class="table-td text-gray-500">
           {{ reserva.deposito }}
         </td>
-        <td class="table-td text-gray-500">
+        <td class="table-td" :class="`estado-${reserva.estado}`">
           {{ mostrarEstado(reserva.estado) }}
+        </td>
+        <td class="table-td text-right">
+          <TableButton type="delete" @click="cancelarReserva('del', reserva)" />
         </td>
       </tr>
     </GlobalInfoTable>
 
     <LazyModal v-if="open.modal">
       <FormUsuarioUpdate is-view @close="open.modal = !open.modal" />
+      <LazyFormReservaCancelar
+        v-if="modal.action == 'del'"
+        @close="modal.show = !modal.show"
+      />
     </LazyModal>
-
-    <!--<LazyModal v-if="open.modal">
-      <FormUsuarioRol is-view @close="open.modal = !open.modal" />
-    </LazyModal> -->
   </div>
 </template>
 
@@ -129,7 +132,7 @@ export default {
         show: false,
         text: '',
       },
-      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado'],
+      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado', 'accion'],
     };
   },
   computed: {
