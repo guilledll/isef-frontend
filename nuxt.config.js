@@ -68,8 +68,9 @@ export default {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
+        // api/api porque en produccion el back esta bajo la URL /api
         url: `${process.env.API_BASE_URL}${
-          process.env.NODE_ENV == 'production' ? '/api' : ''
+          process.env.NODE_ENV == 'production' ? '/api/api' : ''
         }`,
         endpoints: {
           csrf: {
