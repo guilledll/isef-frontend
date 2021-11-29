@@ -94,11 +94,23 @@
         <td class="table-td" :class="`estado-${reserva.estado}`">
           {{ mostrarEstado(reserva.estado) }}
         </td>
+        <td class="table-td text-right">
+          <TableButton
+            type="delete"
+            @click="seleccionarReserva('del', reserva)"
+          />
+        </td>
       </tr>
     </GlobalInfoTable>
-
-    <LazyModal v-if="open.modal">
-      <FormUsuarioUpdate is-view @close="open.modal = !open.modal" />
+    <LazyModal v-if="modal.show">
+      <FormUsuarioUpdate
+        v-if="modal.action == 'edit'"
+        @close="modal.show = !modal.show"
+      />
+      <LazyFormReservaCancelar
+        v-if="modal.action == 'del'"
+        @close="modal.show = !modal.show"
+      />
     </LazyModal>
   </div>
 </template>
@@ -116,16 +128,28 @@ export default {
   },
   data() {
     return {
+      modal: {
+        show: false,
+        action: '',
+      },
       open: {
-        reservas: false,
+        //Despliega resevas
         modal: false,
         table: false,
+        reservas: false,
       },
       alerta: {
         show: false,
         text: '',
       },
-      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado'],
+      table: [
+        'inicio',
+        'fin',
+        'lugar',
+        'depósito',
+        'estado',
+        'Cancelar reserva',
+      ],
     };
   },
   computed: {
@@ -153,6 +177,11 @@ export default {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
       }
+    },
+    seleccionarReserva(action, reserva = null) {
+      if (reserva) this.$store.dispatch('reservas/select', reserva);
+      this.modal.action = action;
+      this.modal.show = !this.modal.show;
     },
     reservasUsuario(usuario) {
       return this.$store.dispatch('reservas/getAllReservasUsuario', usuario);
@@ -183,7 +212,8 @@ export default {
       this.open.table = !this.open.table;
     },
     edit() {
-      this.open.modal = !this.open.modal;
+      this.modal.action = 'edit';
+      this.modal.show = !this.modal.show;
     },
     mostrarEstado(estado) {
       switch (parseInt(estado)) {

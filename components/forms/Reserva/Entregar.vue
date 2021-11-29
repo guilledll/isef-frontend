@@ -18,7 +18,7 @@
       type="add"
       text="Entregar materiales"
       @action="entregar"
-      @close="$emit('close')"
+      @close="closeModal"
     />
   </div>
 </template>
@@ -46,6 +46,10 @@ export default {
       this.$store
         .dispatch('reservas/entregar', { id: this.reserva.id, data: this.form })
         .then(() => this.$emit('entregado', this.reserva.id));
+    },
+    closeModal() {
+      if (!this.isView) this.$store.dispatch('reservas/clear');
+      this.$emit('close');
     },
   },
 };
