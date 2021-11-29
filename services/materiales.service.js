@@ -5,7 +5,7 @@ export default {
    * Devuelve todos los materiales.
    */
   index() {
-    return api().get('/api/v1/material');
+    return api().get('/material');
   },
 
   /**
@@ -13,7 +13,7 @@ export default {
    * @param {int} id
    */
   show(id) {
-    return api().get(`/api/v1/material/${id}`);
+    return api().get(`/material/${id}`);
   },
 
   /**
@@ -21,7 +21,7 @@ export default {
    * @param {request} data
    */
   create(data) {
-    return api().post('/api/v1/material', data);
+    return api().post('/material', data);
   },
 
   /**
@@ -30,7 +30,7 @@ export default {
    * @param {request} data
    */
   update(id, data) {
-    return api().put(`/api/v1/material/${id}`, data);
+    return api().put(`/material/${id}`, data);
   },
 
   /**
@@ -38,7 +38,7 @@ export default {
    * @param {int} id
    */
   delete(id) {
-    return api().delete(`/api/v1/material/${id}`);
+    return api().delete(`/material/${id}`);
   },
 
   /**
@@ -46,7 +46,6 @@ export default {
    * @param {int} id
    */
   movimientos(id) {
-    return api().get(`/api/v1/material/${id}/movimientos`);
+    return api().get(`/material/${id}/movimientos`);
   },
-
 };

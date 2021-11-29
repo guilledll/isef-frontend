@@ -14,6 +14,7 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
+  // Permite la generacion estatica del sitio
   target: 'static',
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -47,7 +48,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: `${process.env.API_BASE_URL}/api/v1/`,
+    baseURL: process.env.API_BASE_URL,
     credentials: true,
   },
 
@@ -70,19 +71,26 @@ export default {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
+        // api/api porque en produccion el back esta bajo la URL /api
         url: process.env.API_BASE_URL,
         endpoints: {
           csrf: {
-            url: '/sanctum/csrf-cookie',
+            url: `${
+              process.env.NODE_ENV == 'production' ? '/api/api' : ''
+            }/sanctum/csrf-cookie`,
           },
           login: {
-            url: '/login',
+            url: `${
+              process.env.NODE_ENV == 'production' ? '/api/api' : ''
+            }/login`,
           },
           user: {
-            url: '/api/v1/user',
+            url: `${process.env.NODE_ENV == 'production' ? '/api' : ''}/user`,
           },
           logout: {
-            url: '/logout',
+            url: `${
+              process.env.NODE_ENV == 'production' ? '/api/api' : ''
+            }/logout`,
           },
         },
         cookie: {
