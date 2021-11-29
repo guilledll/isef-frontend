@@ -21,4 +21,12 @@ export default {
   show(id) {
     return api().get(`/materialesPerdidos/${id}`);
   },
+  /**
+   * Actualiza el informe indicado.
+   * @param {int} id
+   * @param {data} data
+   */
+  update(id, data) {
+    return api().put(`/materialesPerdidos/${id}`, data);
+  },
 };

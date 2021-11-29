@@ -10,7 +10,7 @@
           Se creará una nueva reserva de materiales, por favor complete los
           campos a continuación.
         </p>
-        <div class="space-y-3 mt-2">
+        <div class="space-y-3 mt-2 !text-left">
           <div>
             <FormSelect
               id="departamento_id"
@@ -68,7 +68,7 @@
               </template>
             </FormSelect>
           </div>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid sm:grid-cols-2 gap-4">
             <div>
               <FormDatePicker
                 v-model.trim="form.inicio"
