@@ -102,18 +102,9 @@
         </td>
       </tr>
     </GlobalInfoTable>
-    <!--
-        <LazyModal v-if="open.modal">
-      <FormUsuarioUpdate is-view @close="open.modal = !open.modal" />
-      <LazyFormReservaCancelar
-        v-if="modal.action == 'del'"
-        @close="modal.show = !modal.show"
-      />
-    </LazyModal>
-    -->
     <LazyModal v-if="modal.show">
       <FormUsuarioUpdate
-        v-if="modal.action == 'mod'"
+        v-if="modal.action == 'edit'"
         @close="modal.show = !modal.show"
       />
       <LazyFormReservaCancelar
@@ -142,6 +133,7 @@ export default {
         action: '',
       },
       open: {
+        //Despliega resevas
         modal: false,
         table: false,
         reservas: false,
@@ -220,7 +212,8 @@ export default {
       this.open.table = !this.open.table;
     },
     edit() {
-      this.open.modal = !this.open.modal;
+      this.modal.action = 'edit';
+      this.modal.show = !this.modal.show;
     },
     mostrarEstado(estado) {
       switch (parseInt(estado)) {

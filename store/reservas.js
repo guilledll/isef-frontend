@@ -116,8 +116,8 @@ export const actions = {
   entregar(context, { id, data }) {
     return ReservasService.entregar(id, data);
   },
-  cancelar(context, { id, data }) {
-    return ReservasService.cancelar(id, data);
+  cancelar(context, { id }) {
+    return ReservasService.cancelar(id);
   },
   recibir(context, { id, data }) {
     return ReservasService.recibir(id, data);

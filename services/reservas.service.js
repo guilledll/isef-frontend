@@ -35,6 +35,9 @@ export default {
   entregar(id, data) {
     return api().post(`/reservas/${id}/entregar`, data);
   },
+  cancelar(id) {
+    return api().post(`/reservas/${id}/cancelar`,);
+  },
   /**
    * Recibir materiales de un usuarios siendo guardia.
    * @param {int} data
