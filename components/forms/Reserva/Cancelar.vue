@@ -13,7 +13,12 @@
         </div>
       </div>
     </div>
-    <ModalFooter text="Cancelar reserva" type="del" @close="closeModal" />
+    <ModalFooter
+      text="Cancelar reserva"
+      type="del"
+      :disabled="disabled"
+      @close="$emit('close')"
+    />
   </form>
 </template>
 
@@ -22,7 +27,7 @@ export default {
   data() {
     return {
       form: {
-        guardia_ci: '',
+        user_ci: '',
       },
     };
   },
@@ -30,16 +35,29 @@ export default {
     reserva() {
       return this.$store.state.reservas.reserva;
     },
-    guardia() {
+    usuario() {
       return this.$auth.user;
+    },
+    disabled() {
+      return (
+        this.reserva.estado == '1' ||
+        this.reserva.estado == '4' ||
+        this.reserva.estado == '5'
+      );
     },
   },
   methods: {
     cancelarReserva() {
-      this.form.guardia_ci = this.guardia.ci;
-      this.$store
-        .dispatch('reservas/entregar', { id: this.reserva.id, data: this.form })
-        .then(() => this.$emit('cancelado', this.reserva.id));
+      // Se cancela si está en los estados:  Aprobada 2 o Pendiente 3.
+      if (this.reserva.estado == '2' || this.reserva.estado == '3') {
+        this.form.user_ci = this.user.ci;
+        this.$store
+          .dispatch('reservas/cancelar', {
+            id: this.reserva.id,
+            data: this.form,
+          })
+          .then(() => this.$emit('cancelado', this.reserva.id));
+      }
     },
   },
 };

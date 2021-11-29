@@ -113,7 +113,6 @@ export const actions = {
     context.commit('ACTUALIZAR_RESERVA', data);
     return ReservasService.create(context.state.reserva);
   },
-
   entregar(context, { id, data }) {
     return ReservasService.entregar(id, data);
   },
