@@ -3,77 +3,83 @@
     <LazyGlobalAlert v-if="alerta.show" color="green" class="mb-6 !mt-0">
       La reserva se realizó con exito! {{ alerta.text }}
     </LazyGlobalAlert>
-    <div class="mb-5 md:mb-10">
-      <div class="flex justify-between">
-        <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">
-          {{ usuario.nombre }} {{ usuario.apellido }}
-        </h3>
-        <div class="space-x-2">
-          <button class="perfil-btn" @click="edit">
-            <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
-          </button>
-          <button class="perfil-btn logout" @click="logout">
-            <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="logout" />
-          </button>
+    <div v-if="usuario" class="space-y-5 mb-5 md:mb-6 md:space-y-8">
+      <div>
+        <div class="flex justify-between">
+          <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">
+            {{ usuario.nombre }} {{ usuario.apellido }}
+          </h3>
+          <div class="space-x-2">
+            <button class="perfil-btn" @click="accion">
+              <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
+            </button>
+            <button v-if="soyYo" class="perfil-btn logout" @click="logout">
+              <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="logout" />
+            </button>
+          </div>
+        </div>
+        <hr class="mt-1 sm:mt-3" />
+      </div>
+      <div
+        class="grid grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        <!-- HACER ESTO ITERATIVO -->
+        <div class="flex items-center text-lg md:text-xl">
+          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
+            <GlobalSvg
+              class="h-6 w-6 mr-1 text-indigo-600"
+              svg="identification"
+            />
+            Ci:
+          </span>
+          {{ usuario.ci }}
+        </div>
+        <div
+          v-if="usuario.rol != 1"
+          class="flex items-center text-lg md:text-xl"
+        >
+          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
+            <GlobalSvg
+              class="h-6 w-6 mr-1 text-purple-600"
+              svg="clipboard-check"
+            />
+            Eres:
+          </span>
+          {{ mostrarRol(usuario.rol) }}
+        </div>
+        <div class="flex items-center text-lg md:text-xl">
+          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
+            <GlobalSvg class="h-6 w-6 mr-1 text-blue-600" svg="phone" />
+            Teléfono:
+          </span>
+          {{ usuario.telefono }}
+        </div>
+        <div class="flex items-center text-lg md:text-xl">
+          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
+            <GlobalSvg
+              class="h-6 w-6 mr-1 text-green-600"
+              svg="location-marker"
+            />
+            Departamento:
+          </span>
+          <router-link
+            class="hover:underline hover:text-green-600"
+            :to="`/departamentos/${usuario.departamento_id}`"
+          >
+            {{ usuario.departamento }}
+          </router-link>
+        </div>
+        <div class="flex items-center text-lg md:text-xl">
+          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
+            <GlobalSvg class="h-6 w-6 mr-1 text-yellow-600" svg="mail" />
+            Correo:
+          </span>
+          {{ usuario.correo }}
         </div>
       </div>
-      <hr class="mt-1 sm:mt-3" />
     </div>
-    <div
-      class="grid grid-cols-1 mb-5 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3"
-    >
-      <!-- HACER ESTO ITERATIVO -->
-      <div class="flex items-center text-lg md:text-xl">
-        <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg
-            class="h-6 w-6 mr-1 text-indigo-600"
-            svg="identification"
-          />
-          Ci:
-        </span>
-        {{ usuario.ci }}
-      </div>
-      <div v-if="usuario.rol != 1" class="flex items-center text-lg md:text-xl">
-        <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg
-            class="h-6 w-6 mr-1 text-purple-600"
-            svg="clipboard-check"
-          />
-          Eres:
-        </span>
-        {{ mostrarRol(usuario.rol) }}
-      </div>
-      <div class="flex items-center text-lg md:text-xl">
-        <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg class="h-6 w-6 mr-1 text-blue-600" svg="phone" />
-          Teléfono:
-        </span>
-        {{ usuario.telefono }}
-      </div>
-      <div class="flex items-center text-lg md:text-xl">
-        <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg
-            class="h-6 w-6 mr-1 text-green-600"
-            svg="location-marker"
-          />
-          Departamento:
-        </span>
-        <router-link
-          class="hover:underline hover:text-green-600"
-          :to="`/departamentos/${usuario.departamento_id}`"
-        >
-          {{ usuario.departamento }}
-        </router-link>
-      </div>
-      <div class="flex items-center text-lg md:text-xl">
-        <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg class="h-6 w-6 mr-1 text-yellow-600" svg="mail" />
-          Correo:
-        </span>
-        {{ usuario.correo }}
-      </div>
-    </div>
-    <GlobalInfoTable
+    <LazyGlobalInfoTable
+      v-if="usuario && usuario.rol != 2"
       title="Reservas"
       svg="clipboard-list"
       :table="table"
@@ -104,14 +110,20 @@
           />
         </td>
       </tr>
-    </GlobalInfoTable>
+    </LazyGlobalInfoTable>
     <LazyModal v-if="modal.show">
       <FormUsuarioUpdate
         v-if="modal.action == 'edit'"
+        is-view
         @close="modal.show = !modal.show"
       />
       <LazyFormReservaCancelar
         v-if="modal.action == 'del'"
+        @close="modal.show = !modal.show"
+      />
+      <LazyFormUsuarioRol
+        v-if="modal.action == 'rol'"
+        is-view
         @close="modal.show = !modal.show"
       />
     </LazyModal>
@@ -123,10 +135,13 @@ import FechaMixin from '@/mixins/FechaMixin';
 export default {
   mixins: [FechaMixin],
   layout: 'AppLayout',
-  // Impide ver perfiles de otros usuarios
+  // Impide ver perfiles de otros usuarios si no es admin
   middleware({ route, store, redirect }) {
-    if (store.$auth.user.ci != route.params.ci) {
-      return redirect('/inicio');
+    let user = store.$auth.user;
+    if (user.ci != route.params.ci) {
+      if (user.rol !== 3) {
+        return redirect('/inicio');
+      }
     }
   },
   data() {
@@ -157,13 +172,20 @@ export default {
   },
   computed: {
     usuario() {
-      return this.$auth.user;
+      return this.$store.state.users.user;
     },
     reservas() {
       return this.$store.state.reservas.reservas;
     },
+    soyYo() {
+      return this.$auth.user.ci == this.$route.params.ci;
+    },
   },
-  mounted() {
+  async mounted() {
+    this.soyYo
+      ? await this.$store.dispatch('users/select', this.$auth.user)
+      : await this.$store.dispatch('users/get', this.$route.params.ci);
+
     // Si se realizo una reserva, muestra la alerta
     let res = this.$route.query.res;
     if (res) {
@@ -183,8 +205,15 @@ export default {
       }
       this.open.table = !this.open.table;
     },
+    accion() {
+      this.soyYo ? this.edit() : this.rol();
+    },
     edit() {
       this.modal.action = 'edit';
+      this.modal.show = !this.modal.show;
+    },
+    rol() {
+      this.modal.action = 'rol';
       this.modal.show = !this.modal.show;
     },
     logout() {

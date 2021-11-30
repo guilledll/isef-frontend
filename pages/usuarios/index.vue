@@ -19,7 +19,7 @@
           <tr v-for="user in usuarios" :key="user.ci">
             <td class="table-td">
               <router-link
-                :to="`/usuarios/${user.ci}`"
+                :to="`/perfil/${user.ci}`"
                 class="text-black hover:text-blue-600 hover:underline"
                 @click.native="seleccionarUsuario('view', user)"
               >
@@ -44,7 +44,7 @@
             <td class="table-td text-right">
               <TableButton
                 type="view"
-                @click="$router.push(`/usuarios/${user.ci}`)"
+                @click="$router.push(`/perfil/${user.ci}`)"
               />
               <!-- <TableButton
                 v-if="user.ci != $auth.user.ci"

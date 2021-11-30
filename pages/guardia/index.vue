@@ -12,7 +12,8 @@
       La reserva fue aprobada con éxito.
     </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <GlobalSearch
+    <LazyGlobalSearch
+      v-if="reservasAll.length"
       store="reservas"
       :title="searchTitle"
       :data="reservasFiltradas"
@@ -21,7 +22,7 @@
       @limpiar="limpiar"
       @cambiar="cambiarFiltro"
     />
-    <Table v-if="reservas.length">
+    <Table v-if="reservasAll.length">
       <template #head>
         <TableHead :header="table" />
       </template>
@@ -54,13 +55,7 @@
         </tr>
       </template>
     </Table>
-    <div v-else class="flex flex-col lg:flex-grow">
-      <img
-        src="/svg/sinReservas.svg"
-        alt="No hay materiales"
-        class="h-40 my-8 m-auto md:h-52 md:my-16"
-      />
-    </div>
+    <LazyGlobalSinDatos v-else model="reservas" />
   </div>
 </template>
 

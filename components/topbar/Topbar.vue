@@ -115,13 +115,18 @@ export default {
     admin() {
       return this.user.rol === 3;
     },
+    guardia() {
+      return this.user.rol === 2;
+    },
     menuItems() {
       return [
         {
           text: 'Reservas',
           path: '/reservas',
           selected: this.selected('reservas'),
-          show: this.admin && this.existen.materiales && this.existen.depositos,
+          show:
+            (this.admin && this.existen.materiales && this.existen.depositos) ||
+            this.guardia,
         },
         {
           text: 'Depósitos',

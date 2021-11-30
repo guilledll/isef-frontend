@@ -178,7 +178,7 @@
     <ModalFooter
       text="Modificar datos"
       :disabled="disabled"
-      @close="closeModal"
+      @close="$emit('close')"
     />
   </form>
 </template>
@@ -316,10 +316,6 @@ export default {
     },
     selectDepartamento(value) {
       this.form.departamento = value;
-    },
-    closeModal() {
-      if (!this.isView) this.$store.dispatch('users/clear');
-      this.$emit('close');
     },
   },
 };
