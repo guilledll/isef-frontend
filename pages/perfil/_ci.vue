@@ -83,6 +83,7 @@
       title="Reservas"
       svg="clipboard-list"
       :table="table"
+      :action="true"
       :open="open.table"
       :count="reservas.length"
       @click="showDetails()"
@@ -104,9 +105,10 @@
           {{ mostrarEstado(reserva.estado) }}
         </td>
         <td class="table-td text-right">
-          <TableButton
+          <LazyTableButton
+            v-if="!reservaTerminada(reserva)"
             type="delete"
-            @click="seleccionarReserva('del', reserva)"
+            @click="cancelarReserva(reserva)"
           />
         </td>
       </tr>
@@ -118,7 +120,7 @@
         @close="modal.show = !modal.show"
       />
       <LazyFormReservaCancelar
-        v-if="modal.action == 'del'"
+        v-if="modal.action == 'cancel'"
         @close="modal.show = !modal.show"
       />
       <LazyFormUsuarioRol
@@ -160,14 +162,7 @@ export default {
         show: false,
         text: '',
       },
-      table: [
-        'inicio',
-        'fin',
-        'lugar',
-        'depósito',
-        'estado',
-        'Cancelar reserva',
-      ],
+      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado'],
     };
   },
   computed: {
@@ -216,6 +211,11 @@ export default {
       this.modal.action = 'rol';
       this.modal.show = !this.modal.show;
     },
+    cancelarReserva(res) {
+      this.$store.dispatch('reservas/select', res);
+      this.modal.action = 'cancel';
+      this.modal.show = !this.modal.show;
+    },
     logout() {
       this.$auth.logout();
     },
@@ -253,6 +253,9 @@ export default {
           rol = 'Sin asignar';
       }
       return rol;
+    },
+    reservaTerminada(reserva) {
+      return reserva.estado == 4 || reserva.estado == 5 || reserva.estado == 1;
     },
   },
 };

@@ -61,6 +61,11 @@ export const mutations = {
   FILTRAR_RESERVAS(state, filtrados) {
     state.filtrados = filtrados;
   },
+  CANCELAR_RESERVA(state, id) {
+    state.reservas = state.reservas.map((res) =>
+      res.id == id ? { ...res, estado: 5 } : res
+    );
+  },
 };
 
 export const actions = {
@@ -110,14 +115,18 @@ export const actions = {
   entregar(context, { id, data }) {
     return ReservasService.entregar(id, data);
   },
-  cancelar(context, { id }) {
-    return ReservasService.cancelar(id);
+  cancelar(context, id) {
+    return ReservasService.cancelar(id).then(() => {
+      context.commit('CANCELAR_RESERVA', id);
+    });
   },
   recibir(context, { id, data }) {
     return ReservasService.recibir(id, data);
   },
   cambiarEstado(context, data) {
-    return ReservasService.cambiarEstado(data.ci, data).then(() => {
+    return ReservasService.cambiarEstado(data.id, data).then(() => {
+      if (data.estado == 5) context.commit('CANCELAR_RESERVA', data.id);
+
       context.dispatch('global/loading', false, { root: true });
     });
   },

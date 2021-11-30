@@ -35,8 +35,12 @@ export default {
   entregar(id, data) {
     return api().post(`/reservas/${id}/entregar`, data);
   },
+  /**
+   * Permite al usuario cancelar su reserva.
+   * @param {int} data
+   */
   cancelar(id) {
-    return api().post(`/reservas/${id}/cancelar`,);
+    return api().post(`/reservas/${id}/cancelar`);
   },
   /**
    * Recibir materiales de un usuarios siendo guardia.
