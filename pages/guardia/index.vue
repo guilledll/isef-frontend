@@ -21,7 +21,7 @@
       @limpiar="limpiar"
       @cambiar="cambiarFiltro"
     />
-    <Table>
+    <Table v-if="reservas.length">
       <template #head>
         <TableHead :header="table" />
       </template>
@@ -54,6 +54,13 @@
         </tr>
       </template>
     </Table>
+    <div v-else class="flex flex-col lg:flex-grow">
+      <img
+        src="/svg/sinReservas.svg"
+        alt="No hay materiales"
+        class="h-40 my-8 m-auto md:h-52 md:my-16"
+      />
+    </div>
   </div>
 </template>
 

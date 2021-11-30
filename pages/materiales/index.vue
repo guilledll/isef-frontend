@@ -102,6 +102,7 @@
           </template>
         </Table>
       </div>
+
       <LazyModal v-if="modal.show">
         <LazyFormMaterialUpdate
           v-if="modal.action == 'mod'"
@@ -117,6 +118,14 @@
           @close="modal.show = !modal.show"
         />
       </LazyModal>
+
+      <div v-if="materiales.length" class="flex flex-col lg:flex-grow">
+        <img
+          src="/svg/empty.svg"
+          alt="No hay materiales"
+          class="h-40 my-8 m-auto md:h-52 md:my-16"
+        />
+      </div>
     </div>
   </div>
 </template>
