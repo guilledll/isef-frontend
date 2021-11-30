@@ -162,14 +162,7 @@ export default {
         show: false,
         text: '',
       },
-      table: [
-        'inicio',
-        'fin',
-        'lugar',
-        'depósito',
-        'estado',
-        'Cancelar reserva',
-      ],
+      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado'],
     };
   },
   computed: {

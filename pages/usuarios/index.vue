@@ -11,7 +11,7 @@
       @cambiar="cambiarFiltro"
     />
     <div class="flex flex-col gap-3 lg:flex-row">
-      <Table v-if="usuarios.length">
+      <Table>
         <template #head>
           <TableHead :header="table.header" />
         </template>
@@ -60,13 +60,6 @@
           </tr>
         </template>
       </Table>
-      <div v-else class="flex flex-col lg:flex-grow">
-        <img
-          src="/svg/empty.svg"
-          alt="No hay usuarios"
-          class="h-40 my-8 m-auto md:h-52 md:my-16"
-        />
-      </div>
     </div>
     <LazyModal v-if="modal.show">
       <LazyFormUsuarioRol
