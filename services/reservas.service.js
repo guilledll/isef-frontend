@@ -39,11 +39,25 @@ export default {
     return api().post(`/reservas/${id}/cancelar`,);
   },
   /**
+   * Permite al usuario cancelar su reserva.
+   * @param {int} data
+   */
+  cancelar(id) {
+    return api().post(`/reservas/${id}/cancelar`);
+  },
+  /**
    * Recibir materiales de un usuarios siendo guardia.
    * @param {int} data
    */
   recibir(id, data) {
     return api().post(`/reservas/${id}/recibir`, data);
+  },
+  /**
+   * Cambia a aprobada o cancelada (como admin)
+   * @param {int} data
+   */
+  cambiarEstado(id, data) {
+    return api().put(`/reservas/${id}`, data);
   },
   /**
    * Muestra todas las reservas del usuario que se indique su ci en el parametro.

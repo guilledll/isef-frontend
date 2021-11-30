@@ -7,7 +7,6 @@ export default {
   index() {
     return api().get('/departamentos');
   },
-
   /**
    * Crea un departamento.
    * @param {request} data
@@ -15,7 +14,6 @@ export default {
   create(data) {
     return api().post('/departamentos', data);
   },
-
   /**
    * Actualiza el departamento indicado.
    * @param {int} id
@@ -24,7 +22,6 @@ export default {
   update(id, data) {
     return api().put(`/departamentos/${id}`, data);
   },
-
   /**
    * Devuelve un departamento específico
    * @param {int} id
@@ -32,7 +29,6 @@ export default {
   show(id) {
     return api().get(`/departamentos/${id}`);
   },
-
   /**
    * Eliminar el departamento indicado.
    * @param {int} id
@@ -40,7 +36,6 @@ export default {
   delete(id) {
     return api().delete(`/departamentos/${id}`);
   },
-
   /**
    * Obtiene los depositos del departamento.
    * @param {int} id
@@ -48,28 +43,11 @@ export default {
   depositos(id) {
     return api().get(`/departamentos/${id}/depositos`);
   },
-
   /**
    * Obtiene los usuarios del departamento.
    * @param {int} id
    */
   usuarios(id) {
     return api().get(`/departamentos/${id}/usuarios`);
-  },
-
-  /**
-   * Obtiene los depositos del departamento.
-   * @param {int} id
-   */
-  depositos(id) {
-    return api().get(`/api/v1/departamentos/${id}/depositos`);
-  },
-
-  /**
-   * Obtiene los usuarios del departamento.
-   * @param {int} id
-   */
-  usuarios(id) {
-    return api().get(`/api/v1/departamentos/${id}/usuarios`);
   },
 };

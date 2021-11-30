@@ -77,7 +77,8 @@ export const actions = {
 };
 export const getters = {
   conMateriales(state) {
-    return state.categorias.filter(
-      cat => { return cat.cantidad_materiales > 0 });
-  }
+    return state.categorias.filter((cat) => {
+      return cat.cantidad_materiales > 0;
+    });
+  },
 };

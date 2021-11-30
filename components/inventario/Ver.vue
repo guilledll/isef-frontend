@@ -35,6 +35,12 @@ export default {
     return {
       data: [
         {
+          key: 'user_ci',
+          title: 'CI Encargado',
+          color: 'pink',
+          svg: 'user',
+        },
+        {
           key: 'fecha',
           title: 'Fecha',
           color: 'blue',
@@ -63,12 +69,6 @@ export default {
           title: 'Acción',
           color: 'yellow',
           svg: 'clipboard-list',
-        },
-        {
-          key: 'user_ci',
-          title: 'CI Encargado',
-          color: 'pink',
-          svg: 'user',
         },
       ],
     };

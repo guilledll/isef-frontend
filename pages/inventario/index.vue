@@ -20,7 +20,7 @@
             </td>
             <td class="table-td">
               <router-link
-                :to="`/usuarios/${movimiento.user_ci}`"
+                :to="`/perfil/${movimiento.user_ci}`"
                 class="hover:text-blue-600 hover:underline"
               >
                 {{ movimiento.user_ci }}

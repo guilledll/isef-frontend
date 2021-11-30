@@ -7,7 +7,6 @@ export default {
   index() {
     return api().get('/depositos');
   },
-
   /**
    * Muestra el depósito indicado.
    * @param {int} id
@@ -15,7 +14,6 @@ export default {
   show(id) {
     return api().get(`/depositos/${id}`);
   },
-
   /**
    * Crea un depósito.
    * @param {request} data
@@ -23,7 +21,6 @@ export default {
   create(data) {
     return api().post('/depositos', data);
   },
-
   /**
    * Actualiza el depósito indicado.
    * @param {int} id
@@ -32,7 +29,6 @@ export default {
   update(id, data) {
     return api().put(`/depositos/${id}`, data);
   },
-
   /**
    * Eliminar el depósito indicado.
    * @param {int} id
@@ -40,7 +36,6 @@ export default {
   delete(id) {
     return api().delete(`/depositos/${id}`);
   },
-
   /**
    * Obtiene los materiales del deposito.
    * @param {int} id
@@ -48,5 +43,4 @@ export default {
   materiales(id) {
     return api().get(`/depositos/${id}/materiales`);
   },
-
 };

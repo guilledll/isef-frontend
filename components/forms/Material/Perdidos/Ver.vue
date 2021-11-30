@@ -108,6 +108,16 @@
             Las acciones realizadas permite dar seguimiento de los materiales
             involucrados. Las acciones descritas no podrán ser modificadas.
           </LazyGlobalAlert>
+          <LazyGlobalAlert
+            v-if="validarBoton"
+            svg="save"
+            color="red"
+            class="!mt-2"
+          >
+            Al guardar se reconoce que se tomaron acciones reales sobre los
+            materiales afectados. <b>Por ejemplo:</b> comprar nuevos, dar de
+            baja en el sistema, repararlos, etc.
+          </LazyGlobalAlert>
         </div>
         <LazyGlobalAlert v-if="perdidos.admin" color="green" svg="check">
           <b>{{ perdidos.admin }}</b> tomó acciones sobre este informe.
@@ -115,7 +125,7 @@
       </div>
     </div>
     <ModalFooter
-      text="Marcar resuelto"
+      text="Indicar como resuelto"
       type="add"
       :button="validarBoton"
       @close="$emit('close')"
@@ -161,7 +171,7 @@ export default {
   },
   computed: {
     perdidos() {
-      return this.$store.state.materialesPerdidos.materiales;
+      return this.$store.state.materialesPerdidos.material;
     },
     user() {
       return this.$auth.user;
