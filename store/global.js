@@ -26,7 +26,6 @@ export const actions = {
   },
   existen(context) {
     return ExisteService.existen().then((res) => {
-      console.log(res.data);
       context.commit('EXISTE', res.data);
     });
   },

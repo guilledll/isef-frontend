@@ -43,7 +43,6 @@ export const actions = {
     context.commit('CLEAR_SELECTED');
   },
   get(context, id) {
-    console.log(id);
     return CategoriasService.show(id).then((res) => {
       context.dispatch('select', res.data);
     });

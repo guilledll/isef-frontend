@@ -4,6 +4,7 @@
       Los materiales se guardaron correctamente.
     </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+    <!-- Si no hay depositos o categorias muestro esto -->
     <div v-if="!totalDepositos || !totalCategorias" class="mt-6">
       <GlobalAlert color="indigo" class="!my-4">
         Para registrar materiales primero deben haber depósitos y categorías en
@@ -24,8 +25,10 @@
         </router-link>
       </div>
     </div>
+    <!-- Si hay depositos y categorias -->
     <div v-else>
-      <GlobalSearch
+      <LazyGlobalSearch
+        v-if="materialesAll.length"
         store="materiales"
         :title="searchTitle"
         :data="materialesFiltradas"
@@ -48,7 +51,7 @@
             @click="$router.push('/categorias')"
           />
         </div>
-        <Table>
+        <Table v-if="materialesAll.length">
           <template #head>
             <TableHead :header="table" />
           </template>
@@ -101,6 +104,7 @@
             </tr>
           </template>
         </Table>
+        <LazyGlobalSinDatos v-else model="materiales" />
       </div>
 
       <LazyModal v-if="modal.show">
@@ -118,14 +122,6 @@
           @close="modal.show = !modal.show"
         />
       </LazyModal>
-
-      <div v-if="materiales.length" class="flex flex-col lg:flex-grow">
-        <img
-          src="/svg/empty.svg"
-          alt="No hay materiales"
-          class="h-40 my-8 m-auto md:h-52 md:my-16"
-        />
-      </div>
     </div>
   </div>
 </template>
