@@ -2,7 +2,11 @@
   <div>
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
+        <<<<<<< HEAD
         <ModalLeftIcon type="delete" />
+        =======
+        <ModalLeftIcon type="del" />
+        >>>>>>> origin/develop
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
           <h3 class="mb-5 text-xl text-gray-800 font-1 sm:text-2xl">
             Cancelar reserva
