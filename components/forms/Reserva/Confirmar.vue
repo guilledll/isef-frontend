@@ -147,11 +147,11 @@ export default {
           this.$store.dispatch('reservas/clear');
           let query = this.form.validar ? 'true' : 'false';
           this.$router.push({
-            path: `/perfil/${this.reserva.user_ci}`,
+            path: `/perfil/${this.$auth.user.ci}`,
             query: { res: query },
           });
         })
-        .catch((e) => (this.errors = e.response.data.errorsF));
+        .catch((e) => (this.errors = e.response.data.errors));
     },
     // Devuelve el valor, si es fecha la traduce
     datoReserva(key) {

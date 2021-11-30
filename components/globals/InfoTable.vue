@@ -28,7 +28,7 @@
     </p>
     <LazyTable v-if="open && count">
       <template #head>
-        <TableHead :header="table" :action="false" />
+        <TableHead :header="table" :action="action" />
       </template>
       <template #body>
         <slot></slot>
@@ -58,6 +58,7 @@ export default {
     open: { type: Boolean, default: false },
     svg: { type: String, default: 'user-group' },
     count: { type: Number, default: 0 },
+    action: { type: Boolean, default: false },
   },
 };
 </script>

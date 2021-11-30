@@ -1,13 +1,15 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <GlobalSearch
+    <LazyGlobalSearch
+      v-if="depositosAll.length"
       :data="departamentos"
       title="departamento"
       store="depositos"
       @filtrar="filtrar"
       @limpiar="limpiar"
     />
+
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
         <GlobalCallToAction
@@ -22,7 +24,7 @@
           @click="$router.push('/departamentos')"
         />
       </div>
-      <Table v-if="depositos">
+      <Table v-if="depositosAll.length">
         <template #head>
           <TableHead :header="table.header" />
         </template>
@@ -67,14 +69,9 @@
           </tr>
         </template>
       </Table>
-      <div v-else class="flex flex-col lg:flex-grow">
-        <img
-          src="/svg/empty.svg"
-          alt="No hay depósitos"
-          class="h-40 my-8 m-auto md:h-52 md:my-16"
-        />
-      </div>
+      <LazyGlobalSinDatos v-else model="depósitos" />
     </div>
+
     <LazyModal v-if="modal.show">
       <LazyFormDepositoUpdate
         v-if="modal.action == 'mod'"

@@ -47,7 +47,7 @@
         <tr v-for="usuario in usuarios" :key="usuario.id">
           <td class="table-td text-gray-500">
             <router-link
-              :to="`/usuarios/${usuario.ci}`"
+              :to="`/perfil/${usuario.ci}`"
               class="text-black hover:text-blue-600 hover:underline"
             >
               {{ usuario.nombre }} {{ usuario.apellido }}
@@ -55,7 +55,7 @@
           </td>
           <td class="table-td">
             <router-link
-              :to="`/usuarios/${usuario.ci}`"
+              :to="`/perfil/${usuario.ci}`"
               class="text-gray-500 hover:text-blue-600 hover:underline"
             >
               {{ usuario.ci }}

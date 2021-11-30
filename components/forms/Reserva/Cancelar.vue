@@ -2,7 +2,7 @@
   <div>
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
-        <ModalLeftIcon type="del" />
+        <ModalLeftIcon type="delete" />
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
           <h3 class="mb-5 text-xl text-gray-800 font-1 sm:text-2xl">
             Cancelar reserva
@@ -43,9 +43,7 @@ export default {
   methods: {
     async cancelarReserva() {
       await this.$store
-        .dispatch('reservas/cancelar', {
-          id: this.reserva.id,
-        })
+        .dispatch('reservas/cancelar', this.reserva.id)
         .then(() => this.closeModal());
     },
     closeModal() {
