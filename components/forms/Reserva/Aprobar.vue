@@ -2,9 +2,17 @@
   <form @submit.prevent="confirmarReserva">
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="modal-form-body m-auto w-full">
-        <h3 class="mb-5 text-xl text-gray-800 font-1 sm:text-2xl">
-          Confirmar Reserva
+        <h3 class="mb-1 text-xl text-gray-800 font-1 sm:text-2xl">
+          Gestionar Reserva
         </h3>
+        <p class="font-1">
+          Aprobar o rechazar reserva realizada por {{ reserva.user }}.
+        </p>
+        <hr class="w-full mt-2" />
+        <GlobalAlert class="!my-4" color="yellow">
+          Esta reserva tiene una duración superiror a 24hs, para ser válida un
+          administrador debe aprobarla primero.
+        </GlobalAlert>
         <div class="mb-5 grid grid-cols-2 gap-3 text-left sm:gap-5">
           <GlobalInputData
             v-for="res in data"
@@ -15,103 +23,41 @@
             :svg="res.svg"
           />
         </div>
+        <div v-if="reserva.nota_usuario" class="mb-3">
+          <LazyGlobalInputData
+            title="Notas del usuario"
+            :value="reserva.nota_usuario"
+            color="yellow"
+            svg="chat-alt"
+          />
+        </div>
         <Table>
           <template #head>
             <TableHead :header="['Materiales', 'Cantidad']" :action="false" />
           </template>
           <template #body>
-            <tr v-for="material in reserva.materiales" :key="material.id">
+            <tr v-for="material in materiales" :key="material.id">
               <td class="table-td">{{ material.nombre }}</td>
               <td class="table-td">{{ material.cantidad }}</td>
             </tr>
           </template>
         </Table>
-        <div class="flex flex-col mt-3">
-          <FormTextarea
-            id="lugar"
-            v-model.trim="form.lugar"
-            name="lugar"
-            placeholder="Donde usará los materiales?"
-            label="Lugar de uso"
-            rows="2"
-            :sr="false"
-            :error="hasError($v.form.lugar, 'lugar')"
-            @input="fieldReset($v.form.lugar, 'lugar')"
-            @blur="touch($v.form.lugar)"
-          >
-            <LazyFormError
-              v-if="hasError($v.form.lugar, 'lugar')"
-              :text="errorText($v.form.lugar, 'lugar')"
-            />
-          </FormTextarea>
-          <FormTextarea
-            id="razon"
-            v-model.trim="form.razon"
-            name="razon"
-            placeholder="Para que utilizará los materiales?"
-            label="Razón de uso"
-            rows="2"
-            :sr="false"
-            :error="hasError($v.form.razon, 'razon')"
-            @input="fieldReset($v.form.razon, 'razon')"
-            @blur="touch($v.form.razon)"
-          >
-            <LazyFormError
-              v-if="hasError($v.form.razon, 'razon')"
-              :text="errorText($v.form.razon, 'razon')"
-            />
-          </FormTextarea>
-          <FormTextarea
-            id="notas"
-            v-model.trim="form.notas"
-            name="notas"
-            placeholder="Notas (opcional)"
-            label="Notas adicionales"
-            rows="2"
-            :required="false"
-            :sr="false"
-            :error="hasError($v.form.notas, 'notas')"
-            @input="fieldReset($v.form.notas, 'notas')"
-            @blur="touch($v.form.notas)"
-          >
-            <LazyFormError
-              v-if="hasError($v.form.notas, 'notas')"
-              :text="errorText($v.form.notas, 'notas')"
-            />
-          </FormTextarea>
-        </div>
-        <LazyGlobalAlert v-if="reserva.validar" color="yellow">
-          Luego de confirmar, un administrador deberá aprobar esta reserva.
-        </LazyGlobalAlert>
       </div>
     </div>
-    <ModalFooter text="Confirmar Reserva" type="add" @close="$emit('close')" />
+    <ModalFooter :button="false" close-text="Volver" @close="$emit('close')" />
   </form>
 </template>
 
 <script>
-// import FechaMixin from '@/mixins/FechaMixin';
+import FechaMixin from '@/mixins/FechaMixin';
 export default {
+  mixins: [FechaMixin],
   data() {
     return {
       form: {
-        razon: '',
-        lugar: '',
-        notas: '',
+        estado: null,
       },
       data: [
-        {
-          key: 'deposito',
-          title: 'Depósito',
-          color: 'blue',
-          svg: 'location-marker',
-        },
-        {
-          key: 'departamento',
-          title: 'Departamento',
-          color: 'purple',
-          svg: 'map',
-        },
         {
           key: 'inicio',
           title: 'Inicia',
@@ -124,12 +70,27 @@ export default {
           color: 'red',
           svg: 'clock',
         },
+        {
+          key: 'razon',
+          title: 'Razón de uso',
+          color: 'purple',
+          svg: 'question-circle',
+        },
+        {
+          key: 'lugar',
+          title: 'Lugar de uso',
+          color: 'pink',
+          svg: 'location-marker',
+        },
       ],
     };
   },
   computed: {
     reserva() {
       return this.$store.state.reservas.reserva;
+    },
+    materiales() {
+      return this.$store.state.reservas.materialesDisponibles;
     },
   },
   methods: {

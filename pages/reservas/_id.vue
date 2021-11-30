@@ -81,6 +81,7 @@
         class="btn indigo"
         @click="verAdmin"
       >
+        <GlobalSvg svg="info-circle" class="h-5 w-5 mr-2" />
         Ver reserva
       </button>
     </div>
@@ -117,7 +118,7 @@
         @close="close"
         @recibido="recibido"
       />
-      <LazyFormReservaRecibir
+      <LazyFormReservaAprobar
         v-if="modal.type == 'verAdmin'"
         @close="close"
         @accion="accionSobreReserva"
@@ -199,11 +200,8 @@ export default {
     materiales() {
       return this.$store.state.reservas.materialesDisponibles;
     },
-    tieneMaterialesPerdidos() {
-      return this.$store.state.reservas.perdidos;
-    },
     perdidos() {
-      return this.$store.state.materialesPerdidos.materiales;
+      return this.$store.state.materialesPerdidos.material;
     },
     totalMateriales() {
       return this.materiales.reduce((a, b) => {
@@ -228,12 +226,6 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('reservas/get', this.$route.params.id);
-    if (this.tieneMaterialesPerdidos) {
-      await this.$store.dispatch(
-        'materialesPerdidos/get',
-        this.tieneMaterialesPerdidos.id
-      );
-    }
     // Si se realizo una reserva, muestra la alerta
     let acc = this.$route.query.accion;
     if (acc) {

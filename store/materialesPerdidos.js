@@ -7,8 +7,8 @@ export const state = () => ({
 });
 
 export const mutations = {
-  SELECT(state, materiales) {
-    state.materiales = materiales;
+  SELECT(state, material) {
+    state.material = material;
   },
   CLEAR_SELECTED(state) {
     state.material = null;

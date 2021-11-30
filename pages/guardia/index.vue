@@ -112,6 +112,9 @@ export default {
       return estadosTraducidos;
     },
   },
+  beforeCreate() {
+    this.$store.dispatch('reservas/clear');
+  },
   async mounted() {
     await this.$store.dispatch('reservas/all');
     await this.$store.dispatch('depositos/all');

@@ -18,8 +18,7 @@ export const mutations = {
     state.reserva = reserva;
   },
   CLEAR_SELECTED(state) {
-    state.material = null;
-    state.movimientos = [];
+    state.reserva = null;
     state.materialesDisponibles = [];
   },
   INICIAR_RESERVA(state, reserva) {

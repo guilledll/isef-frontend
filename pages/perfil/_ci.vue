@@ -8,13 +8,16 @@
         <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">
           {{ usuario.nombre }} {{ usuario.apellido }}
         </h3>
-        <div>
-          <button class="action-btn" @click="edit">
-            <GlobalSvg class="h-6 w-6 md:h-6 md:w-6" svg="pencil" />
+        <div class="space-x-2">
+          <button class="perfil-btn" @click="edit">
+            <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
+          </button>
+          <button class="perfil-btn logout" @click="logout">
+            <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="logout" />
           </button>
         </div>
       </div>
-      <hr class="mt-3" />
+      <hr class="mt-1 sm:mt-3" />
     </div>
     <div
       class="grid grid-cols-1 mb-5 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3"
@@ -36,7 +39,7 @@
             class="h-6 w-6 mr-1 text-purple-600"
             svg="clipboard-check"
           />
-          Rol:
+          Eres:
         </span>
         {{ mostrarRol(usuario.rol) }}
       </div>
@@ -72,7 +75,7 @@
     </div>
     <GlobalInfoTable
       title="Reservas"
-      svg="cube"
+      svg="clipboard-list"
       :table="table"
       :open="open.table"
       :count="reservas.length"
@@ -147,32 +150,6 @@ export default {
     }
   },
   methods: {
-    seleccionarUsuario(action, user = null) {
-      if (user) this.$store.dispatch('users/select', user);
-      if (action != 'view') {
-        this.modal.action = action;
-        this.modal.show = !this.modal.show;
-      }
-    },
-    reservasUsuario(usuario) {
-      return this.$store.dispatch('reservas/getAllReservasUsuario', usuario);
-    },
-    mostrarRol(rol) {
-      switch (parseInt(rol)) {
-        case 1:
-          rol = 'Usuario';
-          break;
-        case 2:
-          rol = 'Guardia';
-          break;
-        case 3:
-          rol = 'Administrador';
-          break;
-        default:
-          rol = 'Sin asignar';
-      }
-      return rol;
-    },
     async showDetails() {
       if (!this.reservas.length) {
         await this.$store.dispatch(
@@ -184,6 +161,9 @@ export default {
     },
     edit() {
       this.open.modal = !this.open.modal;
+    },
+    logout() {
+      this.$auth.logout();
     },
     mostrarEstado(estado) {
       switch (parseInt(estado)) {
@@ -204,21 +184,31 @@ export default {
       }
       return estado;
     },
+    mostrarRol(rol) {
+      switch (parseInt(rol)) {
+        case 1:
+          rol = 'Usuario';
+          break;
+        case 2:
+          rol = 'Guardia';
+          break;
+        case 3:
+          rol = 'Administrador';
+          break;
+        default:
+          rol = 'Sin asignar';
+      }
+      return rol;
+    },
   },
 };
 </script>
 
 <style lang="postcss" scoped>
-.rol-0 {
-  @apply text-red-500;
-}
-.rol-1 {
-  @apply text-gray-500;
-}
-.rol-2 {
-  @apply text-indigo-500;
-}
-.rol-3 {
-  @apply text-green-500;
+.perfil-btn {
+  @apply p-1.5 rounded-md hover:shadow-md hover:text-blue-500;
+  &.logout {
+    @apply hover:text-red-500;
+  }
 }
 </style>
