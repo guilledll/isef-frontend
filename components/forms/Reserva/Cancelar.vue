@@ -18,6 +18,7 @@
     <ModalFooter
       type="del"
       text="Cancelar reserva"
+      close-text="Cerrar"
       :disabled="disabled"
       @action="cancelarReserva"
       @close="closeModal"

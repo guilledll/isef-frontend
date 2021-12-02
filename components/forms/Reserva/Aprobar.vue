@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="confirmarReserva">
+  <form>
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="modal-form-body m-auto w-full">
         <h3 class="mb-1 text-xl text-gray-800 font-1 sm:text-2xl">
@@ -10,8 +10,8 @@
         </p>
         <hr class="w-full mt-2" />
         <GlobalAlert class="!my-4" color="yellow">
-          Esta reserva tiene una duración superiror a 24hs, para ser válida un
-          administrador debe aprobarla primero.
+          Esta reserva tiene una duración superiror a 24hs, para ser entregada
+          un administrador debe aprobarla primero.
         </GlobalAlert>
         <div class="mb-5 grid grid-cols-2 gap-3 text-left sm:gap-5">
           <GlobalInputData
@@ -42,6 +42,41 @@
             </tr>
           </template>
         </Table>
+        <!-- TOMA DE ACCION (aprueba/cancela) -->
+        <div class="foot">
+          <p class="font-1 text-center text-gray-800">
+            Define si aprobar o cancelar la reserva. Al terminar informaremos la
+            acción tomada al respectivo usuario.
+          </p>
+          <div class="aciones">
+            <button
+              type="button"
+              class="btn full cancelar"
+              :disabled="loading"
+              @click="accion(5)"
+            >
+              <span v-if="!loading">Cancelar pedido</span>
+              <GlobalSvg
+                v-else
+                class="h-5 w-5 animate-spin mx-4"
+                svg="refresh"
+              />
+            </button>
+            <button
+              type="button"
+              class="btn full aprobar"
+              :disabled="loading"
+              @click="accion(2)"
+            >
+              <span v-if="!loading">Aprobar pedido</span>
+              <GlobalSvg
+                v-else
+                class="h-5 w-5 animate-spin mx-4"
+                svg="refresh"
+              />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <ModalFooter :button="false" close-text="Volver" @close="$emit('close')" />
@@ -55,9 +90,22 @@ export default {
   data() {
     return {
       form: {
+        id: null,
         estado: null,
       },
       data: [
+        {
+          key: 'user_ci',
+          title: 'Cédula',
+          color: 'yellow',
+          svg: 'identification',
+        },
+        {
+          key: 'user',
+          title: 'Usuario',
+          color: 'blue',
+          svg: 'user',
+        },
         {
           key: 'inicio',
           title: 'Inicia',
@@ -92,22 +140,32 @@ export default {
     materiales() {
       return this.$store.state.reservas.materialesDisponibles;
     },
+    loading() {
+      return this.$store.state.global.loading;
+    },
   },
   methods: {
-    confirmarReserva() {
-      if (this.invalid()) return;
+    accion(estado) {
+      this.form.id = this.reserva.id;
+      this.form.estado = estado;
 
-      // this.$store
-      //   .dispatch('reservas/confirmarReserva', this.form)
-      //   .then(() => {
-      //     this.$emit('close');
-      //     this.$store.dispatch('reservas/clear');
-      //     let query = this.form.validar ? 'true' : 'false';
-      //     this.$router.push({
-      //       path: `/perfil/${this.reserva.user_ci}`,
-      //       query: { res: query },
-      //     });
-      //   })
+      this.$store
+        .dispatch('reservas/cambiarEstado', this.form)
+        .then(() => {
+          this.$emit('close');
+          this.$store.dispatch('reservas/clear');
+
+          this.$router.push({
+            path: `/guardia`,
+            query:
+              this.form.estado == 2
+                ? { aprobada: this.form.id }
+                : { cancelada: this.form.id },
+          });
+        })
+        .catch(() => {
+          this.$store.dispatch('global/loading', false);
+        });
     },
     // Devuelve el valor, si es fecha la traduce
     datoReserva(key) {
@@ -122,5 +180,17 @@ export default {
 <style lang="postcss" scoped>
 ::v-deep .form-label {
   @apply text-gray-700 !important;
+}
+.foot {
+  @apply bg-gray-50 border rounded px-3 py-4 mt-4 space-y-3;
+  .aciones {
+    @apply flex items-center justify-between space-x-3;
+    .aprobar {
+      @apply bg-green-500 hover:shadow-md;
+    }
+    .cancelar {
+      @apply bg-red-500 hover:shadow-md;
+    }
+  }
 }
 </style>

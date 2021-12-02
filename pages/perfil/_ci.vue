@@ -181,6 +181,8 @@ export default {
       ? await this.$store.dispatch('users/select', this.$auth.user)
       : await this.$store.dispatch('users/get', this.$route.params.ci);
 
+    this.$store.dispatch('reservas/clearAll');
+
     // Si se realizo una reserva, muestra la alerta
     let res = this.$route.query.res;
     if (res) {
