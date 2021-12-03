@@ -86,7 +86,7 @@
         </LazyGlobalAlert>
         <div v-else class="space-y-3">
           <GlobalAlert color="gray">
-            Nombre los materiales respetando el formato
+            Nombre los materiales en singular y respetando el formato
             <b>"Nombre Categoría"</b>. Ejemplos: <b>Pelota fútbol</b>,
             <b>5K pesa</b>, <b>Red tennis</b>.
           </GlobalAlert>

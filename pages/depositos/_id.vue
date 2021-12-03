@@ -14,54 +14,44 @@
       <hr class="mt-3" />
     </div>
     <div class="grid grid-cols-1 mb-5 sm:grid-cols-2">
-      <div class="flex items-center text-lg md:text-xl">
-        <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-          <GlobalSvg
-            class="h-6 w-6 mr-1 text-green-600"
-            svg="location-marker"
-          />
-          Departamento:
-        </span>
-        <router-link
-          class="hover:underline hover:text-green-600"
-          :to="`/departamentos/${deposito.departamento_id}`"
-        >
-          {{ deposito.departamento }}
-        </router-link>
-      </div>
+      <GlobalTextData
+        title="Departamento:"
+        color="green"
+        svg="location-marker"
+        :text="deposito.departamento"
+        :link="`/departamentos/${deposito.departamento_id}`"
+      />
     </div>
-    <div class="grid gap-3 lg:grid-cols-2">
-      <GlobalInfoTable
-        title="Materiales"
-        svg="cube"
-        :table="table"
-        :open="open.table"
-        :count="materiales.length"
-        @click="showDetails()"
-      >
-        <tr v-for="material in materiales" :key="material.id">
-          <td class="table-td">
-            <router-link
-              :to="`/materiales/${material.id}`"
-              class="text-black hover:text-blue-600 hover:underline"
-            >
-              {{ material.nombre }}
-            </router-link>
-          </td>
-          <td class="table-td text-gray-500">
-            <router-link
-              :to="`/categorias/${material.categoria_id}`"
-              class="text-black hover:text-blue-600 hover:underline"
-            >
-              {{ material.categoria }}
-            </router-link>
-          </td>
-          <td class="table-td text-gray-500">
-            {{ material.cantidad }}
-          </td>
-        </tr>
-      </GlobalInfoTable>
-    </div>
+    <GlobalInfoTable
+      title="Materiales"
+      svg="cube"
+      :table="table"
+      :open="open.table"
+      :count="materiales.length"
+      @click="showDetails()"
+    >
+      <tr v-for="material in materiales" :key="material.id">
+        <td class="table-td">
+          <router-link
+            :to="`/materiales/${material.id}`"
+            class="text-black hover:text-blue-600 hover:underline"
+          >
+            {{ material.nombre }}
+          </router-link>
+        </td>
+        <td class="table-td text-gray-500">
+          <router-link
+            :to="`/categorias/${material.categoria_id}`"
+            class="text-black hover:text-blue-600 hover:underline"
+          >
+            {{ material.categoria }}
+          </router-link>
+        </td>
+        <td class="table-td text-gray-500">
+          {{ material.cantidad }}
+        </td>
+      </tr>
+    </GlobalInfoTable>
     <LazyModal v-if="open.modal">
       <FormDepositoUpdate is-view @close="open.modal = !open.modal" />
     </LazyModal>

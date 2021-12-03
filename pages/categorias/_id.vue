@@ -13,38 +13,36 @@
       </div>
       <hr class="mt-3" />
     </div>
-    <div class="grid gap-3 lg:grid-cols-2">
-      <GlobalInfoTable
-        title="Materiales"
-        svg="cube"
-        :table="table"
-        :open="open.table"
-        :count="materiales.length"
-        @click="showDetails()"
-      >
-        <tr v-for="material in materiales" :key="material.id">
-          <td class="table-td">
-            <router-link
-              :to="`/materiales/${material.id}`"
-              class="text-black hover:text-blue-600 hover:underline"
-            >
-              {{ material.nombre }}
-            </router-link>
-          </td>
-          <td class="table-td">
-            <router-link
-              :to="`/categorias/${material.deposito_id}`"
-              class="text-black hover:text-blue-600 hover:underline"
-            >
-              {{ material.deposito }}
-            </router-link>
-          </td>
-          <td class="table-td text-gray-500">
-            {{ material.cantidad }}
-          </td>
-        </tr>
-      </GlobalInfoTable>
-    </div>
+    <GlobalInfoTable
+      title="Materiales"
+      svg="cube"
+      :table="table"
+      :open="open.table"
+      :count="materiales.length"
+      @click="showDetails()"
+    >
+      <tr v-for="material in materiales" :key="material.id">
+        <td class="table-td">
+          <router-link
+            :to="`/materiales/${material.id}`"
+            class="text-black hover:text-blue-600 hover:underline"
+          >
+            {{ material.nombre }}
+          </router-link>
+        </td>
+        <td class="table-td">
+          <router-link
+            :to="`/categorias/${material.deposito_id}`"
+            class="text-black hover:text-blue-600 hover:underline"
+          >
+            {{ material.deposito }}
+          </router-link>
+        </td>
+        <td class="table-td text-gray-500">
+          {{ material.cantidad }}
+        </td>
+      </tr>
+    </GlobalInfoTable>
     <LazyModal v-if="open.modal">
       <FormCategoriaUpdate is-view @close="open.modal = !open.modal" />
     </LazyModal>
