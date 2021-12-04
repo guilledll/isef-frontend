@@ -26,7 +26,8 @@
 export default {
   props: {
     cant: { type: Number, default: 1 },
-    maxCant: { type: Number, default: 50 },
+    maxCant: { type: Number, default: 100 },
+    zero: { type: Boolean, default: false },
     sr: { type: Boolean, default: true },
     label: { type: String, default: 'Cantidad' },
   },
@@ -49,6 +50,9 @@ export default {
     },
     restar() {
       if (this.cantidad > 1) {
+        this.cantidad -= 1;
+        this.$emit('cambio', this.cantidad);
+      } else if (this.cantidad == 1 && this.zero) {
         this.cantidad -= 1;
         this.$emit('cambio', this.cantidad);
       }

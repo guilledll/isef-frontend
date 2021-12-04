@@ -1,12 +1,12 @@
 <template>
   <div class="page-container">
-    <div class="mb-10">
+    <div class="mb-8">
       <div class="flex justify-between">
         <h3 class="text-2xl text-gray-900 font-1 md:text-4xl">
           {{ material.nombre }} {{ material.categoria }}
         </h3>
         <div>
-          <button class="action-btn" @click="edit">
+          <button class="optional-btn" @click="edit">
             <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
           </button>
         </div>
@@ -36,7 +36,7 @@
         <td class="table-td">
           {{ movimiento.fecha }}
         </td>
-        <td class="table-td" :class="claseAccion(movimiento.accion)">
+        <td class="table-td" :class="`accion-${movimiento.accion}`">
           {{ mostrarAccion(movimiento.accion) }}
         </td>
         <td class="table-td text-gray-500">
@@ -108,9 +108,6 @@ export default {
     },
     edit() {
       this.open.modal = !this.open.modal;
-    },
-    claseAccion(accion) {
-      return `accion-${accion}`;
     },
     mostrarAccion(accion) {
       switch (parseInt(accion)) {

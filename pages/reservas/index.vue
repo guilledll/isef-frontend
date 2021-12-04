@@ -1,25 +1,30 @@
 <template>
   <div>
-    <div v-if="reserva && materialesDisponibles.length">
-      <LazyGlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-      <LazyReservaListadoMateriales
-        :materiales-disponibles="materialesDisponibles"
-      />
-      <div class="reserva-footer">
-        <button class="btn red gap-1.5" @click="cancelarReserva">
-          <GlobalSvg svg="x" class="h-5 w-5" />
-          Cancelar
-        </button>
-        <button
-          class="btn green gap-1.5"
-          :disabled="!reserva.materiales.length"
-          @click="verModal(2)"
-        >
-          <GlobalSvg svg="check" class="h-5 w-5" />
-          Continuar
-        </button>
+    <!-- Reserva de materiales -->
+    <div v-if="reserva">
+      <div v-if="materialesDisponibles.length">
+        <LazyGlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+        <LazyReservaListadoMateriales
+          :materiales-disponibles="materialesDisponibles"
+        />
+        <div class="reserva-footer">
+          <button class="btn red gap-1.5" @click="cancelarReserva">
+            <GlobalSvg svg="x" class="h-5 w-5" />
+            Cancelar
+          </button>
+          <button
+            class="btn green gap-1.5"
+            :disabled="!reserva.materiales.length"
+            @click="verModal(2)"
+          >
+            <GlobalSvg svg="check" class="h-5 w-5" />
+            Continuar
+          </button>
+        </div>
       </div>
+      <LazyGlobalSinDatos v-else model="materiales" />
     </div>
+    <!-- Inicio y opciones -->
     <div v-else class="hacer-reserva-container">
       <h4 class="text-2xl font-1 md:text-5xl">Reserva de materiales</h4>
       <div class="flex flex-row gap-5 items-center justify-center">
@@ -80,7 +85,7 @@ export default {
     cancelarReserva() {
       let msg = 'Al cancelar se perderán los datos. Desea continuar?';
       if (confirm(msg)) {
-        this.$store.dispatch('reservas/cancelarReserva');
+        this.$store.dispatch('reservas/clear');
         this.$router.push('/reservas');
       }
     },

@@ -10,10 +10,10 @@
             {{ usuario.nombre }} {{ usuario.apellido }}
           </h3>
           <div class="space-x-2">
-            <button class="perfil-btn" @click="accion">
+            <button class="optional-btn" @click="accion">
               <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
             </button>
-            <button v-if="soyYo" class="perfil-btn logout" @click="logout">
+            <button v-if="soyYo" class="optional-btn red" @click="logout">
               <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="logout" />
             </button>
           </div>
@@ -258,12 +258,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss" scoped>
-.perfil-btn {
-  @apply p-1.5 rounded-md hover:shadow-md hover:text-blue-500;
-  &.logout {
-    @apply hover:text-red-500;
-  }
-}
-</style>
