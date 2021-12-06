@@ -35,6 +35,16 @@ export default {
   entregar(id, data) {
     return api().post(`/reservas/${id}/entregar`, data);
   },
+  cancelar(id) {
+    return api().post(`/reservas/${id}/cancelar`,);
+  },
+  /**
+   * Permite al usuario cancelar su reserva.
+   * @param {int} data
+   */
+  cancelar(id) {
+    return api().post(`/reservas/${id}/cancelar`);
+  },
   /**
    * Permite al usuario cancelar su reserva.
    * @param {int} data
