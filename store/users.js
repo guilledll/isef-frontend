@@ -21,9 +21,9 @@ export const mutations = {
   GET_ALL_USERS(state, users) {
     state.users = users;
   },
-  UPDATE_ROL(state, users) {
-    state.users = state.users.map((user) =>
-      user.ci == users.ci ? { ...user, rol: users.rol } : user
+  UPDATE_ROL(state, user) {
+    state.users = state.users.map((u) =>
+      u.ci == user.ci ? { ...u, rol: user.rol } : u
     );
   },
   DEL_USUARIO(state, ci) {
@@ -65,7 +65,6 @@ export const actions = {
     return UsersService.updateRol(data.ci, data).then((res) => {
       context.commit('UPDATE_ROL', res.data);
       context.dispatch('select', res.data);
-      context.dispatch('global/loading', false, { root: true });
     });
   },
   update(context, data) {

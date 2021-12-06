@@ -4,7 +4,7 @@
     <GlobalSearch
       store="users"
       :title="searchTitle"
-      :data="usuariosFiltrados"
+      :data="elementosFiltrados"
       :inputs="inputs"
       @filtrar="filtrar"
       @limpiar="limpiar"
@@ -23,7 +23,7 @@
                 class="text-black hover:text-blue-600 hover:underline"
                 @click.native="seleccionarUsuario('view', user)"
               >
-                {{ user.nombre }}
+                {{ user.nombre }} {{ user.apellido }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
@@ -71,6 +71,7 @@
     <LazyModal v-if="modal.show">
       <LazyFormUsuarioRol
         v-if="modal.action == 'mod'"
+        @cambioRol="cambioRol"
         @close="modal.show = !modal.show"
       />
       <!-- <LazyFormUsuarioDelete
@@ -99,7 +100,7 @@ export default {
         action: '',
       },
       usuarios: [],
-      usuariosFiltrados: [],
+      elementosFiltrados: [],
       inputs: [
         { value: 'departamento_id', text: 'Departamento' },
         { value: 'rol', text: 'Rol' },
@@ -150,10 +151,13 @@ export default {
       this.usuarios = this.filtrados;
     },
     cambiarFiltro(dato) {
-      this.usuariosFiltrados =
+      this.elementosFiltrados =
         dato === 'departamento_id' ? this.departamentos : this.roles;
       this.searchTitle = dato === 'departamento_id' ? 'departamento' : 'rol';
       this.limpiar();
+    },
+    cambioRol() {
+      this.usuarios = this.usuariosAll;
     },
     mostrarRol(rol) {
       switch (parseInt(rol)) {
