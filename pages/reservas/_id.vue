@@ -225,6 +225,7 @@ export default {
     },
   },
   async mounted() {
+    this.$store.dispatch('materialesPerdidos/clear');
     await this.$store.dispatch('reservas/get', this.$route.params.id);
     // Si se realizo una reserva, muestra la alerta
     let acc = this.$route.query.accion;
