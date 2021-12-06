@@ -146,6 +146,20 @@ export default {
         this.entregado.text = 'recibida';
         return;
       }
+      let aprobada = this.$route.query.aprobada;
+      if (aprobada) {
+        this.entregado.show = true;
+        this.entregado.id = aprobada;
+        this.entregado.text = 'aprobada';
+        return;
+      }
+      let cancelada = this.$route.query.cancelada;
+      if (cancelada) {
+        this.entregado.show = true;
+        this.entregado.id = cancelada;
+        this.entregado.text = 'cancelada';
+        return;
+      }
       if (this.$route.query.aprobada) {
         this.aprobada = true;
         return;

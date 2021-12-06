@@ -46,6 +46,13 @@ export default {
     return api().post(`/reservas/${id}/cancelar`);
   },
   /**
+   * Permite al usuario cancelar su reserva.
+   * @param {int} data
+   */
+  cancelar(id) {
+    return api().post(`/reservas/${id}/cancelar`);
+  },
+  /**
    * Recibir materiales de un usuarios siendo guardia.
    * @param {int} data
    */

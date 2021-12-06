@@ -11,7 +11,7 @@ export default {
     /**
      * Cuando hay errores, el estado de carga se apaga
      */
-    errors() {
+    errors() { 
       this.$store.dispatch('global/loading', false);
     },
   },

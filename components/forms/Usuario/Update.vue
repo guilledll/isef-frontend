@@ -115,7 +115,7 @@
               </FormSelect>
             </div>
           </div>
-          <div v-if="false">
+          <div v-if="true">
             <!-- UPDATE PASSWORD -->
             <p class="font-1 mb-2 text-lg">¿Cambiar contraseña?</p>
             <div>
@@ -188,12 +188,12 @@ import { updatedDiff } from 'deep-object-diff';
 import {
   required,
   integer,
-  // requiredIf,
+  requiredIf,
   numeric,
   email,
   maxLength,
   minLength,
-  //  sameAs,
+  sameAs,
 } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 import FormValidationMixin from '@/mixins/FormValidationMixin';
@@ -227,19 +227,12 @@ export default {
     disabled() {
       return (
         Object.keys(updatedDiff(this.usuario, this.form)).length == 0 ||
-        this.$v.form.$invalid
-        // || this.$v.password.$invalid ||
-        // this.$v.password_confirmation.$invalid
+        this.$v.form.$invalid ||
+        this.$v.password.$invalid ||
+        this.$v.password_confirmation.$invalid
       );
     },
-    upPass() {
-      return (
-        !this.$v.form.$invalid &&
-        !this.$v.password.$invalid &&
-        !this.$v.password_confirmation.$invalid &&
-        Object.keys(updatedDiff(this.usuario, this.form)).length != 0
-      );
-    },
+
   },
   validations: {
     form: {
@@ -272,19 +265,19 @@ export default {
         departamento,
       },
     },
-    // password: {
-    //   // required: requiredIf((cambiar) => {
-    //   //   return cambiar;
-    //   // }),
-    //   minLength: minLength(8),
-    //   maxLength: maxLength(50),
-    // },
-    // password_confirmation: {
-    //   // required: requiredIf((cambiar) => {
-    //   //   return cambiar;
-    //   // }),
-    //   sameAsPassword: sameAs('password'),
-    // },
+    password: {
+      required: requiredIf((cambiar) => {
+        return cambiar;
+      }),
+      minLength: minLength(8),
+      maxLength: maxLength(50),
+    },
+    password_confirmation: {
+      required: requiredIf((cambiar) => {
+        return cambiar;
+      }),
+      sameAsPassword: sameAs('password'),
+    },
   },
   mounted() {
     this.form.ci = this.usuario.ci;

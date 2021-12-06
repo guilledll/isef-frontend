@@ -19,6 +19,7 @@ export const mutations = {
     state.materiales = materiales;
   },
   MOD_MATERIAL(state, material) {
+    state.material = material;
     state.materiales = state.materiales.map((mat) =>
       mat.id == material.id
         ? {

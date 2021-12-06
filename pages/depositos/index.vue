@@ -100,7 +100,7 @@ export default {
         text: 'En los depósitos se encuentran los materiales. Ejemplo de depósitos: Cure, Campus, etc.',
       },
       table: {
-        header: ['Nombre', 'Sede', 'Materiales'],
+        header: ['Nombre', 'Departamento', 'Materiales'],
       },
       modal: {
         show: false,

@@ -21,6 +21,12 @@ export const mutations = {
     state.reserva = null;
     state.materialesDisponibles = [];
   },
+  CLEAR_ALL(state) {
+    state.reservas = [];
+    state.filtrados = [];
+    state.reserva = null;
+    state.materialesDisponibles = [];
+  },
   INICIAR_RESERVA(state, reserva) {
     state.reserva = reserva;
   },
@@ -124,9 +130,10 @@ export const actions = {
     return ReservasService.recibir(id, data);
   },
   cambiarEstado(context, data) {
+    context.dispatch('global/loading', true, { root: true });
     return ReservasService.cambiarEstado(data.id, data).then(() => {
-      if (data.estado == 5) context.commit('CANCELAR_RESERVA', data.id);
-
+      // if (data.estado == 5) context.commit('CANCELAR_RESERVA', data.id);
+      // if (data.estado == 2) context.commit('APREBAR_RESERVA', data.id);
       context.dispatch('global/loading', false, { root: true });
     });
   },
@@ -141,6 +148,9 @@ export const actions = {
   },
   clear(context) {
     context.commit('CLEAR_SELECTED');
+  },
+  clearAll(context) {
+    context.commit('CLEAR_ALL');
   },
 };
 

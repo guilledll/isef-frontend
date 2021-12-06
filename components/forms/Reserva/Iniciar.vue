@@ -109,6 +109,9 @@
           Las reservas con duración mayor a 24hs deberán ser aprobadas por un
           administrador.
         </LazyGlobalAlert>
+        <LazyGlobalAlert v-if="fechaInvalida" color="red">
+          ¡Estás ingresando mal las fechas de la reserva!.
+        </LazyGlobalAlert>
       </div>
     </div>
     <ModalFooter text="Continuar" type="add" @close="$emit('close')" />
@@ -135,6 +138,7 @@ export default {
         fin: this.loadFechaFin(),
         materiales: [],
       },
+      fechaInvalida: false,
     };
   },
   computed: {
@@ -160,6 +164,10 @@ export default {
   },
   methods: {
     async iniciarReserva() {
+      if (this.form.inicio > this.form.fin) {
+        this.fechaInvalida = true;
+        return;
+      }
       if (this.invalid()) return;
       if (this.mas24Horas) this.form.validar = true;
       await this.$store.dispatch('reservas/iniciar', this.form);

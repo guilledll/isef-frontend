@@ -10,10 +10,10 @@
             {{ usuario.nombre }} {{ usuario.apellido }}
           </h3>
           <div class="space-x-2">
-            <button class="perfil-btn" @click="accion">
+            <button class="optional-btn" @click="accion">
               <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
             </button>
-            <button v-if="soyYo" class="perfil-btn logout" @click="logout">
+            <button v-if="soyYo" class="optional-btn red" @click="logout">
               <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="logout" />
             </button>
           </div>
@@ -23,59 +23,15 @@
       <div
         class="grid grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3"
       >
-        <!-- HACER ESTO ITERATIVO -->
-        <div class="flex items-center text-lg md:text-xl">
-          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-            <GlobalSvg
-              class="h-6 w-6 mr-1 text-indigo-600"
-              svg="identification"
-            />
-            Ci:
-          </span>
-          {{ usuario.ci }}
-        </div>
-        <div
-          v-if="usuario.rol != 1"
-          class="flex items-center text-lg md:text-xl"
-        >
-          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-            <GlobalSvg
-              class="h-6 w-6 mr-1 text-purple-600"
-              svg="clipboard-check"
-            />
-            Eres:
-          </span>
-          {{ mostrarRol(usuario.rol) }}
-        </div>
-        <div class="flex items-center text-lg md:text-xl">
-          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-            <GlobalSvg class="h-6 w-6 mr-1 text-blue-600" svg="phone" />
-            Teléfono:
-          </span>
-          {{ usuario.telefono }}
-        </div>
-        <div class="flex items-center text-lg md:text-xl">
-          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-            <GlobalSvg
-              class="h-6 w-6 mr-1 text-green-600"
-              svg="location-marker"
-            />
-            Departamento:
-          </span>
-          <router-link
-            class="hover:underline hover:text-green-600"
-            :to="`/departamentos/${usuario.departamento_id}`"
-          >
-            {{ usuario.departamento }}
-          </router-link>
-        </div>
-        <div class="flex items-center text-lg md:text-xl">
-          <span class="flex items-center mr-1.5 font-semibold text-gray-800">
-            <GlobalSvg class="h-6 w-6 mr-1 text-yellow-600" svg="mail" />
-            Correo:
-          </span>
-          {{ usuario.correo }}
-        </div>
+        <GlobalTextData
+          v-for="d in data"
+          :key="d.key"
+          :title="d.title"
+          :text="mostrarDato(d.key)"
+          :color="d.color"
+          :svg="d.svg"
+          :link="d.link"
+        />
       </div>
     </div>
     <LazyGlobalInfoTable
@@ -114,7 +70,12 @@
       </tr>
     </LazyGlobalInfoTable>
     <LazyModal v-if="modal.show">
-      <FormUsuarioUpdate
+      <!--<FormUsuarioUpdate
+        v-if="modal.action == 'edit'"
+        is-view
+        @close="modal.show = !modal.show"
+      /> -->
+      <FormUsuarioUpdatePass
         v-if="modal.action == 'edit'"
         is-view
         @close="modal.show = !modal.show"
@@ -137,8 +98,8 @@ import FechaMixin from '@/mixins/FechaMixin';
 export default {
   mixins: [FechaMixin],
   layout: 'AppLayout',
-  // Impide ver perfiles de otros usuarios si no es admin
   middleware({ route, store, redirect }) {
+    // Impide ver perfiles de otros usuarios si no es admin
     let user = store.$auth.user;
     if (user.ci != route.params.ci) {
       if (user.rol !== 3) {
@@ -182,11 +143,48 @@ export default {
     soyYo() {
       return this.$auth.user.ci == this.$route.params.ci;
     },
+    data() {
+      return [
+        {
+          title: 'CI:',
+          key: 'ci',
+          svg: 'identification',
+          color: 'indigo',
+        },
+        {
+          title: 'Eres:',
+          key: 'rol',
+          svg: 'clipboard-check',
+          color: 'purple',
+        },
+        {
+          title: 'Teléfono:',
+          key: 'telefono',
+          svg: 'phone',
+          color: 'blue',
+        },
+        {
+          title: 'Departamento:',
+          key: 'departamento',
+          svg: 'location-marker',
+          color: 'green',
+          link: `/departamentos/${this.usuario.departamento_id}`,
+        },
+        {
+          title: 'Correo:',
+          key: 'correo',
+          svg: 'mail',
+          color: 'yellow',
+        },
+      ];
+    },
   },
   async mounted() {
     this.soyYo
       ? await this.$store.dispatch('users/select', this.$auth.user)
       : await this.$store.dispatch('users/get', this.$route.params.ci);
+
+    this.$store.dispatch('reservas/clearAll');
 
     // Si se realizo una reserva, muestra la alerta
     let res = this.$route.query.res;
@@ -225,6 +223,11 @@ export default {
     },
     logout() {
       this.$auth.logout();
+    },
+    mostrarDato(key) {
+      return key == 'rol'
+        ? this.mostrarRol(this.usuario[key])
+        : this.usuario[key];
     },
     mostrarEstado(estado) {
       switch (parseInt(estado)) {
@@ -267,12 +270,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss" scoped>
-.perfil-btn {
-  @apply p-1.5 rounded-md hover:shadow-md hover:text-blue-500;
-  &.logout {
-    @apply hover:text-red-500;
-  }
-}
-</style>
