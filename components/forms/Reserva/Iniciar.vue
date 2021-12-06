@@ -18,7 +18,6 @@
               name="departamento_id"
               required
               label="Departamento"
-              :sr="false"
               :error="hasError($v.form.departamento_id)"
               @input="fieldReset($v.form.departamento_id)"
               @blur="touch($v.form.departamento_id)"
@@ -48,7 +47,6 @@
               name="deposito_id"
               required
               label="Lugar"
-              :sr="false"
               :error="hasError($v.form.deposito_id)"
               @input="fieldReset($v.form.deposito_id)"
               @blur="touch($v.form.deposito_id)"
@@ -74,7 +72,6 @@
                 v-model.trim="form.inicio"
                 name="inicio"
                 label="Fecha inicio"
-                :sr="false"
                 :disabled-date="desactivarAntesDeHoy_Y_MasDeUnaSemana"
                 :error="hasError($v.form.inicio)"
                 @input="setFechaIncio"
@@ -91,7 +88,6 @@
                 v-model.trim="form.fin"
                 name="fin"
                 label="Fecha finalización"
-                :sr="false"
                 :disabled-date="desactivarAntesDeHoy_Y_MasDeUnaSemana"
                 :error="hasError($v.form.fin)"
                 @input="setFechaFin"

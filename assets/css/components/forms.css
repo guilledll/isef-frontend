@@ -1,8 +1,13 @@
 @layer components {
+  .form-select {
+    @apply h-11;
+  }
   .form-input-text,
   .form-select,
   .form-datepicker {
-    @apply w-full rounded-md px-3 py-2 border border-gray-300  placeholder-gray-500 text-base text-gray-900 focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10;
+    @apply bg-white w-full rounded-md px-3 py-2 border border-gray-300 placeholder-gray-500 text-base text-gray-900
+      focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 
+      disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-800;
     &.error {
       @apply border-red-500 focus:ring-red-400 focus:border-red-400;
     }

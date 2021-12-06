@@ -1,6 +1,10 @@
 <template>
   <div class="body">
-    <label for="cantidad" class="form-label font-1" :class="{ 'sr-only': sr }">
+    <label
+      for="cantidad"
+      class="form-label font-1"
+      :class="{ 'sr-only': !label }"
+    >
       {{ label }}
     </label>
     <div class="counter">
@@ -26,9 +30,9 @@
 export default {
   props: {
     cant: { type: Number, default: 1 },
-    maxCant: { type: Number, default: 50 },
-    sr: { type: Boolean, default: true },
-    label: { type: String, default: 'Cantidad' },
+    maxCant: { type: Number, default: 100 },
+    zero: { type: Boolean, default: false },
+    label: { type: String, default: '' },
   },
   data() {
     return {
@@ -49,6 +53,9 @@ export default {
     },
     restar() {
       if (this.cantidad > 1) {
+        this.cantidad -= 1;
+        this.$emit('cambio', this.cantidad);
+      } else if (this.cantidad == 1 && this.zero) {
         this.cantidad -= 1;
         this.$emit('cambio', this.cantidad);
       }

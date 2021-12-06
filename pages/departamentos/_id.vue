@@ -6,7 +6,7 @@
           {{ departamento.nombre }}
         </h3>
         <div>
-          <button class="action-btn" @click="edit">
+          <button class="optional-btn" @click="edit">
             <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
           </button>
         </div>

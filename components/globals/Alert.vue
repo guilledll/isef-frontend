@@ -1,6 +1,6 @@
 <template>
   <div class="alert" :class="color" @click="$emit('click')">
-    <GlobalSvg class="h-5 w-5 inline mr-0.5 mb-0.5" :svg="svg" />
+    <GlobalSvg v-if="hasSvg" class="h-5 w-5 inline mr-0.5 mb-0.5" :svg="svg" />
     <span>
       <slot></slot>
     </span>
@@ -12,6 +12,7 @@ export default {
   props: {
     color: { type: String, default: 'blue' },
     svg: { type: String, default: 'info-circle' },
+    hasSvg: { type: Boolean, default: true },
   },
 };
 </script>

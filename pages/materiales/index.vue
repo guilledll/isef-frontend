@@ -31,7 +31,7 @@
         v-if="materialesAll.length"
         store="materiales"
         :title="searchTitle"
-        :data="materialesFiltradas"
+        :data="elementosFiltrados"
         :inputs="inputs"
         @filtrar="filtrar"
         @limpiar="limpiar"
@@ -92,10 +92,10 @@
                   type="view"
                   @click="$router.push(`/materiales/${material.id}`)"
                 />
-                <!-- <TableButton
-                type="delete"
-                @click="seleccionarMaterial('del', material)"
-              /> -->
+                <TableButton
+                  type="list"
+                  @click="seleccionarMaterial('mov', material)"
+                />
                 <TableButton
                   type="edit"
                   @click="seleccionarMaterial('mod', material)"
@@ -111,14 +111,15 @@
         <LazyFormMaterialUpdate
           v-if="modal.action == 'mod'"
           @actualizado="updateFiltrados"
+          @mover="mover"
           @close="modal.show = !modal.show"
         />
         <LazyFormMaterialCreate
           v-else-if="modal.action == 'add'"
           @close="modal.show = !modal.show"
         />
-        <LazyFormMaterialDelete
-          v-else-if="modal.action == 'del'"
+        <LazyFormMaterialMover
+          v-else-if="modal.action == 'mov'"
           @close="modal.show = !modal.show"
         />
       </LazyModal>
@@ -143,7 +144,7 @@ export default {
         action: '',
       },
       materiales: [],
-      materialesFiltradas: [],
+      elementosFiltrados: [],
       inputs: [
         { value: 'deposito_id', text: 'Deposito' },
         { value: 'categoria_id', text: 'Categoría' },
@@ -172,6 +173,13 @@ export default {
       return this.$store.state.categorias.categorias.length;
     },
   },
+  watch: {
+    $route(to) {
+      // Si se movieron materiales, muestra la alerta
+      if (to.query.add) this.alerta = true;
+      this.limpiar();
+    },
+  },
   async mounted() {
     await this.$store.dispatch('materiales/all');
     await this.$store.dispatch('depositos/all');
@@ -184,7 +192,7 @@ export default {
     }
   },
   methods: {
-    async seleccionarMaterial(action, material = null) {
+    async seleccionarMaterial(action, material) {
       if (material) await this.$store.dispatch('materiales/select', material);
       if (action != 'view') {
         this.modal.action = action;
@@ -204,7 +212,7 @@ export default {
       this.materiales = this.materialesAll;
     },
     cambiarFiltro(dato) {
-      this.materialesFiltradas =
+      this.elementosFiltrados =
         dato === 'deposito_id' ? this.depositos : this.categorias;
       this.searchTitle = dato === 'deposito_id' ? 'depósito' : 'categoría';
       this.limpiar();
@@ -212,6 +220,9 @@ export default {
     updateFiltrados() {
       this.modal.show = false;
       this.materiales = this.materialesAll;
+    },
+    mover(material) {
+      this.seleccionarMaterial('mov', material);
     },
   },
 };

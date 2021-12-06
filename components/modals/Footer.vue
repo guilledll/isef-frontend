@@ -61,8 +61,5 @@ export default {
       @apply bg-red-500 hover:bg-red-600 focus:ring-red-500 disabled:bg-red-300;
     }
   }
-  & > .cancel-btn {
-    @apply border-gray-300 bg-white text-gray-700 mt-3 hover:bg-gray-50 focus:ring-gray-500 sm:mt-0;
-  }
 }
 </style>
