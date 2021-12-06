@@ -34,16 +34,25 @@ export const mutations = {
         : mat
     );
   },
-  DEL_MATERIAL(state, id) {
-    state.materiales.map((mat, index) => {
-      mat.id == id ? state.materiales.splice(index, 1) : mat;
-    });
-  },
   GET_MOVIMIENTOS(state, movimientos) {
     state.movimientos = movimientos;
   },
   FILTRAR_MATERIALES(state, filtrados) {
     state.filtrados = filtrados;
+  },
+  MOVER_MATERIALES(state, materiales) {
+    // Itera sobre los 2 materiales (actuales y movidos)
+    for (let material of materiales) {
+      // Itera sobre todos los materiales y encuentra el indice
+      let index = state.materiales.findIndex((mat) => {
+        return mat.id == material.id;
+      });
+
+      if (index != -1) state.materiales[index] = material;
+      else state.materiales.push(material);
+    }
+
+    state.materiales = [...state.materiales];
   },
 };
 
@@ -72,12 +81,6 @@ export const actions = {
       context.commit('MOD_MATERIAL', res.data);
     });
   },
-  delete(context, id) {
-    return MaterialesService.delete(id).then(() => {
-      context.commit('DEL_MATERIAL', id);
-      context.commit('CLEAR_SELECTED');
-    });
-  },
   movimientos(context, id) {
     return MaterialesService.movimientos(id).then((res) => {
       context.commit('GET_MOVIMIENTOS', res.data);
@@ -88,6 +91,11 @@ export const actions = {
       (material) => material[contenido] == id
     );
     context.commit('FILTRAR_MATERIALES', filtrado);
+  },
+  mover(context, data) {
+    return MaterialesService.mover(data.id, data).then((res) => {
+      context.commit('MOVER_MATERIALES', res.data);
+    });
   },
 };
 

@@ -80,7 +80,7 @@
         </div>
       </div>
     </div>
-    <ModalFooter text="Guardar" :disabled="false" @close="closeModal" />
+    <ModalFooter text="Guardar" :disabled="disabled" @close="closeModal" />
   </form>
 </template>
 
@@ -147,7 +147,7 @@ export default {
     },
     mover() {
       this.closeModal();
-      this.$emit('mover');
+      this.$emit('mover', this.material);
     },
     closeModal() {
       if (!this.isView) this.$store.dispatch('materiales/clear');

@@ -29,4 +29,7 @@
       @apply hover:text-red-500;
     }
   }
+  .cancel-btn {
+    @apply border-gray-300 bg-white text-gray-700 mt-3 hover:bg-gray-50 focus:ring-gray-500 sm:mt-0;
+  }
 }

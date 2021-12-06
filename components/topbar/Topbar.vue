@@ -123,7 +123,7 @@ export default {
         {
           text: 'Reservas',
           path: '/reservas',
-          selected: this.selected('reservas'),
+          selected: this.selected('guardia'),
           show:
             (this.admin && this.existen.materiales && this.existen.depositos) ||
             this.guardia,

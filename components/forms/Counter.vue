@@ -1,6 +1,10 @@
 <template>
   <div class="body">
-    <label for="cantidad" class="form-label font-1" :class="{ 'sr-only': sr }">
+    <label
+      for="cantidad"
+      class="form-label font-1"
+      :class="{ 'sr-only': !label }"
+    >
       {{ label }}
     </label>
     <div class="counter">
@@ -28,8 +32,7 @@ export default {
     cant: { type: Number, default: 1 },
     maxCant: { type: Number, default: 100 },
     zero: { type: Boolean, default: false },
-    sr: { type: Boolean, default: true },
-    label: { type: String, default: 'Cantidad' },
+    label: { type: String, default: '' },
   },
   data() {
     return {

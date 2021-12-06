@@ -20,6 +20,13 @@
       d="M6 18L18 6M6 6l12 12"
     />
     <path
+      v-if="svg == 'arrow-right'"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M14 5l7 7m0 0l-7 7m7-7H3"
+    />
+    <path
       v-if="svg == 'view-list'"
       stroke-linecap="round"
       stroke-linejoin="round"

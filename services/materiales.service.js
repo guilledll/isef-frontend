@@ -43,4 +43,12 @@ export default {
   movimientos(id) {
     return api().get(`/material/${id}/movimientos`);
   },
+  /**
+   * Mueve el material de deppósito.
+   * @param {int} id
+   * @param {request} data
+   */
+  mover(id, data) {
+    return api().post(`/material/${id}/mover`, data);
+  },
 };
