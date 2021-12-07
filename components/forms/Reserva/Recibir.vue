@@ -137,6 +137,7 @@ export default {
         perdidos: false,
         materiales_perdidos: '',
         nota_perdidos: '',
+        deposito_id: '',
       },
       materialesPerdidos: {},
     };
@@ -157,6 +158,7 @@ export default {
       if (this.invalid()) return;
       this.formatearNotas();
       this.form.guardia_ci = this.guardia.ci;
+      this.form.deposito_id = this.reserva.deposito_id;
       this.$store
         .dispatch('reservas/recibir', { id: this.reserva.id, data: this.form })
         .then(() => this.$emit('recibido', this.reserva.id))
@@ -206,7 +208,7 @@ export default {
       },
       nota_perdidos: {
         required: requiredIf((form) => {
-          return !form.perdidos;
+          return form.problema;
         }),
         maxLength: maxLength(500),
       },

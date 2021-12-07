@@ -98,6 +98,11 @@ export const getters = {
       return dep.cantidad_materiales > 0;
     });
   },
+  conMaterialesPerdidos(state) {
+    return state.depositos.filter((dep) => {
+      return dep.materialesPerdidos_count > 0;
+    });
+  },
   conReservas(state) {
     return state.depositos.filter((dep) => {
       return dep.reservas_count > 0;

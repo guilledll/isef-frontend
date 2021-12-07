@@ -14,7 +14,7 @@
           <div>
             <FormSelect
               id="departamento_id"
-              v-model.trim="form.departamento_id"
+              v-model.number="form.departamento_id"
               name="departamento_id"
               required
               label="Departamento"
@@ -28,6 +28,7 @@
                   v-for="dep in departamentos"
                   :key="dep.id"
                   :value="dep.id"
+                  :selected="dep.id == user.departamento_id"
                 >
                   {{ dep.nombre }}
                 </option>
@@ -43,7 +44,7 @@
           <div>
             <FormSelect
               id="deposito_id"
-              v-model.trim="form.deposito_id"
+              v-model.number="form.deposito_id"
               name="deposito_id"
               required
               label="Lugar"
@@ -105,6 +106,9 @@
           Las reservas con duración mayor a 24hs deberán ser aprobadas por un
           administrador.
         </LazyGlobalAlert>
+        <LazyGlobalAlert v-if="fechaInvalida" color="red">
+          ¡Estás ingresando mal las fechas de la reserva!
+        </LazyGlobalAlert>
       </div>
     </div>
     <ModalFooter text="Continuar" type="add" @close="$emit('close')" />
@@ -123,7 +127,7 @@ export default {
       form: {
         user_ci: null,
         departamento: '',
-        departamento_id: 0,
+        departamento_id: null,
         deposito: '',
         deposito_id: 0,
         validar: false,
@@ -131,6 +135,7 @@ export default {
         fin: this.loadFechaFin(),
         materiales: [],
       },
+      fechaInvalida: false,
     };
   },
   computed: {
@@ -156,6 +161,10 @@ export default {
   },
   methods: {
     async iniciarReserva() {
+      if (this.form.inicio > this.form.fin) {
+        this.fechaInvalida = true;
+        return;
+      }
       if (this.invalid()) return;
       if (this.mas24Horas) this.form.validar = true;
       await this.$store.dispatch('reservas/iniciar', this.form);

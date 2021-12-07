@@ -26,7 +26,7 @@
             svg="user"
           />
         </div>
-        <div>
+        <div v-if="perdidos.materiales">
           <p class="font-1 flex my-3 text-gray-700 items-center">
             <GlobalSvg class="h-6 w-6 mr-1 text-blue-500" svg="cube" />
             Lista de materiales afectados en esta reserva.

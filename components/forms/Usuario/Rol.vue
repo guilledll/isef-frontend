@@ -9,7 +9,7 @@
           <div>
             <FormSelect
               id="rol"
-              v-model.trim="form.rol"
+              v-model.number="form.rol"
               name="rol"
               required
               :error="hasError($v.form.rol)"

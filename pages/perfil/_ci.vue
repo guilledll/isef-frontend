@@ -70,6 +70,11 @@
       </tr>
     </LazyGlobalInfoTable>
     <LazyModal v-if="modal.show">
+      <!--<FormUsuarioUpdate
+        v-if="modal.action == 'edit'"
+        is-view
+        @close="modal.show = !modal.show"
+      /> -->
       <FormUsuarioUpdate
         v-if="modal.action == 'edit'"
         is-view
@@ -118,14 +123,7 @@ export default {
         show: false,
         text: '',
       },
-      table: [
-        'inicio',
-        'fin',
-        'lugar',
-        'depósito',
-        'estado',
-        'Cancelar reserva',
-      ],
+      table: ['inicio', 'fin', 'lugar', 'depósito', 'estado'],
     };
   },
   computed: {

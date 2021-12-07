@@ -125,8 +125,7 @@ export default {
           path: '/reservas',
           selected: this.selected('guardia'),
           show:
-            (this.admin && this.existen.materiales && this.existen.depositos) ||
-            this.guardia,
+            (this.existen.materiales && this.existen.depositos) || this.guardia,
         },
         {
           text: 'Depósitos',

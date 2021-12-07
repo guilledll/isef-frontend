@@ -9,6 +9,14 @@
       @limpiar="limpiar"
     />
     <div class="flex flex-col gap-3 lg:flex-row">
+      <div class="table-actions">
+        <GlobalCallToAction
+          text="Ver <b>materiales reportados</b>."
+          type="view"
+          svg="clipboard-list"
+          @click="$router.push('/materialesPerdidos')"
+        />
+      </div>
       <Table v-if="movimientos.length">
         <template #head>
           <TableHead :header="table" :action="false" />
