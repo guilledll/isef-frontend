@@ -88,7 +88,7 @@
             <div>
               <FormSelect
                 id="departamento_id"
-                v-model.trim="form.departamento_id"
+                v-model.number="form.departamento_id"
                 name="departamento_id"
                 required
                 :error="hasError($v.form.departamento_id)"
@@ -97,11 +97,11 @@
                 @change="selectDepartamento"
               >
                 <template #options>
-                  <option value="0">{{ form.departamento }}</option>
                   <option
                     v-for="departamento in departamentos"
                     :key="departamento.id"
                     :value="departamento.id"
+                    :selected="departamento.id == usuario.departamento_id"
                   >
                     {{ departamento.nombre }}
                   </option>
@@ -113,63 +113,6 @@
                   />
                 </template>
               </FormSelect>
-            </div>
-          </div>
-          <div v-if="false">
-            <!-- UPDATE PASSWORD -->
-            <p class="font-1 mb-2 text-lg">¿Cambiar contraseña?</p>
-            <div>
-              <div class="checkbox">
-                <input
-                  id="cambiar"
-                  v-model="form.cambiar"
-                  name="cambiar"
-                  type="checkbox"
-                  class="check"
-                  @change="cambiarPass"
-                />
-                <label for="cambiar" class="text"> SI </label>
-              </div>
-            </div>
-            <div v-if="form.cambiar" class="space-y-2 mt-2">
-              <p class="font-1 mb-1 mt-3">Ingrese una nueva contraseña.</p>
-              <!-- CONTRASEÑA -->
-              <div>
-                <FormInput
-                  id="password"
-                  v-model.trim="password"
-                  name="password"
-                  type="password"
-                  placeholder="Contraseña"
-                  :error="hasError($v.password)"
-                  @input="fieldReset($v.password)"
-                  @blur="touch($v.password)"
-                >
-                  <LazyFormError
-                    v-if="hasError($v.password)"
-                    :text="errorText($v.password)"
-                  />
-                </FormInput>
-              </div>
-              <!-- REPETIR CONTRASEÑA -->
-              <p class="font-1 mb-1 mt-3">Repetir contraseña.</p>
-              <div>
-                <FormInput
-                  id="password_confirmation"
-                  v-model.trim="password_confirmation"
-                  name="password_confirmation"
-                  type="password"
-                  placeholder="Repetir contraseña"
-                  :error="hasError($v.password_confirmation)"
-                  @input="fieldReset($v.password_confirmation)"
-                  @blur="touch($v.password_confirmation)"
-                >
-                  <LazyFormError
-                    v-if="hasError($v.password_confirmation)"
-                    :text="errorText($v.password_confirmation)"
-                  />
-                </FormInput>
-              </div>
             </div>
           </div>
         </div>
@@ -188,12 +131,10 @@ import { updatedDiff } from 'deep-object-diff';
 import {
   required,
   integer,
-  // requiredIf,
   numeric,
   email,
   maxLength,
   minLength,
-  //  sameAs,
 } from 'vuelidate/lib/validators';
 import { validationMixin } from 'vuelidate';
 import FormValidationMixin from '@/mixins/FormValidationMixin';
@@ -210,9 +151,6 @@ export default {
         telefono: '',
         departamento: '',
       },
-      password: '',
-      password_confirmation: '',
-      cambiar: false,
     };
   },
   computed: {
@@ -228,17 +166,33 @@ export default {
       return (
         Object.keys(updatedDiff(this.usuario, this.form)).length == 0 ||
         this.$v.form.$invalid
-        // || this.$v.password.$invalid ||
-        // this.$v.password_confirmation.$invalid
       );
     },
-    upPass() {
-      return (
-        !this.$v.form.$invalid &&
-        !this.$v.password.$invalid &&
-        !this.$v.password_confirmation.$invalid &&
-        Object.keys(updatedDiff(this.usuario, this.form)).length != 0
-      );
+  },
+  mounted() {
+    this.form.ci = this.usuario.ci;
+    this.form.nombre = this.usuario.nombre;
+    this.form.apellido = this.usuario.apellido;
+    this.form.telefono = this.usuario.telefono;
+    this.form.departamento_id = this.usuario.departamento_id;
+    this.form.correo = this.usuario.correo;
+    this.form.departamento = this.usuario.departamento;
+  },
+  methods: {
+    async updateUsuario() {
+      if (this.invalid()) return;
+      await this.$store
+        .dispatch('users/update', this.form)
+        .then(() => this.actualizado())
+        .catch((e) => (this.errors = e.response.data.errors));
+    },
+    async actualizado() {
+      let res = await this.$auth.fetchUser();
+      this.$store.dispatch('users/actualizado', res.data);
+      this.$emit('close');
+    },
+    selectDepartamento(value) {
+      this.form.departamento = value;
     },
   },
   validations: {
@@ -271,51 +225,6 @@ export default {
         integer,
         departamento,
       },
-    },
-    // password: {
-    //   // required: requiredIf((cambiar) => {
-    //   //   return cambiar;
-    //   // }),
-    //   minLength: minLength(8),
-    //   maxLength: maxLength(50),
-    // },
-    // password_confirmation: {
-    //   // required: requiredIf((cambiar) => {
-    //   //   return cambiar;
-    //   // }),
-    //   sameAsPassword: sameAs('password'),
-    // },
-  },
-  mounted() {
-    this.form.ci = this.usuario.ci;
-    this.form.nombre = this.usuario.nombre;
-    this.form.apellido = this.usuario.apellido;
-    this.form.telefono = this.usuario.telefono;
-    this.form.departamento_id = this.usuario.departamento_id;
-    this.form.correo = this.usuario.correo;
-    this.form.departamento = this.usuario.departamento;
-  },
-  methods: {
-    async updateUsuario() {
-      if (this.invalid()) return;
-      await this.$store
-        .dispatch('users/update', this.form)
-        .then(async () => {
-          await this.$auth.fetchUser();
-          this.$emit('close');
-        })
-        .catch((e) => (this.errors = e.response.data.errors));
-    },
-    cambiarPass() {
-      //Resetea los input de la contraseña
-      this.$v.form.$reset();
-      if (!this.cambiar) {
-        this.password = '';
-        this.password_confirmation = '';
-      }
-    },
-    selectDepartamento(value) {
-      this.form.departamento = value;
     },
   },
 };

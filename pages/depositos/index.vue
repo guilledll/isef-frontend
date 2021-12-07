@@ -9,7 +9,6 @@
       @filtrar="filtrar"
       @limpiar="limpiar"
     />
-
     <div class="flex flex-col gap-3 lg:flex-row">
       <div class="table-actions">
         <GlobalCallToAction
@@ -100,7 +99,7 @@ export default {
         text: 'En los depósitos se encuentran los materiales. Ejemplo de depósitos: Cure, Campus, etc.',
       },
       table: {
-        header: ['Nombre', 'Sede', 'Materiales'],
+        header: ['Nombre', 'Departamento', 'Materiales'],
       },
       modal: {
         show: false,

@@ -22,7 +22,7 @@ export default {
     }
     // Si es sin asignar a validar
     if (store.$auth.user.rol === 0) {
-      return redirect('/validar');
+      return redirect('/auth/validar');
     }
   },
 };

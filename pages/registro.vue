@@ -231,6 +231,23 @@ export default {
       return this.$store.state.global.loading;
     },
   },
+  methods: {
+    registro() {
+      if (this.invalid()) return;
+      this.$store
+        .dispatch('users/register', this.form)
+        .then(() => {
+          this.$store.dispatch('global/loading', false);
+          this.$auth.loginWith('laravelSanctum', {
+            correo: this.form.correo,
+            password: this.form.password,
+          });
+        })
+        .catch((e) => {
+          this.errors = e.response.data.errors;
+        });
+    },
+  },
   validations: {
     form: {
       ci: {
@@ -273,23 +290,6 @@ export default {
         integer,
         departamento,
       },
-    },
-  },
-  methods: {
-    registro() {
-      if (this.invalid()) return;
-      this.$store
-        .dispatch('users/register', this.form)
-        .then(() => {
-          this.$store.dispatch('global/loading', false);
-          this.$auth.loginWith('laravelSanctum', {
-            correo: this.form.correo,
-            password: this.form.password,
-          });
-        })
-        .catch((e) => {
-          this.errors = e.response.data.errors;
-        });
     },
   },
 };

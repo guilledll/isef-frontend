@@ -28,11 +28,15 @@
     <div v-else class="hacer-reserva-container">
       <h4 class="text-2xl font-1 md:text-5xl">Reserva de materiales</h4>
       <div class="flex flex-row gap-5 items-center justify-center">
-        <button class="btn green reservar-btn" @click="verModal(1)">
+        <button
+          v-if="existen.materiales && existen.depositos"
+          class="btn green reservar-btn"
+          @click="verModal(1)"
+        >
           Hacer reserva
         </button>
         <router-link :to="toRoute()" class="btn indigo reservar-btn">
-          Ver reservas
+          {{ user.rol != 1 ? 'Ver' : 'Mis' }} reservas
         </router-link>
       </div>
       <div class="mt-16 mb-8 md:mt-28">
@@ -72,6 +76,9 @@ export default {
     },
     user() {
       return this.$auth.user;
+    },
+    existen() {
+      return this.$store.state.global.existen;
     },
   },
   beforeCreate() {

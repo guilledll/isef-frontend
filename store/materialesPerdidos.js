@@ -13,6 +13,12 @@ export const mutations = {
   CLEAR_SELECTED(state) {
     state.material = null;
   },
+  GET_ALL_MATERIALES_PERDIDOS(state, material) {
+    state.materiales = material;
+  },
+  FILTRAR_MATERIALES_PERDIDOS(state, filtrados) {
+    state.filtrados = filtrados;
+  },
 };
 
 export const actions = {
@@ -27,9 +33,20 @@ export const actions = {
       context.commit('SELECT', res.data);
     });
   },
+  all(context) {
+    return MaterialesPerdidosService.index().then((res) => {
+      context.commit('GET_ALL_MATERIALES_PERDIDOS', res.data);
+    });
+  },
   accion(context, data) {
     return MaterialesPerdidosService.update(data.id, data).then(() => {
       context.dispatch('global/loading', false, { root: true });
     });
+  },
+  filtrar(context, { id }) {
+    let filtrado = context.state.materiales.filter((material) => {
+      return material.deposito_id == id;
+    });
+    context.commit('FILTRAR_MATERIALES_PERDIDOS', filtrado);
   },
 };
