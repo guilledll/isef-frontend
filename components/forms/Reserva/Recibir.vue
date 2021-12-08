@@ -20,7 +20,6 @@
               name="nota_guardia"
               placeholder="Escriba aqui... (opcional)"
               label="Notas adicionales"
-              :sr="false"
               :error="hasError($v.form.nota_guardia)"
               @input="fieldReset($v.form.nota_guardia)"
               @blur="touch($v.form.nota_guardia)"
@@ -95,9 +94,8 @@
               id="nota_perdidos"
               v-model.trim="form.nota_perdidos"
               name="nota_perdidos"
-              placeholder="¿Qué sucedió? (opcional)"
+              placeholder="¿Qué sucedió?"
               label="Anotaciones"
-              :sr="false"
               :error="hasError($v.form.nota_perdidos)"
               @input="fieldReset($v.form.nota_perdidos)"
               @blur="touch($v.form.nota_perdidos)"
@@ -139,6 +137,7 @@ export default {
         perdidos: false,
         materiales_perdidos: '',
         nota_perdidos: '',
+        deposito_id: '',
       },
       materialesPerdidos: {},
     };
@@ -159,6 +158,7 @@ export default {
       if (this.invalid()) return;
       this.formatearNotas();
       this.form.guardia_ci = this.guardia.ci;
+      this.form.deposito_id = this.reserva.deposito_id;
       this.$store
         .dispatch('reservas/recibir', { id: this.reserva.id, data: this.form })
         .then(() => this.$emit('recibido', this.reserva.id))
@@ -208,7 +208,7 @@ export default {
       },
       nota_perdidos: {
         required: requiredIf((form) => {
-          return !form.perdidos;
+          return form.problema;
         }),
         maxLength: maxLength(500),
       },

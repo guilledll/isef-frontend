@@ -6,45 +6,43 @@
           {{ categoria.nombre }}
         </h3>
         <div>
-          <button class="action-btn" @click="edit">
+          <button class="optional-btn" @click="edit">
             <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
           </button>
         </div>
       </div>
       <hr class="mt-3" />
     </div>
-    <div class="grid gap-3 lg:grid-cols-2">
-      <GlobalInfoTable
-        title="Materiales"
-        svg="cube"
-        :table="table"
-        :open="open.table"
-        :count="materiales.length"
-        @click="showDetails()"
-      >
-        <tr v-for="material in materiales" :key="material.id">
-          <td class="table-td">
-            <router-link
-              :to="`/materiales/${material.id}`"
-              class="text-black hover:text-blue-600 hover:underline"
-            >
-              {{ material.nombre }}
-            </router-link>
-          </td>
-          <td class="table-td">
-            <router-link
-              :to="`/categorias/${material.deposito_id}`"
-              class="text-black hover:text-blue-600 hover:underline"
-            >
-              {{ material.deposito }}
-            </router-link>
-          </td>
-          <td class="table-td text-gray-500">
-            {{ material.cantidad }}
-          </td>
-        </tr>
-      </GlobalInfoTable>
-    </div>
+    <GlobalInfoTable
+      title="Materiales"
+      svg="cube"
+      :table="table"
+      :open="open.table"
+      :count="materiales.length"
+      @click="showDetails()"
+    >
+      <tr v-for="material in materiales" :key="material.id">
+        <td class="table-td">
+          <router-link
+            :to="`/materiales/${material.id}`"
+            class="text-black hover:text-blue-600 hover:underline"
+          >
+            {{ material.nombre }}
+          </router-link>
+        </td>
+        <td class="table-td">
+          <router-link
+            :to="`/categorias/${material.deposito_id}`"
+            class="text-black hover:text-blue-600 hover:underline"
+          >
+            {{ material.deposito }}
+          </router-link>
+        </td>
+        <td class="table-td text-gray-500">
+          {{ material.cantidad }}
+        </td>
+      </tr>
+    </GlobalInfoTable>
     <LazyModal v-if="open.modal">
       <FormCategoriaUpdate is-view @close="open.modal = !open.modal" />
     </LazyModal>

@@ -115,13 +115,17 @@ export default {
     admin() {
       return this.user.rol === 3;
     },
+    guardia() {
+      return this.user.rol === 2;
+    },
     menuItems() {
       return [
         {
           text: 'Reservas',
           path: '/reservas',
-          selected: this.selected('reservas'),
-          show: true,
+          selected: this.selected('guardia'),
+          show:
+            (this.existen.materiales && this.existen.depositos) || this.guardia,
         },
         {
           text: 'Depósitos',
@@ -135,18 +139,12 @@ export default {
           selected: this.selected('materiales'),
           show: this.admin,
         },
-        // {
-        //   text: 'Categorias',
-        //   path: '/categorias',
-        //   selected: this.selected('categorias'),
-        //   show: this.admin,
-        // },
-        // {
-        //   text: 'Departamentos',
-        //   path: '/departamentos',
-        //   selected: this.selected('departamentos'),
-        //   show: this.admin,
-        // },
+        {
+          text: 'Categorías',
+          path: '/categorias',
+          selected: this.selected('categorias'),
+          show: this.admin && !this.existen.materiales,
+        },
         {
           text: 'Usuarios',
           path: '/usuarios',
@@ -157,7 +155,7 @@ export default {
           text: 'Registros',
           path: '/inventario',
           selected: this.selected('inventario'),
-          show: this.admin,
+          show: this.admin && this.existen.materiales,
         },
         {
           text: 'Perfil',
@@ -170,6 +168,12 @@ export default {
     filterButtons() {
       return this.menuItems.filter((btn) => btn.show);
     },
+    existen() {
+      return this.$store.state.global.existen;
+    },
+  },
+  async mounted() {
+    await this.$store.dispatch('global/existen');
   },
   methods: {
     hideMenu() {

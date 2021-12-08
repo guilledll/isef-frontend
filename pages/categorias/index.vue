@@ -15,7 +15,7 @@
           @click="$router.push('/materiales')"
         />
       </div>
-      <Table>
+      <Table v-if="categorias.length">
         <template #head>
           <TableHead :header="table.header" />
         </template>
@@ -51,6 +51,7 @@
           </tr>
         </template>
       </Table>
+      <LazyGlobalSinDatos v-else model="categorías" />
     </div>
     <LazyModal v-if="modal.show">
       <LazyFormCategoriaUpdate

@@ -28,7 +28,7 @@
             <div>
               <FormSelect
                 id="departamento_id"
-                v-model.trim="form.departamento_id"
+                v-model.number="form.departamento_id"
                 name="departamento_id"
                 required
                 :error="hasError($v.form.departamento_id)"

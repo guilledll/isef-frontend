@@ -14,11 +14,10 @@
           <div>
             <FormSelect
               id="departamento_id"
-              v-model.trim="form.departamento_id"
+              v-model.number="form.departamento_id"
               name="departamento_id"
               required
               label="Departamento"
-              :sr="false"
               :error="hasError($v.form.departamento_id)"
               @input="fieldReset($v.form.departamento_id)"
               @blur="touch($v.form.departamento_id)"
@@ -29,6 +28,7 @@
                   v-for="dep in departamentos"
                   :key="dep.id"
                   :value="dep.id"
+                  :selected="dep.id == user.departamento_id"
                 >
                   {{ dep.nombre }}
                 </option>
@@ -44,11 +44,10 @@
           <div>
             <FormSelect
               id="deposito_id"
-              v-model.trim="form.deposito_id"
+              v-model.number="form.deposito_id"
               name="deposito_id"
               required
               label="Lugar"
-              :sr="false"
               :error="hasError($v.form.deposito_id)"
               @input="fieldReset($v.form.deposito_id)"
               @blur="touch($v.form.deposito_id)"
@@ -74,7 +73,6 @@
                 v-model.trim="form.inicio"
                 name="inicio"
                 label="Fecha inicio"
-                :sr="false"
                 :disabled-date="desactivarAntesDeHoy_Y_MasDeUnaSemana"
                 :error="hasError($v.form.inicio)"
                 @input="setFechaIncio"
@@ -91,7 +89,6 @@
                 v-model.trim="form.fin"
                 name="fin"
                 label="Fecha finalización"
-                :sr="false"
                 :disabled-date="desactivarAntesDeHoy_Y_MasDeUnaSemana"
                 :error="hasError($v.form.fin)"
                 @input="setFechaFin"
@@ -108,6 +105,9 @@
         <LazyGlobalAlert v-if="mas24Horas" color="yellow">
           Las reservas con duración mayor a 24hs deberán ser aprobadas por un
           administrador.
+        </LazyGlobalAlert>
+        <LazyGlobalAlert v-if="fechaInvalida" color="red">
+          ¡Estás ingresando mal las fechas de la reserva!
         </LazyGlobalAlert>
       </div>
     </div>
@@ -127,7 +127,7 @@ export default {
       form: {
         user_ci: null,
         departamento: '',
-        departamento_id: 0,
+        departamento_id: null,
         deposito: '',
         deposito_id: 0,
         validar: false,
@@ -135,6 +135,7 @@ export default {
         fin: this.loadFechaFin(),
         materiales: [],
       },
+      fechaInvalida: false,
     };
   },
   computed: {
@@ -160,6 +161,10 @@ export default {
   },
   methods: {
     async iniciarReserva() {
+      if (this.form.inicio > this.form.fin) {
+        this.fechaInvalida = true;
+        return;
+      }
       if (this.invalid()) return;
       if (this.mas24Horas) this.form.validar = true;
       await this.$store.dispatch('reservas/iniciar', this.form);

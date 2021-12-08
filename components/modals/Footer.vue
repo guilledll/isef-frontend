@@ -11,7 +11,9 @@
       <span v-if="!loading">{{ text }}</span>
       <GlobalSvg v-else class="h-5 w-5 animate-spin mx-4" svg="refresh" />
     </button>
-    <button type="button" class="cancel-btn" @click="close">Cancelar</button>
+    <button type="button" class="cancel-btn" @click="close">
+      {{ closeText }}
+    </button>
   </div>
 </template>
 
@@ -20,6 +22,7 @@ export default {
   props: {
     type: { type: String, default: 'mod' },
     text: { type: String, default: 'Acción' },
+    closeText: { type: String, default: 'Cancelar' },
     disabled: { type: Boolean, default: false },
     button: { type: Boolean, default: true },
   },
@@ -57,9 +60,6 @@ export default {
     &.del {
       @apply bg-red-500 hover:bg-red-600 focus:ring-red-500 disabled:bg-red-300;
     }
-  }
-  & > .cancel-btn {
-    @apply border-gray-300 bg-white text-gray-700 mt-3 hover:bg-gray-50 focus:ring-gray-500 sm:mt-0;
   }
 }
 </style>

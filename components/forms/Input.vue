@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label :for="id" class="form-label font-1" :class="{ 'sr-only': sr }">
+    <label :for="id" class="form-label font-1" :class="{ 'sr-only': !label }">
       {{ label || name }}
     </label>
     <input
@@ -12,6 +12,7 @@
       :required="required"
       :placeholder="placeholder"
       :class="{ error: error }"
+      :disabled="disabled"
       class="form-input-text"
       @input="$emit('input', $event.target.value)"
       @keyup.enter="$emit('enter')"
@@ -34,7 +35,7 @@ export default {
     autocomplete: { type: String, default: 'on' },
     required: { type: Boolean, default: true },
     error: { type: Boolean, default: false },
-    sr: { type: Boolean, default: true },
+    disabled: { type: Boolean, default: false },
   },
 };
 </script>

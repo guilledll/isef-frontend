@@ -21,15 +21,18 @@ export const mutations = {
   GET_ALL_USERS(state, users) {
     state.users = users;
   },
-  UPDATE_ROL(state, users) {
-    state.users = state.users.map((user) =>
-      user.ci == users.ci ? { ...user, rol: users.rol } : user
+  UPDATE_ROL(state, user) {
+    state.users = state.users.map((u) =>
+      u.ci == user.ci ? { ...u, rol: user.rol } : u
     );
   },
   DEL_USUARIO(state, ci) {
     state.users.map((user, index) => {
       user.ci == ci ? state.users.splice(index, 1) : user;
     });
+  },
+  UPDATE_USUARIO(state, user) {
+    state.user = user;
   },
   FILTRAR_USUARIOS(state, filtrados) {
     state.filtrados = filtrados;
@@ -65,11 +68,13 @@ export const actions = {
     return UsersService.updateRol(data.ci, data).then((res) => {
       context.commit('UPDATE_ROL', res.data);
       context.dispatch('select', res.data);
-      context.dispatch('global/loading', false, { root: true });
     });
   },
   update(context, data) {
     return UsersService.update(data.ci, data);
+  },
+  actualizado(context, data) {
+    context.commit('UPDATE_USUARIO', data);
   },
   delete(context, ci) {
     return UsersService.delete(ci).then(() => {

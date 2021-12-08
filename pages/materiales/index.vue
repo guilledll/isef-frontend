@@ -4,98 +4,126 @@
       Los materiales se guardaron correctamente.
     </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <GlobalSearch
-      store="materiales"
-      :title="searchTitle"
-      :data="materialesFiltradas"
-      :inputs="inputs"
-      @filtrar="filtrar"
-      @limpiar="limpiar"
-      @cambiar="cambiarFiltro"
-    />
-    <div class="flex flex-col gap-3 lg:flex-row">
-      <div class="table-actions">
-        <GlobalCallToAction
-          text="Agregar <b>materiales</b>."
-          svg="cube"
-          @click="$router.push('/materiales/agregar')"
-        />
-        <GlobalCallToAction
-          text="Ver <b>categorías</b> de materiales."
-          type="view"
-          svg="clipboard-list"
-          @click="$router.push('/categorias')"
-        />
+    <!-- Si no hay depositos o categorias muestro esto -->
+    <div v-if="!totalDepositos || !totalCategorias" class="mt-6">
+      <GlobalAlert color="indigo" class="!my-4">
+        Para registrar materiales primero deben haber depósitos y categorías en
+        el sistema.
+      </GlobalAlert>
+      <div class="flex items-center justify-start gap-4">
+        <router-link v-if="!totalDepositos" to="/depositos" class="btn green">
+          <GlobalSvg svg="archive" class="h-6 w-6 mr-1" />
+          Agregar Depósitos
+        </router-link>
+        <router-link
+          v-if="!totalCategorias"
+          to="/categorias"
+          class="btn indigo"
+        >
+          <GlobalSvg svg="clipboard-list" class="h-6 w-6 mr-1" />
+          Agregar Categorías
+        </router-link>
       </div>
-      <Table>
-        <template #head>
-          <TableHead :header="table" />
-        </template>
-        <template #body>
-          <tr v-for="material in materiales" :key="material.id">
-            <td class="table-td text-gray-500">
-              <router-link
-                :to="`/materiales/${material.id}`"
-                class="text-black hover:text-blue-600 hover:underline"
-                @click.native="seleccionarMaterial('view', material)"
-              >
-                {{ material.nombre }}
-              </router-link>
-            </td>
-            <td class="table-td text-gray-500">
-              <router-link
-                :to="`/categorias/${material.categoria_id}`"
-                class="hover:text-blue-600 hover:underline"
-                @click.native="verCategoria(material.categoria_id)"
-              >
-                {{ material.categoria }}
-              </router-link>
-            </td>
-            <td class="table-td text-gray-500">
-              <router-link
-                :to="`/depositos/${material.deposito_id}`"
-                class="hover:text-blue-600 hover:underline"
-                @click.native="verDeposito(material.deposito_id)"
-              >
-                {{ material.deposito }}
-              </router-link>
-            </td>
-            <td class="table-td text-gray-500">
-              {{ material.cantidad || 0 }}
-            </td>
-            <td class="table-td text-right">
-              <TableButton
-                type="view"
-                @click="$router.push(`/materiales/${material.id}`)"
-              />
-              <!-- <TableButton
-                type="delete"
-                @click="seleccionarMaterial('del', material)"
-              /> -->
-              <TableButton
-                type="edit"
-                @click="seleccionarMaterial('mod', material)"
-              />
-            </td>
-          </tr>
-        </template>
-      </Table>
     </div>
-    <LazyModal v-if="modal.show">
-      <LazyFormMaterialUpdate
-        v-if="modal.action == 'mod'"
-        @actualizado="updateFiltrados"
-        @close="modal.show = !modal.show"
+    <!-- Si hay depositos y categorias -->
+    <div v-else>
+      <LazyGlobalSearch
+        v-if="materialesAll.length"
+        store="materiales"
+        :title="searchTitle"
+        :data="elementosFiltrados"
+        :inputs="inputs"
+        @filtrar="filtrar"
+        @limpiar="limpiar"
+        @cambiar="cambiarFiltro"
       />
-      <LazyFormMaterialCreate
-        v-else-if="modal.action == 'add'"
-        @close="modal.show = !modal.show"
-      />
-      <LazyFormMaterialDelete
-        v-else-if="modal.action == 'del'"
-        @close="modal.show = !modal.show"
-      />
-    </LazyModal>
+      <div class="flex flex-col gap-3 lg:flex-row">
+        <div class="table-actions">
+          <GlobalCallToAction
+            text="Agregar <b>materiales</b>."
+            svg="cube"
+            @click="$router.push('/materiales/agregar')"
+          />
+          <GlobalCallToAction
+            text="Ver <b>categorías</b> de materiales."
+            type="view"
+            svg="clipboard-list"
+            @click="$router.push('/categorias')"
+          />
+        </div>
+        <Table v-if="materialesAll.length">
+          <template #head>
+            <TableHead :header="table" />
+          </template>
+          <template #body>
+            <tr v-for="material in materiales" :key="material.id">
+              <td class="table-td text-gray-500">
+                <router-link
+                  :to="`/materiales/${material.id}`"
+                  class="text-black hover:text-blue-600 hover:underline"
+                  @click.native="seleccionarMaterial('view', material)"
+                >
+                  {{ material.nombre }}
+                </router-link>
+              </td>
+              <td class="table-td text-gray-500">
+                <router-link
+                  :to="`/categorias/${material.categoria_id}`"
+                  class="hover:text-blue-600 hover:underline"
+                  @click.native="verCategoria(material.categoria_id)"
+                >
+                  {{ material.categoria }}
+                </router-link>
+              </td>
+              <td class="table-td text-gray-500">
+                <router-link
+                  :to="`/depositos/${material.deposito_id}`"
+                  class="hover:text-blue-600 hover:underline"
+                  @click.native="verDeposito(material.deposito_id)"
+                >
+                  {{ material.deposito }}
+                </router-link>
+              </td>
+              <td class="table-td text-gray-500">
+                {{ material.cantidad || 0 }}
+              </td>
+              <td class="table-td text-right">
+                <TableButton
+                  type="view"
+                  @click="$router.push(`/materiales/${material.id}`)"
+                />
+                <TableButton
+                  type="list"
+                  @click="seleccionarMaterial('mov', material)"
+                />
+                <TableButton
+                  type="edit"
+                  @click="seleccionarMaterial('mod', material)"
+                />
+              </td>
+            </tr>
+          </template>
+        </Table>
+        <LazyGlobalSinDatos v-else model="materiales" />
+      </div>
+
+      <LazyModal v-if="modal.show">
+        <LazyFormMaterialUpdate
+          v-if="modal.action == 'mod'"
+          @actualizado="updateFiltrados"
+          @mover="mover"
+          @close="modal.show = !modal.show"
+        />
+        <LazyFormMaterialCreate
+          v-else-if="modal.action == 'add'"
+          @close="modal.show = !modal.show"
+        />
+        <LazyFormMaterialMover
+          v-else-if="modal.action == 'mov'"
+          @close="modal.show = !modal.show"
+        />
+      </LazyModal>
+    </div>
   </div>
 </template>
 
@@ -116,7 +144,7 @@ export default {
         action: '',
       },
       materiales: [],
-      materialesFiltradas: [],
+      elementosFiltrados: [],
       inputs: [
         { value: 'deposito_id', text: 'Deposito' },
         { value: 'categoria_id', text: 'Categoría' },
@@ -138,6 +166,19 @@ export default {
     depositos() {
       return this.$store.getters['depositos/conMateriales'];
     },
+    totalDepositos() {
+      return this.$store.state.depositos.depositos.length;
+    },
+    totalCategorias() {
+      return this.$store.state.categorias.categorias.length;
+    },
+  },
+  watch: {
+    $route(to) {
+      // Si se movieron materiales, muestra la alerta
+      if (to.query.add) this.alerta = true;
+      this.limpiar();
+    },
   },
   async mounted() {
     await this.$store.dispatch('materiales/all');
@@ -151,22 +192,18 @@ export default {
     }
   },
   methods: {
-    seleccionarMaterial(action, material = null) {
+    async seleccionarMaterial(action, material) {
       if (material) this.$store.dispatch('materiales/select', material);
       if (action != 'view') {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
       }
     },
-    verDeposito(dep) {
-      this.$store.dispatch('depositos/get', {
-        id: dep,
-      });
+    async verDeposito(dep) {
+      await this.$store.dispatch('depositos/get', dep);
     },
-    verCategoria(cat) {
-      this.$store.dispatch('categorias/get', {
-        id: cat,
-      });
+    async verCategoria(cat) {
+      await this.$store.dispatch('categorias/get', cat);
     },
     filtrar() {
       this.materiales = this.filtrados;
@@ -175,7 +212,7 @@ export default {
       this.materiales = this.materialesAll;
     },
     cambiarFiltro(dato) {
-      this.materialesFiltradas =
+      this.elementosFiltrados =
         dato === 'deposito_id' ? this.depositos : this.categorias;
       this.searchTitle = dato === 'deposito_id' ? 'depósito' : 'categoría';
       this.limpiar();
@@ -183,6 +220,9 @@ export default {
     updateFiltrados() {
       this.modal.show = false;
       this.materiales = this.materialesAll;
+    },
+    mover(material) {
+      this.seleccionarMaterial('mov', material);
     },
   },
 };

@@ -6,7 +6,7 @@
           {{ departamento.nombre }}
         </h3>
         <div>
-          <button class="action-btn" @click="edit">
+          <button class="optional-btn" @click="edit">
             <GlobalSvg class="h-5 w-5 md:h-6 md:w-6" svg="pencil" />
           </button>
         </div>
@@ -47,7 +47,7 @@
         <tr v-for="usuario in usuarios" :key="usuario.id">
           <td class="table-td text-gray-500">
             <router-link
-              :to="`/usuarios/${usuario.ci}`"
+              :to="`/perfil/${usuario.ci}`"
               class="text-black hover:text-blue-600 hover:underline"
             >
               {{ usuario.nombre }} {{ usuario.apellido }}
@@ -55,7 +55,7 @@
           </td>
           <td class="table-td">
             <router-link
-              :to="`/usuarios/${usuario.ci}`"
+              :to="`/perfil/${usuario.ci}`"
               class="text-gray-500 hover:text-blue-600 hover:underline"
             >
               {{ usuario.ci }}
