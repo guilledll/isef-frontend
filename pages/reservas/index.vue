@@ -1,33 +1,42 @@
 <template>
   <div>
-    <div v-if="reserva && materialesDisponibles.length">
-      <LazyGlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-      <LazyReservaListadoMateriales
-        :materiales-disponibles="materialesDisponibles"
-      />
-      <div class="reserva-footer">
-        <button class="btn red gap-1.5" @click="cancelarReserva">
-          <GlobalSvg svg="x" class="h-5 w-5" />
-          Cancelar
-        </button>
-        <button
-          class="btn green gap-1.5"
-          :disabled="!reserva.materiales.length"
-          @click="verModal(2)"
-        >
-          <GlobalSvg svg="check" class="h-5 w-5" />
-          Continuar
-        </button>
+    <!-- Reserva de materiales -->
+    <div v-if="reserva">
+      <div v-if="materialesDisponibles.length">
+        <LazyGlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
+        <LazyReservaListadoMateriales
+          :materiales-disponibles="materialesDisponibles"
+        />
+        <div class="reserva-footer">
+          <button class="btn red gap-1.5" @click="cancelarReserva">
+            <GlobalSvg svg="x" class="h-5 w-5" />
+            Cancelar
+          </button>
+          <button
+            class="btn green gap-1.5"
+            :disabled="!reserva.materiales.length"
+            @click="verModal(2)"
+          >
+            <GlobalSvg svg="check" class="h-5 w-5" />
+            Continuar
+          </button>
+        </div>
       </div>
+      <LazyGlobalSinDatos v-else model="materiales" />
     </div>
+    <!-- Inicio y opciones -->
     <div v-else class="hacer-reserva-container">
       <h4 class="text-2xl font-1 md:text-5xl">Reserva de materiales</h4>
       <div class="flex flex-row gap-5 items-center justify-center">
-        <button class="btn green reservar-btn" @click="verModal(1)">
+        <button
+          v-if="existen.materiales && existen.depositos"
+          class="btn green reservar-btn"
+          @click="verModal(1)"
+        >
           Hacer reserva
         </button>
         <router-link :to="toRoute()" class="btn indigo reservar-btn">
-          Ver reservas
+          {{ user.rol != 1 ? 'Ver' : 'Mis' }} reservas
         </router-link>
       </div>
       <div class="mt-16 mb-8 md:mt-28">
@@ -68,6 +77,9 @@ export default {
     user() {
       return this.$auth.user;
     },
+    existen() {
+      return this.$store.state.global.existen;
+    },
   },
   beforeCreate() {
     this.$store.dispatch('reservas/clear');
@@ -80,7 +92,7 @@ export default {
     cancelarReserva() {
       let msg = 'Al cancelar se perderán los datos. Desea continuar?';
       if (confirm(msg)) {
-        this.$store.dispatch('reservas/cancelarReserva');
+        this.$store.dispatch('reservas/clear');
         this.$router.push('/reservas');
       }
     },

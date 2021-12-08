@@ -3,8 +3,17 @@
     <LazyGlobalAlert v-if="entregado.show" color="green" class="!mt-0 mb-4">
       La reserva nro #{{ entregado.id }} se marcó como {{ entregado.text }}.
     </LazyGlobalAlert>
+    <LazyGlobalAlert
+      v-if="aprobada"
+      color="green"
+      svg="check"
+      class="!mt-0 mb-4"
+    >
+      La reserva fue aprobada con éxito.
+    </LazyGlobalAlert>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <GlobalSearch
+    <LazyGlobalSearch
+      v-if="reservasAll.length"
       store="reservas"
       :title="searchTitle"
       :data="reservasFiltradas"
@@ -13,7 +22,7 @@
       @limpiar="limpiar"
       @cambiar="cambiarFiltro"
     />
-    <Table>
+    <Table v-if="reservasAll.length">
       <template #head>
         <TableHead :header="table" />
       </template>
@@ -46,6 +55,7 @@
         </tr>
       </template>
     </Table>
+    <LazyGlobalSinDatos v-else model="reservas" />
   </div>
 </template>
 
@@ -71,6 +81,7 @@ export default {
         id: null,
         text: 'entregada',
       },
+      aprobada: false,
       reservas: [],
       reservasFiltradas: [],
       inputs: [
@@ -103,6 +114,9 @@ export default {
       return estadosTraducidos;
     },
   },
+  beforeCreate() {
+    this.$store.dispatch('reservas/clear');
+  },
   async mounted() {
     await this.$store.dispatch('reservas/all');
     await this.$store.dispatch('depositos/all');
@@ -130,6 +144,24 @@ export default {
         this.entregado.show = true;
         this.entregado.id = res;
         this.entregado.text = 'recibida';
+        return;
+      }
+      let aprobada = this.$route.query.aprobada;
+      if (aprobada) {
+        this.entregado.show = true;
+        this.entregado.id = aprobada;
+        this.entregado.text = 'aprobada';
+        return;
+      }
+      let cancelada = this.$route.query.cancelada;
+      if (cancelada) {
+        this.entregado.show = true;
+        this.entregado.id = cancelada;
+        this.entregado.text = 'cancelada';
+        return;
+      }
+      if (this.$route.query.aprobada) {
+        this.aprobada = true;
         return;
       }
     },

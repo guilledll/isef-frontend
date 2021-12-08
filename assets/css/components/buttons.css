@@ -23,4 +23,13 @@
       @apply bg-gray-600 hover:bg-gray-700 focus:ring-gray-400 text-gray-800 disabled:bg-gray-100;
     }
   }
+  .optional-btn {
+    @apply p-1.5 rounded-md hover:shadow-md hover:text-blue-500;
+    &.red {
+      @apply hover:text-red-500;
+    }
+  }
+  .cancel-btn {
+    @apply border-gray-300 bg-white text-gray-700 mt-3 hover:bg-gray-50 focus:ring-gray-500 sm:mt-0;
+  }
 }

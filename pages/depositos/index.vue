@@ -1,7 +1,8 @@
 <template>
   <div>
     <GlobalHeader :title="pageHeader.title" :text="pageHeader.text" />
-    <GlobalSearch
+    <LazyGlobalSearch
+      v-if="depositosAll.length"
       :data="departamentos"
       title="departamento"
       store="depositos"
@@ -22,7 +23,7 @@
           @click="$router.push('/departamentos')"
         />
       </div>
-      <Table>
+      <Table v-if="depositosAll.length">
         <template #head>
           <TableHead :header="table.header" />
         </template>
@@ -67,7 +68,9 @@
           </tr>
         </template>
       </Table>
+      <LazyGlobalSinDatos v-else model="depósitos" />
     </div>
+
     <LazyModal v-if="modal.show">
       <LazyFormDepositoUpdate
         v-if="modal.action == 'mod'"
@@ -96,7 +99,7 @@ export default {
         text: 'En los depósitos se encuentran los materiales. Ejemplo de depósitos: Cure, Campus, etc.',
       },
       table: {
-        header: ['Nombre', 'Sede', 'Materiales'],
+        header: ['Nombre', 'Departamento', 'Materiales'],
       },
       modal: {
         show: false,

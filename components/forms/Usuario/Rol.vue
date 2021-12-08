@@ -9,7 +9,7 @@
           <div>
             <FormSelect
               id="rol"
-              v-model.trim="form.rol"
+              v-model.number="form.rol"
               name="rol"
               required
               :error="hasError($v.form.rol)"
@@ -83,25 +83,29 @@ export default {
     this.form.rol = this.usuario.rol;
     this.originalRol = this.usuario.rol;
   },
+  methods: {
+    updateRol() {
+      if (this.invalid()) return;
+      this.$store
+        .dispatch('users/updateRol', this.form)
+        .then(() => this.cambioRol())
+        .catch((e) => (this.errors = e.response.data.errors));
+    },
+    cambioRol() {
+      this.closeModal();
+      this.$emit('cambioRol');
+    },
+    closeModal() {
+      if (!this.isView) this.$store.dispatch('users/clear');
+      this.$emit('close');
+    },
+  },
   validations: {
     form: {
       rol: {
         required,
         integer,
       },
-    },
-  },
-  methods: {
-    updateRol() {
-      if (this.invalid()) return;
-      this.$store
-        .dispatch('users/updateRol', this.form)
-        .then(() => this.$emit('close'))
-        .catch((e) => (this.errors = e.response.data.errors));
-    },
-    closeModal() {
-      if (!this.isView) this.$store.dispatch('users/clear');
-      this.$emit('close');
     },
   },
 };

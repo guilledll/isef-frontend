@@ -76,6 +76,14 @@
       >
         Recibir materiales
       </button>
+      <button
+        v-if="admin && reserva.estado == 3"
+        class="btn indigo"
+        @click="verAdmin"
+      >
+        <GlobalSvg svg="info-circle" class="h-5 w-5 mr-2" />
+        Ver reserva
+      </button>
     </div>
 
     <!-- ALERTAS Y MENSAJES -->
@@ -109,6 +117,11 @@
         v-if="modal.type == 'in'"
         @close="close"
         @recibido="recibido"
+      />
+      <LazyFormReservaAprobar
+        v-if="modal.type == 'verAdmin'"
+        @close="close"
+        @accion="accionSobreReserva"
       />
       <LazyFormMaterialPerdidosVer v-if="modal.type == 'mat'" @close="close" />
     </LazyModal>
@@ -187,11 +200,8 @@ export default {
     materiales() {
       return this.$store.state.reservas.materialesDisponibles;
     },
-    tieneMaterialesPerdidos() {
-      return this.$store.state.reservas.perdidos;
-    },
     perdidos() {
-      return this.$store.state.materialesPerdidos.materiales;
+      return this.$store.state.materialesPerdidos.material;
     },
     totalMateriales() {
       return this.materiales.reduce((a, b) => {
@@ -208,23 +218,16 @@ export default {
   watch: {
     $route(to) {
       // Si se realizo una reserva, muestra la alerta
-      let acc = to.query.accion;
-      if (acc) {
+      if (to.query.accion) {
         this.alerta = true;
       }
     },
   },
   async mounted() {
+    this.$store.dispatch('materialesPerdidos/clear');
     await this.$store.dispatch('reservas/get', this.$route.params.id);
-    if (this.tieneMaterialesPerdidos) {
-      await this.$store.dispatch(
-        'materialesPerdidos/get',
-        this.tieneMaterialesPerdidos.id
-      );
-    }
     // Si se realizo una reserva, muestra la alerta
-    let acc = this.$route.query.accion;
-    if (acc) {
+    if (this.$route.query.accion) {
       this.alerta = true;
     }
   },
@@ -264,6 +267,18 @@ export default {
     },
     close() {
       this.modal.open = !this.modal.open;
+    },
+    verAdmin() {
+      this.close();
+      this.modal.type = 'verAdmin';
+    },
+    accionSobreReserva(data) {
+      this.$store.dispatch('reservas/cambiarEstado', data).then(() => {
+        this.$router.push({
+          path: '/guardia',
+          query: { aprobada: data.accion },
+        });
+      });
     },
   },
 };

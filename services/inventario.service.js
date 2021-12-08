@@ -7,7 +7,6 @@ export default {
   index() {
     return api().get('/inventario');
   },
-
   /**
    * Crea un movimiento.
    * @param {request} data
@@ -15,7 +14,6 @@ export default {
   create(data) {
     return api().post('/inventario', data);
   },
-
   /**
    * Actualiza el movimiento indicado.
    * @param {int} id
@@ -24,7 +22,6 @@ export default {
   update(id, data) {
     return api().put(`/inventario/${id}`, data);
   },
-
   /**
    * Devuelve un movimiento específico
    * @param {int} id
@@ -32,7 +29,6 @@ export default {
   show(id) {
     return api().get(`/inventario/${id}`);
   },
-
   /**
    * Eliminar el movimiento indicado.
    * @param {int} id

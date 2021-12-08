@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label :for="id" class="form-label font-1" :class="{ 'sr-only': sr }">
+    <label :for="id" class="form-label font-1" :class="{ 'sr-only': !label }">
       {{ label || name }}
     </label>
     <select
@@ -8,7 +8,8 @@
       :name="name"
       :required="required"
       :class="{ error: error }"
-      class="form-select bg-white h-11 text-gray-900"
+      :disabled="disabled"
+      class="form-select"
       @input="$emit('input', $event.target.value)"
       @focus="$emit('focus')"
       @blur="$emit('blur')"
@@ -28,7 +29,7 @@ export default {
     label: { type: String, default: '' },
     required: { type: Boolean, default: true },
     error: { type: Boolean, default: false },
-    sr: { type: Boolean, default: true },
+    disabled: { type: Boolean, default: false },
   },
   methods: {
     // Emite el texto del <option>

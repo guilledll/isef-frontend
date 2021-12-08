@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label :for="name" class="form-label font-1" :class="{ 'sr-only': sr }">
+    <label :for="name" class="form-label font-1" :class="{ 'sr-only': !label }">
       {{ label || name }}
     </label>
     <DatePicker
@@ -34,7 +34,6 @@ export default {
     showSecond: { type: Boolean, default: false },
     clearable: { type: Boolean, default: false },
     disabledDate: { type: Function, default: () => ({}) },
-    sr: { type: Boolean, default: true },
     label: { type: String, default: '' },
     error: { type: Boolean, default: false },
   },

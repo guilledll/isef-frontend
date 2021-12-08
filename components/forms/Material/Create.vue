@@ -19,7 +19,6 @@
             v-model.number="form.departamento_id"
             name="departamento_id"
             label="Departamento"
-            :sr="false"
             :error="hasError($v.form.departamento_id)"
             @input="fieldReset($v.form.departamento_id)"
             @blur="touch($v.form.departamento_id)"
@@ -50,7 +49,6 @@
             v-model.number="form.deposito_id"
             name="deposito_id"
             label="Depósito"
-            :sr="false"
             :error="hasError($v.form.deposito_id)"
             @input="fieldReset($v.form.deposito_id)"
             @blur="touch($v.form.deposito_id)"
@@ -86,7 +84,7 @@
         </LazyGlobalAlert>
         <div v-else class="space-y-3">
           <GlobalAlert color="gray">
-            Nombre los materiales respetando el formato
+            Nombre los materiales en singular y respetando el formato
             <b>"Nombre Categoría"</b>. Ejemplos: <b>Pelota fútbol</b>,
             <b>5K pesa</b>, <b>Red tennis</b>.
           </GlobalAlert>
@@ -98,7 +96,6 @@
             label="Material"
             autocomplete="on"
             placeholder="Nombre del material"
-            :sr="false"
             :error="hasError($v.form.nombre, 'nombre')"
             @input="fieldReset($v.form.nombre, 'nombre')"
             @blur="touch($v.form.nombre)"
@@ -116,7 +113,6 @@
             name="categoria_id"
             label="Categoría"
             required
-            :sr="false"
             :error="hasError($v.form.categoria_id)"
             @input="fieldReset($v.form.categoria_id)"
             @blur="touch($v.form.categoria_id)"
@@ -156,7 +152,6 @@
             type="number"
             placeholder="Cantidad de materiales"
             label="Cantidad a agregar"
-            :sr="false"
             :error="hasError($v.form.cantidad, 'cantidad')"
             @input="fieldReset($v.form.cantidad, 'cantidad')"
             @blur="touch($v.form.cantidad)"
@@ -174,7 +169,6 @@
             name="nota"
             placeholder="Notas (opcional)"
             label="Notas del movimiento"
-            :sr="false"
             :error="hasError($v.form.nota, 'nota')"
             @input="fieldReset($v.form.nota, 'nota')"
             @blur="touch($v.form.nota)"

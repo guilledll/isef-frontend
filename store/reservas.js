@@ -18,8 +18,13 @@ export const mutations = {
     state.reserva = reserva;
   },
   CLEAR_SELECTED(state) {
-    state.material = null;
-    state.movimientos = [];
+    state.reserva = null;
+    state.materialesDisponibles = [];
+  },
+  CLEAR_ALL(state) {
+    state.reservas = [];
+    state.filtrados = [];
+    state.reserva = null;
     state.materialesDisponibles = [];
   },
   INICIAR_RESERVA(state, reserva) {
@@ -37,11 +42,6 @@ export const mutations = {
   GET_RESERVA(state, reserva, materiales) {
     state.reserva = reserva;
     state.materialesDisponibles = materiales;
-  },
-  UPDATE_ESTADO(state, reservas) {
-    state.users = state.reservas.map((user) =>
-      user.ci == reservas.ci ? { ...user, estado: reservas.estado } : user
-    );
   },
   AGREGAR_MATERIAL(state, material) {
     state.reserva.materiales.push({
@@ -64,11 +64,13 @@ export const mutations = {
       state.reserva[key] = data[key];
     });
   },
-  CANCELAR_RESERVA(state) {
-    state.reserva = null;
-  },
   FILTRAR_RESERVAS(state, filtrados) {
     state.filtrados = filtrados;
+  },
+  CANCELAR_RESERVA(state, id) {
+    state.reservas = state.reservas.map((res) =>
+      res.id == id ? { ...res, estado: 5 } : res
+    );
   },
 };
 
@@ -116,19 +118,22 @@ export const actions = {
     context.commit('ACTUALIZAR_RESERVA', data);
     return ReservasService.create(context.state.reserva);
   },
-  cancelarReserva(context) {
-    context.commit('CANCELAR_RESERVA');
-  },
   entregar(context, { id, data }) {
     return ReservasService.entregar(id, data);
+  },
+  cancelar(context, id) {
+    return ReservasService.cancelar(id).then(() => {
+      context.commit('CANCELAR_RESERVA', id);
+    });
   },
   recibir(context, { id, data }) {
     return ReservasService.recibir(id, data);
   },
-  updateEstado(context, data) {
-    return ReservasService.updateEstado(data.ci, data).then((res) => {
-      context.commit('UPDATE_ESTADO', res.data);
-      context.dispatch('select', res.data);
+  cambiarEstado(context, data) {
+    context.dispatch('global/loading', true, { root: true });
+    return ReservasService.cambiarEstado(data.id, data).then(() => {
+      // if (data.estado == 5) context.commit('CANCELAR_RESERVA', data.id);
+      // if (data.estado == 2) context.commit('APREBAR_RESERVA', data.id);
       context.dispatch('global/loading', false, { root: true });
     });
   },
@@ -143,6 +148,9 @@ export const actions = {
   },
   clear(context) {
     context.commit('CLEAR_SELECTED');
+  },
+  clearAll(context) {
+    context.commit('CLEAR_ALL');
   },
 };
 

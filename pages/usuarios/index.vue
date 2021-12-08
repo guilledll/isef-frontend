@@ -4,14 +4,14 @@
     <GlobalSearch
       store="users"
       :title="searchTitle"
-      :data="usuariosFiltrados"
+      :data="elementosFiltrados"
       :inputs="inputs"
       @filtrar="filtrar"
       @limpiar="limpiar"
       @cambiar="cambiarFiltro"
     />
     <div class="flex flex-col gap-3 lg:flex-row">
-      <Table>
+      <Table v-if="usuarios.length">
         <template #head>
           <TableHead :header="table.header" />
         </template>
@@ -19,11 +19,11 @@
           <tr v-for="user in usuarios" :key="user.ci">
             <td class="table-td">
               <router-link
-                :to="`/usuarios/${user.ci}`"
+                :to="`/perfil/${user.ci}`"
                 class="text-black hover:text-blue-600 hover:underline"
                 @click.native="seleccionarUsuario('view', user)"
               >
-                {{ user.nombre }}
+                {{ user.nombre }} {{ user.apellido }}
               </router-link>
             </td>
             <td class="table-td text-gray-500">
@@ -44,7 +44,7 @@
             <td class="table-td text-right">
               <TableButton
                 type="view"
-                @click="$router.push(`/users/${user.ci}`)"
+                @click="$router.push(`/perfil/${user.ci}`)"
               />
               <!-- <TableButton
                 v-if="user.ci != $auth.user.ci"
@@ -60,10 +60,18 @@
           </tr>
         </template>
       </Table>
+      <div v-else class="flex flex-col lg:flex-grow">
+        <img
+          src="/svg/empty.svg"
+          alt="No hay usuarios"
+          class="h-40 my-8 m-auto md:h-52 md:my-16"
+        />
+      </div>
     </div>
     <LazyModal v-if="modal.show">
       <LazyFormUsuarioRol
         v-if="modal.action == 'mod'"
+        @cambioRol="cambioRol"
         @close="modal.show = !modal.show"
       />
       <!-- <LazyFormUsuarioDelete
@@ -92,7 +100,7 @@ export default {
         action: '',
       },
       usuarios: [],
-      usuariosFiltrados: [],
+      elementosFiltrados: [],
       inputs: [
         { value: 'departamento_id', text: 'Departamento' },
         { value: 'rol', text: 'Rol' },
@@ -143,10 +151,13 @@ export default {
       this.usuarios = this.filtrados;
     },
     cambiarFiltro(dato) {
-      this.usuariosFiltrados =
+      this.elementosFiltrados =
         dato === 'departamento_id' ? this.departamentos : this.roles;
       this.searchTitle = dato === 'departamento_id' ? 'departamento' : 'rol';
       this.limpiar();
+    },
+    cambioRol() {
+      this.usuarios = this.usuariosAll;
     },
     mostrarRol(rol) {
       switch (parseInt(rol)) {

@@ -32,7 +32,7 @@
             alt="Revisión de perfil"
             class="h-60 my-24 m-auto"
           />
-          <button class="btn gray" @click="logout">Cerrar sesión</button>
+          <button class="btn cancel-btn" @click="logout">Cerrar sesión</button>
         </div>
       </div>
     </div>
