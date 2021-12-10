@@ -1,6 +1,6 @@
 import api from '@/services/api.service';
 
-let rutaToken = `${process.env.NODE_ENV == 'production' ? '/api' : ''}`;
+let rutaApi = `${process.env.NODE_ENV == 'production' ? '/api' : ''}`;
 
 export default {
   /**
@@ -48,9 +48,9 @@ export default {
    */
   register(data) {
     return api()
-      .get(`${rutaToken}/sanctum/csrf-cookie`)
+      .get(`${rutaApi}/sanctum/csrf-cookie`)
       .then(() => {
-        return api().post('/register', data);
+        return api().post(`${rutaApi}/register`, data);
       });
   },
   /**
