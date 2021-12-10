@@ -1,5 +1,7 @@
 import api from '@/services/api.service';
 
+let rutaToken = `${process.env.NODE_ENV == 'production' ? '/api' : ''}`;
+
 export default {
   /**
    * Devuelve todos los usuarios.
@@ -45,11 +47,8 @@ export default {
    * @param {form} data
    */
   register(data) {
-    const ruta = `${process.env.API_BASE_URL}${
-      process.env.NODE_ENV == 'production' ? '/api' : ''
-    }`;
     return api()
-      .get(`${ruta}/sanctum/csrf-cookie`)
+      .get(`${rutaToken}/sanctum/csrf-cookie`)
       .then(() => {
         return api().post('/register', data);
       });
