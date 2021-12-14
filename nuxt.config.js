@@ -1,3 +1,6 @@
+const rutaDoble = `${process.env.NODE_ENV == 'production' ? '/api/api' : ''}`;
+const rutaSimple = `${process.env.NODE_ENV == 'production' ? '/api' : ''}`;
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -47,10 +50,7 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    baseURL: process.env.API_BASE_URL,
-    credentials: true,
-  },
+  axios: {},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
@@ -75,22 +75,16 @@ export default {
         url: process.env.API_BASE_URL,
         endpoints: {
           csrf: {
-            url: `${
-              process.env.NODE_ENV == 'production' ? '/api/api' : ''
-            }/sanctum/csrf-cookie`,
+            url: `${rutaDoble}/sanctum/csrf-cookie`,
           },
           login: {
-            url: `${
-              process.env.NODE_ENV == 'production' ? '/api/api' : ''
-            }/login`,
+            url: `${rutaDoble}/login`,
           },
           user: {
-            url: `${process.env.NODE_ENV == 'production' ? '/api' : ''}/user`,
+            url: `${rutaSimple}/user`,
           },
           logout: {
-            url: `${
-              process.env.NODE_ENV == 'production' ? '/api/api' : ''
-            }/logout`,
+            url: `${rutaDoble}/logout`,
           },
         },
         cookie: {

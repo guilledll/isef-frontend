@@ -1,5 +1,7 @@
 import api from '@/services/api.service';
 
+let rutaApi = `${process.env.NODE_ENV == 'production' ? '/api' : ''}`;
+
 export default {
   /**
    * Devuelve todos los usuarios.
@@ -40,19 +42,21 @@ export default {
   updateRol(ci, data) {
     return api().put(`/users/${ci}/rol`, data);
   },
-
   /**
    * Registro de nuevos usuarios
    * @param {form} data
    */
   register(data) {
     return api()
-      .get('/sanctum/csrf-cookie')
+      .get(`${rutaApi}/sanctum/csrf-cookie`)
       .then(() => {
-        return api().post('/register', data);
+        return api().post(`${rutaApi}/register`, data);
       });
   },
-
+  /**
+   * Envia el correo de verificacion
+   * @param {form} data
+   */
   emailVerification(data) {
     return api().post('/email/verification-notification', data);
   },

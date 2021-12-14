@@ -146,7 +146,7 @@ export default {
         .catch((e) => (this.errors = e.response.data.errors));
     },
     mover() {
-      this.closeModal();
+      this.$emit('close');
       this.$emit('mover', this.material);
     },
     closeModal() {

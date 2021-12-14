@@ -25,7 +25,7 @@
           md:my-6 md:text-xl
         "
       >
-        Sistema de gestión de inventario y reserva de materaieles disponibles
+        Sistema de gestión de inventario y reserva de materiales disponibles
         para uso educativo en sedes ISEF Uruguay. Inicia sesión para reservar.
       </p>
       <div class="flex justify-center space-x-3 sm:mt-8">

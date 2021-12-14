@@ -43,10 +43,10 @@ export default {
           show: true,
         },
         {
-          texto: 'Mostrar informes',
-          ruta: '',
+          texto: 'Materiales reportados',
+          ruta: 'materialesPerdidos',
           svg: 'clipboard-list',
-          show: true,
+          show: this.existen.materiales && this.existen.reservas,
         },
         {
           texto: 'Ver reservas',

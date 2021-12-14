@@ -193,7 +193,7 @@ export default {
   },
   methods: {
     async seleccionarMaterial(action, material) {
-      if (material) await this.$store.dispatch('materiales/select', material);
+      if (material) this.$store.dispatch('materiales/select', material);
       if (action != 'view') {
         this.modal.action = action;
         this.modal.show = !this.modal.show;
